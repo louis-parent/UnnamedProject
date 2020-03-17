@@ -13,7 +13,6 @@ import unnamed.model.Element;
 
 public class GameWindow extends BasicGame
 {
-	private GameContainer container;
 	private GameController controller;
 	private Camera cam;
 
@@ -27,7 +26,6 @@ public class GameWindow extends BasicGame
 	@Override
 	public void init(GameContainer container) throws SlickException
 	{
-		this.container = container;
 		this.controller.init(container);
 	}
 
@@ -54,15 +52,6 @@ public class GameWindow extends BasicGame
 		for(Element element : elements)
 		{
 			g.drawImage(element.getSprite(), element.getX(), element.getY());
-		}
-	}
-
-	@Override
-	public void keyReleased(int key, char c)
-	{
-		if(Input.KEY_ESCAPE == key)
-		{
-			container.exit();
 		}
 	}
 

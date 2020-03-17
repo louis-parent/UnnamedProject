@@ -58,6 +58,9 @@ public class KeyController implements KeyListener
 			case Input.KEY_RIGHT:
 				cam.movingRight();
 				break;
+			case Input.KEY_ESCAPE:
+				GameController.stop();
+				break;
 		}
 	}
 

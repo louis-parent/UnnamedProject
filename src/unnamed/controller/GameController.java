@@ -20,6 +20,7 @@ public class GameController
 
 	private static GameController instance;
 
+	private GameContainer container;
 	private GameWindow view;
 	private ElementContainer model;
 
@@ -44,9 +45,15 @@ public class GameController
 		AppGameContainer game = new AppGameContainer(GameController.getInstance().view, GAME_WIDTH, GAME_HEIGHT, true);
 		game.start();
 	}
+	
+	public static void stop()
+	{
+		GameController.getInstance().container.exit();
+	}
 
 	public void init(GameContainer container) throws SlickException
 	{
+		this.container = container;
 		this.model.init();
 		container.getInput().addMouseListener(new MouseController());
 		container.getInput().addKeyListener(new KeyController());
@@ -75,7 +82,8 @@ public class GameController
 	public void clickAt(int x, int y)
 	{
 		Camera camera = this.view.getCamera();
-		this.model.clickAt(x - camera.getOffsetX(), y - camera.getOffsetY());
+		float zoomMultiplicator = camera.getZoomMultiplicator();
+		this.model.clickAt((x / zoomMultiplicator) - camera.getOffsetX(), (y / zoomMultiplicator) - camera.getOffsetY());
 	}
 
 	public int getMapHeight()

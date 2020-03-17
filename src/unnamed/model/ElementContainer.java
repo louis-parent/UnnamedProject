@@ -95,7 +95,7 @@ public class ElementContainer
 
 	public int getMapHeight()
 	{
-		return NUMBER_OF_ROWS * Tile.TILE_HEIGHT - (Tile.FLOATING_OFFSET * NUMBER_OF_ROWS) + Tile.TILE_HEIGHT + Tile.FLOATING_OFFSET;
+		return (NUMBER_OF_ROWS * Tile.TILE_HEIGHT) - (Tile.FLOATING_OFFSET * NUMBER_OF_ROWS) + Tile.TILE_HEIGHT + Tile.FLOATING_OFFSET;
 	}
 
 	public int getMapWidth()

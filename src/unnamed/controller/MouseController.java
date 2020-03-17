@@ -74,8 +74,14 @@ public class MouseController implements MouseListener
 	@Override
 	public void mouseWheelMoved(int change)
 	{
-		// TODO Auto-generated method stub
-
+		if(change < 0)
+		{
+			GameController.getInstance().getView().getCamera().unzoom();
+		}
+		else
+		{
+			GameController.getInstance().getView().getCamera().zoom();
+		}
 	}
 
 }

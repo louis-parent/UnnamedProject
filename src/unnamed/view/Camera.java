@@ -7,13 +7,17 @@ import unnamed.controller.GameController;
 public class Camera
 {
 
-	private static final int STANDARD_CAMERA_SPEED = 10;
+	private static final double ZOOM_SPEED = 0.1;
+
+	private static final int STANDARD_CAMERA_SPEED = 20;
 
 	private float offsetX;
 	private float offsetY;
 
 	private int horizontalSpeedMultiplicator;
 	private int verticalSpeedMultiplicator;
+
+	private float zoomMultiplicator;
 
 	public Camera()
 	{
@@ -22,16 +26,19 @@ public class Camera
 
 		this.horizontalSpeedMultiplicator = 0;
 		this.verticalSpeedMultiplicator = 0;
+
+		this.zoomMultiplicator = 1;
 	}
 
 	public void update()
 	{
-		this.offsetXBy(STANDARD_CAMERA_SPEED * this.horizontalSpeedMultiplicator);
-		this.offsetYBy(STANDARD_CAMERA_SPEED * this.verticalSpeedMultiplicator);
+		this.offsetXBy((STANDARD_CAMERA_SPEED * this.horizontalSpeedMultiplicator) / this.zoomMultiplicator);
+		this.offsetYBy((STANDARD_CAMERA_SPEED * this.verticalSpeedMultiplicator) / this.zoomMultiplicator);
 	}
 
 	public void render(Graphics g)
 	{
+		g.scale(this.zoomMultiplicator, this.zoomMultiplicator);
 		g.translate(this.offsetX, this.offsetY);
 	}
 
@@ -39,7 +46,7 @@ public class Camera
 	{
 		float sum = this.offsetX + i;
 		int mapWidth = GameController.getInstance().getMapWidth();
-		int maxWidth = -(mapWidth - GameController.GAME_WIDTH);
+		float maxWidth = -(mapWidth - (GameController.GAME_WIDTH / this.zoomMultiplicator));
 
 		if(sum > 0)
 		{
@@ -59,7 +66,7 @@ public class Camera
 	{
 		float sum = this.offsetY + i;
 		int mapHeight = GameController.getInstance().getMapHeight();
-		int maxHeight = -(mapHeight - GameController.GAME_HEIGHT);
+		float maxHeight = -(mapHeight - (GameController.GAME_HEIGHT / this.zoomMultiplicator));
 
 		if(sum > 0)
 		{
@@ -133,5 +140,22 @@ public class Camera
 	public float getOffsetY()
 	{
 		return this.offsetY;
+	}
+
+	public float getZoomMultiplicator()
+	{
+		return zoomMultiplicator;
+	}
+
+	public void zoom()
+	{
+		this.zoomMultiplicator += ZOOM_SPEED;
+		this.zoomMultiplicator = this.zoomMultiplicator > 5 ? 5 : this.zoomMultiplicator;
+	}
+
+	public void unzoom()
+	{
+		this.zoomMultiplicator -= ZOOM_SPEED;
+		this.zoomMultiplicator = this.zoomMultiplicator < 1 ? 1 : this.zoomMultiplicator;
 	}
 }
