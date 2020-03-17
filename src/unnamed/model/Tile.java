@@ -2,9 +2,9 @@ package unnamed.model;
 
 public abstract class Tile extends Element
 {
-	private static final int FLOATING_OFFSET = 8;
-	private static final int TILE_WIDTH = 32;
-	private static final int TILE_HEIGHT = 29;
+	public static final int TILE_WIDTH = 32;
+	public static final int TILE_HEIGHT = 29;
+	public static final int FLOATING_OFFSET = 8;
 	private static final int Z_SPACE_BETWEEN_TILES = 10;
 
 	private static Tile lastSelected;
@@ -59,11 +59,12 @@ public abstract class Tile extends Element
 	{
 		this.isSelected = true;
 		this.setY(this.getY() - FLOATING_OFFSET);
-		
-		if (Tile.lastSelected != null) {
+
+		if(Tile.lastSelected != null)
+		{
 			Tile.lastSelected.deselect();
 		}
-		
+
 		Tile.lastSelected = this;
 	}
 
@@ -71,8 +72,9 @@ public abstract class Tile extends Element
 	{
 		this.isSelected = false;
 		this.setY(this.getY() + FLOATING_OFFSET);
-		
-		if (Tile.lastSelected == this) {
+
+		if(Tile.lastSelected == this)
+		{
 			Tile.lastSelected = null;
 		}
 	}

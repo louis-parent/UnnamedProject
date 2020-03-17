@@ -7,8 +7,7 @@ public class Main
 
 	public static void main(String[] args) throws SlickException
 	{
-		GameController controller = new GameController();
-		controller.start();
+		GameController.start();
 	}
 
 }

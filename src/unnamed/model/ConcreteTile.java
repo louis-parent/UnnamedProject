@@ -8,7 +8,7 @@ public class ConcreteTile extends Tile
 
 	private static Image flat;
 	private static Image mountain;
-	
+
 	private Image sprite;
 
 	public static void init() throws SlickException

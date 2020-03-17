@@ -3,6 +3,8 @@ package unnamed.model;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 
+import unnamed.controller.GameController;
+
 public abstract class Element
 {
 	private float x;
@@ -50,25 +52,25 @@ public abstract class Element
 	{
 		int oldZ = this.z;
 		this.z = z;
-		ElementContainer.getInstance().changeZOfElement(this, oldZ);
+		GameController.getInstance().getModel().changeZOfElement(this, oldZ);
 	}
 
-	public boolean isInside(int x, int y)
+	public boolean isInside(float x, float y)
 	{
 		boolean isBefore = x < this.getX() || y < this.getY();
 		boolean isAfter = x > this.getX() + this.getSprite().getWidth() || y > this.getY() + this.getSprite().getHeight();
-		
-		return !isBefore && !isAfter && !this.inTransparency(x, y); 
+
+		return !isBefore && !isAfter && !this.inTransparency(x, y);
 	}
 
-	private boolean inTransparency(int x, int y)
+	private boolean inTransparency(float x, float y)
 	{
 		int spriteX = (int) (x - this.getX());
 		int spriteY = (int) (y - this.getY());
-		
+
 		Image sprite = this.getSprite();
 		Color pixelColor = sprite.getColor(spriteX, spriteY);
-		
+
 		return pixelColor.getAlpha() == 0;
 	}
 

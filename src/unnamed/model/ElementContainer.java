@@ -7,24 +7,17 @@ import java.util.Map;
 
 import org.newdawn.slick.SlickException;
 
+import unnamed.controller.GameController;
+
 public class ElementContainer
 {
-	private static ElementContainer instance;
 
+	private static final int NUMBER_OF_ROWS = 75;
+	private static final int NUMBER_OF_COLUMNS = 75;
 	private Map<Integer, List<Element>> elements;
 	private int maxDepth;
 
-	public static ElementContainer getInstance()
-	{
-		if(ElementContainer.instance == null)
-		{
-			ElementContainer.instance = new ElementContainer();
-		}
-
-		return ElementContainer.instance;
-	}
-
-	private ElementContainer()
+	public ElementContainer()
 	{
 		this.elements = new HashMap<Integer, List<Element>>();
 		this.maxDepth = 0;
@@ -51,11 +44,11 @@ public class ElementContainer
 	{
 		ConcreteTile.init();
 
-		for(int i = 0; i < 15; i++)
+		for(int i = 0; i < NUMBER_OF_COLUMNS; i++)
 		{
-			for(int j = 0; j < 20; j++)
+			for(int j = 0; j < NUMBER_OF_ROWS; j++)
 			{
-				ElementContainer.getInstance().addElement(new ConcreteTile(i, j));
+				GameController.getInstance().getModel().addElement(new ConcreteTile(i, j));
 			}
 		}
 	}
@@ -77,14 +70,12 @@ public class ElementContainer
 
 	public void changeZOfElement(Element newElement, int oldZ)
 	{
-		int newZ = newElement.getZ();
-
 		this.elements.get(oldZ).remove(newElement);
 
 		this.addElement(newElement);
 	}
 
-	public void clickAt(int x, int y)
+	public void clickAt(float x, float y)
 	{
 		List<Element> elements = this.getElementsToDraw();
 
@@ -98,8 +89,17 @@ public class ElementContainer
 				i--;
 			}
 		}
-		
-		((Tile) elements.get(elements.size() - 1)).click();
 
+		((Tile) elements.get(elements.size() - 1)).click();
+	}
+
+	public int getMapHeight()
+	{
+		return NUMBER_OF_ROWS * Tile.TILE_HEIGHT - (Tile.FLOATING_OFFSET * NUMBER_OF_ROWS) + Tile.TILE_HEIGHT + Tile.FLOATING_OFFSET;
+	}
+
+	public int getMapWidth()
+	{
+		return (ElementContainer.NUMBER_OF_COLUMNS * Tile.TILE_WIDTH) + (Tile.TILE_WIDTH / 2);
 	}
 }
