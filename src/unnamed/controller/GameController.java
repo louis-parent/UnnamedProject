@@ -1,5 +1,7 @@
 package unnamed.controller;
 
+import java.util.Random;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -13,7 +15,6 @@ import unnamed.view.GameWindow;
 
 public class GameController
 {
-
 	public static final int GAME_HEIGHT = 1080;
 
 	public static final int GAME_WIDTH = 1920;
@@ -30,6 +31,8 @@ public class GameController
 	private ElementContainer currentContainer;
 	private MainMenuContainer menuContainer;
 	private MapContainer mapContainer;
+	
+	private Random random;
 
 	public static GameController getInstance()
 	{
@@ -49,6 +52,8 @@ public class GameController
 
 		this.menuContainer = new MainMenuContainer();
 		this.mapContainer = new MapContainer();
+		
+		this.random = new Random();
 	}
 
 	public static void start() throws SlickException
@@ -94,6 +99,11 @@ public class GameController
 	public CameraController getCameraController()
 	{
 		return this.cameraController;
+	}
+	
+	public Random getRandom()
+	{
+		return this.random;
 	}
 
 	public void clickAt(int x, int y)

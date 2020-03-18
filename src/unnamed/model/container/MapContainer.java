@@ -1,12 +1,17 @@
 package unnamed.model.container;
 
+import java.util.Random;
+
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import unnamed.controller.CameraController;
 import unnamed.controller.GameController;
-import unnamed.model.element.map.ConcreteTile;
+import unnamed.model.element.map.DesertTile;
+import unnamed.model.element.map.GrassTile;
 import unnamed.model.element.map.Tile;
+import unnamed.model.element.map.TileType;
+import unnamed.model.element.map.WaterTile;
 
 public class MapContainer extends ElementContainer
 {
@@ -17,13 +22,30 @@ public class MapContainer extends ElementContainer
 	@Override
 	public void init() throws SlickException
 	{
-		ConcreteTile.init();
+		GrassTile.init();
+		WaterTile.init();
+		DesertTile.init();
 
+		Random rand = GameController.getInstance().getRandom();
+		
 		for(int i = 0; i < NUMBER_OF_COLUMNS; i++)
 		{
 			for(int j = 0; j < NUMBER_OF_ROWS; j++)
 			{
-				this.addElement(new ConcreteTile(i, j, this));
+				switch(rand.nextInt(3))
+				{
+					case 0:
+						this.addElement(new GrassTile(i, j, TileType.getRandomType(), this));
+						break;
+						
+					case 1:
+						this.addElement(new WaterTile(i, j, TileType.getRandomType(), this));
+						break;
+						
+					case 2:
+						this.addElement(new DesertTile(i, j, TileType.getRandomType(), this));
+						break;
+				}
 			}
 		}
 	}

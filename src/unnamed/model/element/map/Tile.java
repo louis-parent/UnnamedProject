@@ -1,5 +1,6 @@
 package unnamed.model.element.map;
 
+import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
 
@@ -7,6 +8,7 @@ public abstract class Tile extends Element
 {
 	public static final int TILE_WIDTH = 32;
 	public static final int TILE_HEIGHT = 29;
+	
 	public static final int FLOATING_OFFSET = 8;
 	private static final int Z_SPACE_BETWEEN_TILES = 10;
 
@@ -14,20 +16,32 @@ public abstract class Tile extends Element
 
 	private int column;
 	private int row;
-
+	
+	private TileType type;
+	
+	private PixelisedImage sprite;
+	
 	private boolean isSelected;
 
-	public Tile(ElementContainer container)
+	public Tile(TileType type, ElementContainer container)
 	{
-		this(0, 0, container);
+		this(0, 0, type, container);
+	}
+	
+	protected Tile(int column, int row, TileType type, PixelisedImage sprite, ElementContainer container)
+	{
+		this(column, row, type, container);
+		this.sprite = sprite;
 	}
 
-	public Tile(int column, int row, ElementContainer container)
+	public Tile(int column, int row, TileType type, ElementContainer container)
 	{
 		super(getXValueFrom(column, row), getYValueFrom(row), getZValueFrom(row), container);
 		this.column = column;
 		this.row = row;
 
+		this.type = type;
+		
 		this.isSelected = false;
 	}
 
@@ -45,6 +59,17 @@ public abstract class Tile extends Element
 	{
 		return this.isSelected;
 	}
+	
+	public TileType getType()
+	{
+		return type;
+	}
+	
+	@Override
+	public PixelisedImage getSprite()
+	{
+		return this.sprite;
+	}
 
 	@Override
 	public void click()
@@ -57,6 +82,16 @@ public abstract class Tile extends Element
 		{
 			this.select();
 		}
+	}
+
+	@Override
+	public void pressed()
+	{
+	}
+
+	@Override
+	public void mouseLeft()
+	{
 	}
 
 	private void select()
