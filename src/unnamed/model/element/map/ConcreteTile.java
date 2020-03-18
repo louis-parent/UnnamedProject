@@ -17,6 +17,8 @@ public class ConcreteTile extends Tile
 	{
 		ConcreteTile.flat = new Image("assets/tiles/grass_flat_1.png");
 		ConcreteTile.mountain = new Image("assets/tiles/grass_mountain_1.png");
+		//ConcreteTile.flat.setFilter(Image.FILTER_NEAREST);
+		//ConcreteTile.mountain.setFilter(Image.FILTER_NEAREST);
 	}
 
 	public ConcreteTile(int column, int row, ElementContainer container)

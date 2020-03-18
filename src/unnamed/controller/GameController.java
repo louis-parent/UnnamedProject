@@ -65,6 +65,7 @@ public class GameController
 	public void init(GameContainer container) throws SlickException
 	{
 		this.container = container;
+		this.container.setTargetFrameRate(60);
 
 		this.menuContainer.init();
 		this.mapContainer.init();

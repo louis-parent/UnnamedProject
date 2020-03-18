@@ -7,7 +7,7 @@ import unnamed.controller.GameController;
 public class Camera
 {
 
-	private static final double ZOOM_SPEED = 0.1;
+	private static final float ZOOM_SPEED = 0.1f;
 
 	private static final int STANDARD_CAMERA_SPEED = 20;
 
@@ -34,6 +34,7 @@ public class Camera
 	{
 		g.scale(this.zoomMultiplicator, this.zoomMultiplicator);
 		g.translate(this.offsetX, this.offsetY);
+		g.flush();
 	}
 
 	private void offsetXBy(float i)
@@ -144,13 +145,31 @@ public class Camera
 	public void zoom()
 	{
 		this.zoomMultiplicator += ZOOM_SPEED;
-		this.zoomMultiplicator = this.zoomMultiplicator > 5 ? 5 : this.zoomMultiplicator;
+
+		if(this.zoomMultiplicator > 5)
+		{
+			this.zoomMultiplicator = 5;
+		}
+		else
+		{
+			this.offsetX -= getZoomingOffset(1920);
+			this.offsetY -= getZoomingOffset(1080);
+		}
 	}
 
 	public void unzoom()
 	{
 		this.zoomMultiplicator -= ZOOM_SPEED;
-		this.zoomMultiplicator = this.zoomMultiplicator < 1 ? 1 : this.zoomMultiplicator;
+
+		if(this.zoomMultiplicator < 1)
+		{
+			this.zoomMultiplicator = 1;
+		}
+		else
+		{
+			this.offsetX += getUnzoomingOffset(1920);
+			this.offsetY += getUnzoomingOffset(1080);
+		}
 	}
 
 	public void setToOrigin()
@@ -162,5 +181,21 @@ public class Camera
 		this.verticalSpeedMultiplicator = 0;
 
 		this.zoomMultiplicator = 1;
+	}
+
+	private float getZoomingOffset(int value)
+	{
+		float actualValue = value - (value / this.zoomMultiplicator);
+		float previousValue = value - (value / (this.zoomMultiplicator - ZOOM_SPEED));
+		
+		return (actualValue - previousValue) / 2;
+	}
+
+	private float getUnzoomingOffset(int value)
+	{
+		float previousValue = value - (value / (this.zoomMultiplicator + ZOOM_SPEED));
+		float actualValue = value - (value / this.zoomMultiplicator);
+		
+		return (previousValue - actualValue) / 2;
 	}
 }
