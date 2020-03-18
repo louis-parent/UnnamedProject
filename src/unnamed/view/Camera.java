@@ -21,13 +21,7 @@ public class Camera
 
 	public Camera()
 	{
-		this.offsetX = 0;
-		this.offsetY = 0;
-
-		this.horizontalSpeedMultiplicator = 0;
-		this.verticalSpeedMultiplicator = 0;
-
-		this.zoomMultiplicator = 1;
+		this.setToOrigin();
 	}
 
 	public void update()
@@ -157,5 +151,16 @@ public class Camera
 	{
 		this.zoomMultiplicator -= ZOOM_SPEED;
 		this.zoomMultiplicator = this.zoomMultiplicator < 1 ? 1 : this.zoomMultiplicator;
+	}
+
+	public void setToOrigin()
+	{
+		this.offsetX = 0;
+		this.offsetY = 0;
+
+		this.horizontalSpeedMultiplicator = 0;
+		this.verticalSpeedMultiplicator = 0;
+
+		this.zoomMultiplicator = 1;
 	}
 }

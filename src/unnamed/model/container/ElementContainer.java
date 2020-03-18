@@ -1,4 +1,4 @@
-package unnamed.model;
+package unnamed.model.container;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,13 +7,10 @@ import java.util.Map;
 
 import org.newdawn.slick.SlickException;
 
-import unnamed.controller.GameController;
+import unnamed.model.element.Element;
 
-public class ElementContainer
+public abstract class ElementContainer
 {
-
-	private static final int NUMBER_OF_ROWS = 75;
-	private static final int NUMBER_OF_COLUMNS = 75;
 	private Map<Integer, List<Element>> elements;
 	private int maxDepth;
 
@@ -40,18 +37,7 @@ public class ElementContainer
 		this.elements.get(z).add(element);
 	}
 
-	public void init() throws SlickException
-	{
-		ConcreteTile.init();
-
-		for(int i = 0; i < NUMBER_OF_COLUMNS; i++)
-		{
-			for(int j = 0; j < NUMBER_OF_ROWS; j++)
-			{
-				GameController.getInstance().getModel().addElement(new ConcreteTile(i, j));
-			}
-		}
-	}
+	public abstract void init() throws SlickException;
 
 	public List<Element> getElementsToDraw()
 	{
@@ -75,7 +61,7 @@ public class ElementContainer
 		this.addElement(newElement);
 	}
 
-	public void clickAt(float x, float y)
+	protected Element getTopElementAt(float x, float y)
 	{
 		List<Element> elements = this.getElementsToDraw();
 
@@ -90,16 +76,32 @@ public class ElementContainer
 			}
 		}
 
-		((Tile) elements.get(elements.size() - 1)).click();
+		if(elements.size() > 0)
+		{
+			return elements.get(elements.size() - 1);
+		}
+		else
+		{
+			return Element.getEmptyElement();
+		}
 	}
 
-	public int getMapHeight()
+	public void clickAt(float x, float y)
 	{
-		return (NUMBER_OF_ROWS * Tile.TILE_HEIGHT) - (Tile.FLOATING_OFFSET * NUMBER_OF_ROWS) + Tile.TILE_HEIGHT + Tile.FLOATING_OFFSET;
+		this.getTopElementAt(x, y).click();
 	}
 
-	public int getMapWidth()
+	public void pressedAt(int x, int y)
 	{
-		return (ElementContainer.NUMBER_OF_COLUMNS * Tile.TILE_WIDTH) + (Tile.TILE_WIDTH / 2);
+		this.getTopElementAt(x, y).pressed();
 	}
+
+	public abstract void mouseWheelMoved(int change);
+
+	public abstract void keyReleased(int key, char c);
+
+	public abstract void keyPressed(int key, char c);
+
+	public abstract void mouseDragged(int oldx, int oldy, int newx, int newy);
+
 }

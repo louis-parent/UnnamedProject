@@ -1,4 +1,7 @@
-package unnamed.model;
+package unnamed.model.element.map;
+
+import unnamed.model.container.ElementContainer;
+import unnamed.model.element.Element;
 
 public abstract class Tile extends Element
 {
@@ -14,14 +17,14 @@ public abstract class Tile extends Element
 
 	private boolean isSelected;
 
-	public Tile()
+	public Tile(ElementContainer container)
 	{
-		this(0, 0);
+		this(0, 0, container);
 	}
 
-	public Tile(int column, int row)
+	public Tile(int column, int row, ElementContainer container)
 	{
-		super(getXValueFrom(column, row), getYValueFrom(row), getZValueFrom(row));
+		super(getXValueFrom(column, row), getYValueFrom(row), getZValueFrom(row), container);
 		this.column = column;
 		this.row = row;
 
@@ -43,6 +46,7 @@ public abstract class Tile extends Element
 		return this.isSelected;
 	}
 
+	@Override
 	public void click()
 	{
 		if(this.isSelected())

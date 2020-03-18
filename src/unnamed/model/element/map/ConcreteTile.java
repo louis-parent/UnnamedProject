@@ -1,7 +1,9 @@
-package unnamed.model;
+package unnamed.model.element.map;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+
+import unnamed.model.container.ElementContainer;
 
 public class ConcreteTile extends Tile
 {
@@ -17,9 +19,9 @@ public class ConcreteTile extends Tile
 		ConcreteTile.mountain = new Image("assets/tiles/grass_mountain_1.png");
 	}
 
-	public ConcreteTile(int column, int row)
+	public ConcreteTile(int column, int row, ElementContainer container)
 	{
-		super(column, row);
+		super(column, row, container);
 
 		if((column + row) % 7 == 0)
 		{
@@ -35,6 +37,16 @@ public class ConcreteTile extends Tile
 	public Image getSprite()
 	{
 		return this.sprite;
+	}
+
+	@Override
+	public void pressed()
+	{
+	}
+
+	@Override
+	public void mouseLeft()
+	{
 	}
 
 }
