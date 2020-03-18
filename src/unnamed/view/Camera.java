@@ -187,7 +187,7 @@ public class Camera
 	{
 		float actualValue = value - (value / this.zoomMultiplicator);
 		float previousValue = value - (value / (this.zoomMultiplicator - ZOOM_SPEED));
-		
+
 		return (actualValue - previousValue) / 2;
 	}
 
@@ -195,7 +195,7 @@ public class Camera
 	{
 		float previousValue = value - (value / (this.zoomMultiplicator + ZOOM_SPEED));
 		float actualValue = value - (value / this.zoomMultiplicator);
-		
+
 		return (previousValue - actualValue) / 2;
 	}
 }

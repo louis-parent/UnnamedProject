@@ -27,7 +27,7 @@ public class MapContainer extends ElementContainer
 		DesertTile.init();
 
 		Random rand = GameController.getInstance().getRandom();
-		
+
 		for(int i = 0; i < NUMBER_OF_COLUMNS; i++)
 		{
 			for(int j = 0; j < NUMBER_OF_ROWS; j++)
@@ -37,11 +37,11 @@ public class MapContainer extends ElementContainer
 					case 0:
 						this.addElement(new GrassTile(i, j, TileType.getRandomType(), this));
 						break;
-						
+
 					case 1:
 						this.addElement(new WaterTile(i, j, TileType.getRandomType(), this));
 						break;
-						
+
 					case 2:
 						this.addElement(new DesertTile(i, j, TileType.getRandomType(), this));
 						break;

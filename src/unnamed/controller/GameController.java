@@ -31,7 +31,7 @@ public class GameController
 	private ElementContainer currentContainer;
 	private MainMenuContainer menuContainer;
 	private MapContainer mapContainer;
-	
+
 	private Random random;
 
 	public static GameController getInstance()
@@ -52,7 +52,7 @@ public class GameController
 
 		this.menuContainer = new MainMenuContainer();
 		this.mapContainer = new MapContainer();
-		
+
 		this.random = new Random();
 	}
 
@@ -100,7 +100,7 @@ public class GameController
 	{
 		return this.cameraController;
 	}
-	
+
 	public Random getRandom()
 	{
 		return this.random;

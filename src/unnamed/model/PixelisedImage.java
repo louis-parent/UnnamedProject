@@ -10,12 +10,12 @@ public class PixelisedImage extends Image
 		super(path);
 		this.setFilter(Image.FILTER_NEAREST);
 	}
-	
+
 	private PixelisedImage()
 	{
-		
+
 	}
-	
+
 	public static PixelisedImage getEmptyImage()
 	{
 		return new PixelisedImage();
