@@ -1,24 +1,22 @@
 package unnamed.model.element.map;
 
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 
 public class ConcreteTile extends Tile
 {
 
-	private static Image flat;
-	private static Image mountain;
+	private static PixelisedImage flat;
+	private static PixelisedImage mountain;
 
-	private Image sprite;
+	private PixelisedImage sprite;
 
 	public static void init() throws SlickException
 	{
-		ConcreteTile.flat = new Image("assets/tiles/grass_flat_1.png");
-		ConcreteTile.mountain = new Image("assets/tiles/grass_mountain_1.png");
-		//ConcreteTile.flat.setFilter(Image.FILTER_NEAREST);
-		//ConcreteTile.mountain.setFilter(Image.FILTER_NEAREST);
+		ConcreteTile.flat = new PixelisedImage("assets/tiles/grass_flat_1.png");
+		ConcreteTile.mountain = new PixelisedImage("assets/tiles/grass_mountain_1.png");
 	}
 
 	public ConcreteTile(int column, int row, ElementContainer container)
@@ -36,7 +34,7 @@ public class ConcreteTile extends Tile
 	}
 
 	@Override
-	public Image getSprite()
+	public PixelisedImage getSprite()
 	{
 		return this.sprite;
 	}

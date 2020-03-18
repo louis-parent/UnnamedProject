@@ -1,9 +1,8 @@
 package unnamed.model.element;
 
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 
+import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 
 public abstract class Element
@@ -89,13 +88,13 @@ public abstract class Element
 		int spriteX = (int) (x - this.getX());
 		int spriteY = (int) (y - this.getY());
 
-		Image sprite = this.getSprite();
+		PixelisedImage sprite = this.getSprite();
 		Color pixelColor = sprite.getColor(spriteX, spriteY);
 
 		return pixelColor.getAlpha() == 0;
 	}
 
-	public abstract Image getSprite();
+	public abstract PixelisedImage getSprite();
 
 	public abstract void click();
 
@@ -107,16 +106,9 @@ public abstract class Element
 	{
 		return new Element(null) {
 			@Override
-			public Image getSprite()
+			public PixelisedImage getSprite()
 			{
-				try
-				{
-					return new Image(0, 0);
-				}
-				catch(SlickException e)
-				{
-					return null;
-				}
+				return PixelisedImage.getEmptyImage();
 
 			}
 

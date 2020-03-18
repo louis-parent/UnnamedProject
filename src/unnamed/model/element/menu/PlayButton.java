@@ -1,16 +1,16 @@
 package unnamed.model.element.menu;
 
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
+import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 
 public class PlayButton extends Button
 {
 
-	private static Image released;
-	private static Image pressed;
+	private static PixelisedImage released;
+	private static PixelisedImage pressed;
 
 	public PlayButton(int x, int y, int z, ElementContainer container)
 	{
@@ -19,8 +19,8 @@ public class PlayButton extends Button
 
 	public static void init() throws SlickException
 	{
-		PlayButton.released = new Image("assets/menu/play.png");
-		PlayButton.pressed = new Image("assets/menu/play_pressed.png");
+		PlayButton.released = new PixelisedImage("assets/menu/play.png");
+		PlayButton.pressed = new PixelisedImage("assets/menu/play_pressed.png");
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class PlayButton extends Button
 	}
 
 	@Override
-	public Image getSprite()
+	public PixelisedImage getSprite()
 	{
 		if(this.isPressed())
 		{
