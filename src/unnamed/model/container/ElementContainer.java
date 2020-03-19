@@ -104,4 +104,8 @@ public abstract class ElementContainer
 
 	public abstract void mouseDragged(int oldx, int oldy, int newx, int newy);
 
+	public abstract void wheelPressedAt(int x, int y);
+
+	public abstract void wheelReleasedAt(int x, int y);
+
 }

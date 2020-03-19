@@ -163,4 +163,14 @@ public class GameController
 	{
 		this.currentContainer.mouseDragged(oldx, oldy, newx, newy);
 	}
+
+	public void wheelPressedAt(int x, int y)
+	{
+		this.currentContainer.wheelPressedAt(x, y);
+	}
+
+	public void wheelReleasedAt(int x, int y)
+	{
+		this.currentContainer.wheelReleasedAt(x, y);
+	}
 }

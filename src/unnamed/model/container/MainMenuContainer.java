@@ -57,4 +57,14 @@ public class MainMenuContainer extends ElementContainer
 			oldElement.mouseLeft();
 		}
 	}
+
+	@Override
+	public void wheelPressedAt(int x, int y)
+	{
+	}
+
+	@Override
+	public void wheelReleasedAt(int x, int y)
+	{
+	}
 }

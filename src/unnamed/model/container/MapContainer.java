@@ -19,6 +19,14 @@ public class MapContainer extends ElementContainer
 	private static final int NUMBER_OF_ROWS = 75;
 	private static final int NUMBER_OF_COLUMNS = 75;
 
+	private boolean isMouseWheelActivated;
+
+	public MapContainer()
+	{
+		super();
+		this.isMouseWheelActivated = false;
+	}
+
 	@Override
 	public void init() throws SlickException
 	{
@@ -123,5 +131,21 @@ public class MapContainer extends ElementContainer
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy)
 	{
+		if(this.isMouseWheelActivated)
+		{
+			GameController.getInstance().getCameraController().mouseWheelDragged(oldx, oldy, newx, newy);
+		}
+	}
+
+	@Override
+	public void wheelPressedAt(int x, int y)
+	{
+		this.isMouseWheelActivated = true;
+	}
+
+	@Override
+	public void wheelReleasedAt(int x, int y)
+	{
+		this.isMouseWheelActivated = false;
 	}
 }

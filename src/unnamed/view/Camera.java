@@ -198,4 +198,13 @@ public class Camera
 
 		return (previousValue - actualValue) / 2;
 	}
+
+	public void moveFromPointTo(int oldx, int oldy, int newx, int newy)
+	{
+		int xChange = oldx - newx;
+		int yChange = oldy - newy;
+
+		this.offsetX += xChange;
+		this.offsetY += yChange;
+	}
 }
