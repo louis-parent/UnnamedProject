@@ -70,7 +70,7 @@ public class GameController
 	public void init(GameContainer container) throws SlickException
 	{
 		this.container = container;
-		this.container.setTargetFrameRate(60);
+		this.container.setVSync(true);
 
 		this.menuContainer.init();
 		this.mapContainer.init();
@@ -83,7 +83,7 @@ public class GameController
 
 	public void update(GameContainer container, int delta) throws SlickException
 	{
-		this.view.updateWindow();
+		this.view.updateWindow(delta);
 	}
 
 	public void render(GameContainer container, Graphics g) throws SlickException

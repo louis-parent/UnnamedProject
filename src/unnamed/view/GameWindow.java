@@ -40,9 +40,9 @@ public class GameWindow extends BasicGame
 		this.controller.render(container, g);
 	}
 
-	public void updateWindow()
+	public void updateWindow(int delta)
 	{
-		this.cam.update();
+		this.cam.update(delta);
 	}
 
 	public void renderWindow(Graphics g, List<Element> elements)

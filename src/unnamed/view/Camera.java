@@ -9,7 +9,7 @@ public class Camera
 
 	private static final float ZOOM_SPEED = 0.1f;
 
-	private static final int STANDARD_CAMERA_SPEED = 20;
+	private static final float STANDARD_CAMERA_SPEED = 0.6f;
 
 	private float offsetX;
 	private float offsetY;
@@ -24,10 +24,10 @@ public class Camera
 		this.setToOrigin();
 	}
 
-	public void update()
+	public void update(int delta)
 	{
-		this.offsetXBy((STANDARD_CAMERA_SPEED * this.horizontalSpeedMultiplicator) / this.zoomMultiplicator);
-		this.offsetYBy((STANDARD_CAMERA_SPEED * this.verticalSpeedMultiplicator) / this.zoomMultiplicator);
+		this.offsetXBy(((STANDARD_CAMERA_SPEED * this.horizontalSpeedMultiplicator) / this.zoomMultiplicator) * delta);
+		this.offsetYBy(((STANDARD_CAMERA_SPEED * this.verticalSpeedMultiplicator) / this.zoomMultiplicator) * delta);
 	}
 
 	public void render(Graphics g)
