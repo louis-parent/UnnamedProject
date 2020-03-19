@@ -72,7 +72,7 @@ public class MapContainer extends ElementContainer
 
 		for(Tile tile : adjacent)
 		{
-			if(GameController.getInstance().getRandom().nextInt(CORRUPTION_SPEED) == 0 && !Tile.getEmptyTile().equals(tile) && this.map.contains(tile))
+			if(GameController.getInstance().getRandom().nextInt(CORRUPTION_SPEED) == 0 && !Tile.EMPTY.equals(tile) && this.map.contains(tile))
 			{
 				Tile corrupt = TileFactory.createFrom(TileFactory.CORRUPT_BIOME, tile);
 

@@ -7,6 +7,30 @@ import unnamed.model.container.ElementContainer;
 
 public abstract class Element
 {
+	public static final Element EMPTY = new Element(ElementContainer.EMPTY) {
+		@Override
+		public PixelisedImage getSprite()
+		{
+			return PixelisedImage.EMPTY;
+
+		}
+
+		@Override
+		public void click()
+		{
+		}
+
+		@Override
+		public void pressed()
+		{
+		}
+
+		@Override
+		public void mouseLeft()
+		{
+		}
+	};
+
 	private ElementContainer container;
 
 	private float x;
@@ -106,32 +130,4 @@ public abstract class Element
 	public abstract void pressed();
 
 	public abstract void mouseLeft();
-
-	public static Element getEmptyElement()
-	{
-		return new Element(ElementContainer.getEmptyContainer()) {
-			@Override
-			public PixelisedImage getSprite()
-			{
-				return PixelisedImage.getEmptyImage();
-
-			}
-
-			@Override
-			public void click()
-			{
-			}
-
-			@Override
-			public void pressed()
-			{
-			}
-
-			@Override
-			public void mouseLeft()
-			{
-			}
-		};
-	}
-
 }

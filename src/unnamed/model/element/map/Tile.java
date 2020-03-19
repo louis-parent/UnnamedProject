@@ -12,12 +12,12 @@ public abstract class Tile extends Element
 	public static final int FLOATING_OFFSET = 8;
 	private static final int Z_SPACE_BETWEEN_TILES = 10;
 
-	private static final Tile EMPTY = new Tile(TileType.FLAT, ElementContainer.getEmptyContainer()) {
+	public static final Tile EMPTY = new Tile(TileType.FLAT, ElementContainer.EMPTY) {
 
 		@Override
 		public PixelisedImage getSprite()
 		{
-			return PixelisedImage.getEmptyImage();
+			return PixelisedImage.EMPTY;
 		}
 	};
 
@@ -159,10 +159,5 @@ public abstract class Tile extends Element
 	protected void setSpriteVariant(int spriteVariant)
 	{
 		this.spriteVariant = spriteVariant;
-	}
-
-	public static Tile getEmptyTile()
-	{
-		return Tile.EMPTY;
 	}
 }

@@ -26,7 +26,7 @@ public class TileFactory
 				return new DesertTile(column, row, type, container);
 
 			default:
-				return Tile.getEmptyTile();
+				return Tile.EMPTY;
 		}
 	}
 

@@ -11,6 +11,49 @@ import unnamed.model.element.Element;
 
 public abstract class ElementContainer
 {
+	public static final ElementContainer EMPTY = new ElementContainer() {
+
+		@Override
+		public void wheelReleasedAt(int x, int y)
+		{
+		}
+
+		@Override
+		public void wheelPressedAt(int x, int y)
+		{
+		}
+
+		@Override
+		public void tickUpdate()
+		{
+		}
+
+		@Override
+		public void mouseWheelMoved(int change)
+		{
+		}
+
+		@Override
+		public void mouseDragged(int oldx, int oldy, int newx, int newy)
+		{
+		}
+
+		@Override
+		public void keyReleased(int key, char c)
+		{
+		}
+
+		@Override
+		public void keyPressed(int key, char c)
+		{
+		}
+
+		@Override
+		public void init() throws SlickException
+		{
+		}
+	};
+
 	private Map<Integer, List<Element>> elements;
 	private int maxDepth;
 
@@ -91,7 +134,7 @@ public abstract class ElementContainer
 		}
 		else
 		{
-			return Element.getEmptyElement();
+			return Element.EMPTY;
 		}
 	}
 
@@ -103,52 +146,6 @@ public abstract class ElementContainer
 	public void pressedAt(int x, int y)
 	{
 		this.getTopElementAt(x, y).pressed();
-	}
-
-	public static ElementContainer getEmptyContainer()
-	{
-		return new ElementContainer() {
-
-			@Override
-			public void wheelReleasedAt(int x, int y)
-			{
-			}
-
-			@Override
-			public void wheelPressedAt(int x, int y)
-			{
-			}
-
-			@Override
-			public void tickUpdate()
-			{
-			}
-
-			@Override
-			public void mouseWheelMoved(int change)
-			{
-			}
-
-			@Override
-			public void mouseDragged(int oldx, int oldy, int newx, int newy)
-			{
-			}
-
-			@Override
-			public void keyReleased(int key, char c)
-			{
-			}
-
-			@Override
-			public void keyPressed(int key, char c)
-			{
-			}
-
-			@Override
-			public void init() throws SlickException
-			{
-			}
-		};
 	}
 
 	public abstract void init() throws SlickException;
