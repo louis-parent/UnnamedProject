@@ -204,7 +204,7 @@ public class Camera
 		int xChange = oldx - newx;
 		int yChange = oldy - newy;
 
-		this.offsetX += xChange;
-		this.offsetY += yChange;
+		this.offsetX -= xChange / this.zoomMultiplicator;
+		this.offsetY -= yChange / this.zoomMultiplicator;
 	}
 }
