@@ -1,6 +1,6 @@
 package unnamed.model.container;
 
-import java.util.Random;
+import java.util.List;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -10,8 +10,8 @@ import unnamed.controller.GameController;
 import unnamed.model.element.map.DesertTile;
 import unnamed.model.element.map.GrassTile;
 import unnamed.model.element.map.Tile;
-import unnamed.model.element.map.TileType;
 import unnamed.model.element.map.WaterTile;
+import unnamed.model.generator.MapGenerator;
 
 public class MapContainer extends ElementContainer
 {
@@ -34,27 +34,12 @@ public class MapContainer extends ElementContainer
 		WaterTile.init();
 		DesertTile.init();
 
-		Random rand = GameController.getInstance().getRandom();
-
-		for(int i = 0; i < NUMBER_OF_COLUMNS; i++)
+		MapGenerator gen = new MapGenerator(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
+		List<Tile> tiles = gen.generateMap(this);
+		
+		for(Tile tile : tiles)
 		{
-			for(int j = 0; j < NUMBER_OF_ROWS; j++)
-			{
-				switch(rand.nextInt(3))
-				{
-					case 0:
-						this.addElement(new GrassTile(i, j, TileType.getRandomType(), this));
-						break;
-
-					case 1:
-						this.addElement(new WaterTile(i, j, TileType.getRandomType(), this));
-						break;
-
-					case 2:
-						this.addElement(new DesertTile(i, j, TileType.getRandomType(), this));
-						break;
-				}
-			}
+			this.addElement(tile);
 		}
 	}
 
