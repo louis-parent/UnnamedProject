@@ -84,7 +84,7 @@ public abstract class Button extends Element
 			return this.getReleasedSprite();
 		}
 	}
-	
+
 	@Override
 	protected boolean inTransparency(float x, float y)
 	{
@@ -93,7 +93,7 @@ public abstract class Button extends Element
 
 		PixelisedImage pressedSprite = this.getPressedSprite();
 		Color pressedPixelColor = pressedSprite.getColor(spriteX, spriteY);
-		
+
 		PixelisedImage releasedSprite = this.getReleasedSprite();
 		Color releasedPixelColor = releasedSprite.getColor(spriteX, spriteY);
 

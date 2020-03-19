@@ -2,6 +2,7 @@ package unnamed.model.element.map;
 
 import org.newdawn.slick.SlickException;
 
+import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 
 public class WaterTile extends Tile
@@ -15,6 +16,12 @@ public class WaterTile extends Tile
 
 	public WaterTile(int column, int row, TileType type, ElementContainer container)
 	{
-		super(column, row, type, WaterTile.waterRegistry.get(WaterTile.waterRegistry.getImageNameFor(type, type.getRandomVariant())), container);
+		super(column, row, type, container);
+	}
+
+	@Override
+	public PixelisedImage getSprite()
+	{
+		return WaterTile.waterRegistry.get(WaterTile.waterRegistry.getImageNameFor(this.getType(), this.getSpriteVariant()));
 	}
 }

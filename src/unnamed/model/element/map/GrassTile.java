@@ -2,6 +2,7 @@ package unnamed.model.element.map;
 
 import org.newdawn.slick.SlickException;
 
+import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 
 public class GrassTile extends Tile
@@ -15,6 +16,12 @@ public class GrassTile extends Tile
 
 	public GrassTile(int column, int row, TileType type, ElementContainer container)
 	{
-		super(column, row, type, GrassTile.grassRegistry.get(GrassTile.grassRegistry.getImageNameFor(type, type.getRandomVariant())), container);
+		super(column, row, type, container);
+	}
+
+	@Override
+	public PixelisedImage getSprite()
+	{
+		return GrassTile.grassRegistry.get(GrassTile.grassRegistry.getImageNameFor(this.getType(), this.getSpriteVariant()));
 	}
 }

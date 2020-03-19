@@ -96,6 +96,11 @@ public abstract class Element
 
 	public abstract PixelisedImage getSprite();
 
+	protected ElementContainer getContainer()
+	{
+		return container;
+	}
+
 	public abstract void click();
 
 	public abstract void pressed();

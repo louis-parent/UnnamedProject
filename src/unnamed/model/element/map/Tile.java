@@ -1,6 +1,5 @@
 package unnamed.model.element.map;
 
-import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
 
@@ -19,19 +18,13 @@ public abstract class Tile extends Element
 
 	private TileType type;
 
-	private PixelisedImage sprite;
-
 	private boolean isSelected;
+
+	private int spriteVariant;
 
 	public Tile(TileType type, ElementContainer container)
 	{
 		this(0, 0, type, container);
-	}
-
-	protected Tile(int column, int row, TileType type, PixelisedImage sprite, ElementContainer container)
-	{
-		this(column, row, type, container);
-		this.sprite = sprite;
 	}
 
 	public Tile(int column, int row, TileType type, ElementContainer container)
@@ -41,6 +34,7 @@ public abstract class Tile extends Element
 		this.row = row;
 
 		this.type = type;
+		this.spriteVariant = type.getRandomVariant();
 
 		this.isSelected = false;
 	}
@@ -62,13 +56,13 @@ public abstract class Tile extends Element
 
 	public TileType getType()
 	{
-		return type;
+		return this.type;
 	}
 
-	@Override
-	public PixelisedImage getSprite()
+	public void setType(TileType type)
 	{
-		return this.sprite;
+		this.type = type;
+		this.setSpriteVariant(type.getRandomVariant());
 	}
 
 	@Override
@@ -145,5 +139,15 @@ public abstract class Tile extends Element
 	private static int getZValueFrom(int row)
 	{
 		return row * Z_SPACE_BETWEEN_TILES;
+	}
+
+	protected int getSpriteVariant()
+	{
+		return this.spriteVariant;
+	}
+
+	protected void setSpriteVariant(int spriteVariant)
+	{
+		this.spriteVariant = spriteVariant;
 	}
 }

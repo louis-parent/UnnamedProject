@@ -36,7 +36,7 @@ public class MapContainer extends ElementContainer
 
 		MapGenerator gen = new MapGenerator(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
 		List<Tile> tiles = gen.generateMap(this);
-		
+
 		for(Tile tile : tiles)
 		{
 			this.addElement(tile);
