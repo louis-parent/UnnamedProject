@@ -30,16 +30,14 @@ public class PlayButton extends Button
 	}
 
 	@Override
-	public PixelisedImage getSprite()
+	protected PixelisedImage getPressedSprite()
 	{
-		if(this.isPressed())
-		{
-			return PlayButton.pressed;
-		}
-		else
-		{
-			return PlayButton.released;
-		}
+		return PlayButton.pressed;
 	}
 
+	@Override
+	protected PixelisedImage getReleasedSprite()
+	{
+		return PlayButton.released;
+	}
 }

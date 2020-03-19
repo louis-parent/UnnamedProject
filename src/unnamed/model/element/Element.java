@@ -68,7 +68,7 @@ public abstract class Element
 	public boolean isInside(float x, float y)
 	{
 		boolean isBefore = x < this.getX() || y < this.getY();
-		boolean isAfter = x > this.getX() + getWidth() || y > this.getY() + getHeight();
+		boolean isAfter = x > this.getX() + this.getWidth() || y > this.getY() + this.getHeight();
 
 		return !isBefore && !isAfter && !this.inTransparency(x, y);
 	}
@@ -83,7 +83,7 @@ public abstract class Element
 		return this.getSprite().getWidth();
 	}
 
-	private boolean inTransparency(float x, float y)
+	protected boolean inTransparency(float x, float y)
 	{
 		int spriteX = (int) (x - this.getX());
 		int spriteY = (int) (y - this.getY());

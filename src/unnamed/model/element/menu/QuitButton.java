@@ -30,16 +30,14 @@ public class QuitButton extends Button
 	}
 
 	@Override
-	public PixelisedImage getSprite()
+	protected PixelisedImage getPressedSprite()
 	{
-		if(this.isPressed())
-		{
-			return QuitButton.pressed;
-		}
-		else
-		{
-			return QuitButton.released;
-		}
+		return QuitButton.pressed;
 	}
 
+	@Override
+	protected PixelisedImage getReleasedSprite()
+	{
+		return QuitButton.released;
+	}
 }
