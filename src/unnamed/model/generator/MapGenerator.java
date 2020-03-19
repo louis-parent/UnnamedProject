@@ -7,6 +7,7 @@ import java.util.Random;
 
 import unnamed.controller.GameController;
 import unnamed.model.container.ElementContainer;
+import unnamed.model.element.map.Map;
 import unnamed.model.element.map.Tile;
 import unnamed.model.element.map.TileFactory;
 import unnamed.model.element.map.TileType;
@@ -22,42 +23,30 @@ public class MapGenerator
 	private static final int DEFAULT_HILL_DENSITY = 3;
 	private static final int HILL_DENSITY_AROUND_MOUNTAINS = 25;
 
-	private int rows;
 	private int columns;
+	private int rows;
 
-	private List<Tile> tiles;
+	private Map map;
 
 	private Random rand;
 
-	public MapGenerator(int numberOfRows, int numberOfColumns)
+	public MapGenerator(int numberOfColumns, int numberOfRows)
 	{
-		this.rows = numberOfRows;
 		this.columns = numberOfColumns;
+		this.rows = numberOfRows;
 
-		this.tiles = new ArrayList<Tile>();
+		this.map = new Map(numberOfColumns, numberOfRows);
 
 		this.rand = GameController.getInstance().getRandom();
 	}
 
-	public List<Tile> generateMap(ElementContainer container)
+	public Map generateMap(ElementContainer container)
 	{
 		this.generateGrassBase(container);
 		this.generateTerrain();
 		this.generateBiomes(container);
 
-		return this.tiles;
-	}
-
-	private int getListPosition(int x, int y)
-	{
-		if((x >= 0 && y >= 0) && (x < this.columns && y < this.rows))
-		{
-			return this.columns * x + y;
-		}
-		else
-		{
-			return -1;
-		}
+		return this.map;
 	}
 
 	private void generateGrassBase(ElementContainer container)
@@ -66,7 +55,7 @@ public class MapGenerator
 		{
 			for(int j = 0; j < this.rows; j++)
 			{
-				this.tiles.add(TileFactory.create(TileFactory.GRASS_BIOME, i, j, TileType.FLAT, container));
+				this.map.add(TileFactory.create(TileFactory.GRASS_BIOME, i, j, TileType.FLAT, container));
 			}
 		}
 	}
@@ -90,14 +79,14 @@ public class MapGenerator
 	{
 		List<Tile> seeded = new ArrayList<Tile>();
 
-		int spot = this.rand.nextInt(this.tiles.size());
+		int spot = this.rand.nextInt(this.map.size());
 
-		Tile changedTile = this.tiles.get(spot);
+		Tile changedTile = this.map.get(spot);
 
 		changedTile.setType(TileType.MOUNTAIN);
 		seeded.add(changedTile);
 
-		List<Tile> adjacentTiles = this.getAdjacentTiles(changedTile);
+		List<Tile> adjacentTiles = this.map.getAdjacentTiles(changedTile);
 
 		Tile randomAdjacentTile;
 
@@ -110,64 +99,6 @@ public class MapGenerator
 		seeded.add(randomAdjacentTile);
 
 		return seeded;
-	}
-
-	private List<Tile> getAdjacentTiles(Tile changedTile)
-	{
-		List<Tile> adjacent = new ArrayList<Tile>();
-
-		adjacent.addAll(this.getTopTiles(changedTile));
-
-		int listPosition = this.getListPosition(changedTile.getColumn() - 1, changedTile.getRow());
-
-		if(listPosition != -1)
-		{
-			adjacent.add(this.tiles.get(listPosition));
-		}
-
-		listPosition = this.getListPosition(changedTile.getColumn() + 1, changedTile.getRow());
-
-		if(listPosition != -1)
-		{
-			adjacent.add(this.tiles.get(listPosition));
-		}
-
-		adjacent.addAll(this.getBottomTiles(changedTile));
-
-		return adjacent;
-	}
-
-	private List<Tile> getTopTiles(Tile changedTile)
-	{
-		return this.getAdjacentTilesForRow(changedTile, -1);
-	}
-
-	private List<Tile> getBottomTiles(Tile changedTile)
-	{
-		return this.getAdjacentTilesForRow(changedTile, 1);
-	}
-
-	private List<Tile> getAdjacentTilesForRow(Tile changedTile, int offset)
-	{
-		List<Tile> row = new ArrayList<Tile>();
-
-		int leftTileValue = changedTile.getColumn() - ((changedTile.getRow() + 1) % 2);
-
-		int listPosition = this.getListPosition(leftTileValue, changedTile.getRow() + offset);
-
-		if(listPosition != -1)
-		{
-			row.add(this.tiles.get(listPosition));
-		}
-
-		listPosition = this.getListPosition(leftTileValue + 1, changedTile.getRow() + offset);
-
-		if(listPosition != -1)
-		{
-			row.add(this.tiles.get(listPosition));
-		}
-
-		return row;
 	}
 
 	private void expandMountains(List<Tile> seeded)
@@ -185,11 +116,11 @@ public class MapGenerator
 		{
 			List<Tile> allMountains = new ArrayList<Tile>(seeded);
 
-			List<Tile> flatAdjacents = this.getAllAdjacentFor(TileType.FLAT, seeded);
+			List<Tile> flatAdjacents = this.map.getAllAdjacentFor(TileType.FLAT, seeded);
 
 			for(Tile tile : flatAdjacents)
 			{
-				if(this.rand.nextInt(100) <= this.getProbabilityForMountainSpawn(this.getNumberAdjacentsOf(TileType.MOUNTAIN, tile)))
+				if(this.rand.nextInt(100) <= this.getProbabilityForMountainSpawn(this.map.getNumberAdjacentsOf(TileType.MOUNTAIN, tile)))
 				{
 					if(tile.getType() != TileType.MOUNTAIN)
 					{
@@ -216,77 +147,20 @@ public class MapGenerator
 
 	}
 
-	private int getNumberAdjacentsOf(TileType type, Tile source)
-	{
-		List<Tile> farAdjacents = new ArrayList<Tile>();
-
-		int i = source.getColumn();
-		int j = source.getRow();
-
-		addToWithCondition(farAdjacents, type, i - 1, j + 2);
-		addToWithCondition(farAdjacents, type, i + 1, j + 2);
-		addToWithCondition(farAdjacents, type, i - 2, j);
-		addToWithCondition(farAdjacents, type, i + 2, j);
-		addToWithCondition(farAdjacents, type, i - 1, j - 2);
-		addToWithCondition(farAdjacents, type, i + 1, j - 2);
-
-		return farAdjacents.size();
-	}
-
-	private void addToWithCondition(List<Tile> farAdjacents, TileType type, int i, int j)
-	{
-		int position = this.getListPosition(i, j);
-		if(position != -1 && this.tiles.get(position).getType() == type)
-		{
-			farAdjacents.add(this.tiles.get(position));
-		}
-	}
-
-	private List<Tile> getAllAdjacentFor(TileType type, List<Tile> tiles)
-	{
-		List<Tile> adjacents = getAllAdjacent(tiles);
-
-		for(int i = 0; i < adjacents.size(); i++)
-		{
-			if(adjacents.get(i).getType() != type)
-			{
-				adjacents.remove(i);
-				i--;
-			}
-		}
-
-		return adjacents;
-	}
-
-	private List<Tile> getAllAdjacent(List<Tile> tiles)
-	{
-		List<Tile> typedAdjacent = new ArrayList<Tile>();
-
-		for(Tile tile : tiles)
-		{
-			for(Tile adjacent : this.getAdjacentTiles(tile))
-			{
-				typedAdjacent.add(adjacent);
-			}
-		}
-
-		return typedAdjacent;
-	}
-
 	private void generateHills()
 	{
 		for(int i = 0; i < this.columns; i++)
 		{
 			for(int j = 0; j < this.rows; j++)
 			{
-				Tile tile = this.tiles.get(this.getListPosition(i, j));
+				Tile tile = this.map.get(this.map.getListPosition(i, j));
 				int prob = 0;
 
 				if(tile.getType() == TileType.MOUNTAIN)
 				{
 					prob = HILL_DENSITY_IN_MOUNTAIN;
 				}
-				else if(this.getAllAdjacentFor(TileType.MOUNTAIN, Arrays.asList(tile)).size() > 0)
+				else if(this.map.getAllAdjacentFor(TileType.MOUNTAIN, Arrays.asList(tile)).size() > 0)
 				{
 					prob = HILL_DENSITY_AROUND_MOUNTAINS;
 				}

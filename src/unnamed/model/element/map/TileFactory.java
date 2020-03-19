@@ -29,4 +29,9 @@ public class TileFactory
 				return Tile.getEmptyTile();
 		}
 	}
+
+	public static Tile createFrom(String biome, Tile tile)
+	{
+		return create(biome, tile.getColumn(), tile.getRow(), tile.getType(), tile.getContainer());
+	}
 }

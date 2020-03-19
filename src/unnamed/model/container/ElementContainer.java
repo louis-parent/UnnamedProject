@@ -42,6 +42,12 @@ public abstract class ElementContainer
 		this.elements.get(element.getZ()).remove(element);
 	}
 
+	public void replaceElement(Element oldElement, Element newElement)
+	{
+		this.removeElement(oldElement);
+		this.addElement(newElement);
+	}
+
 	public List<Element> getElementsToDraw()
 	{
 		List<Element> finalList = new ArrayList<Element>();

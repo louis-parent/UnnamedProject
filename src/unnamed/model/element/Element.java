@@ -96,7 +96,7 @@ public abstract class Element
 
 	public abstract PixelisedImage getSprite();
 
-	protected ElementContainer getContainer()
+	public ElementContainer getContainer()
 	{
 		return container;
 	}

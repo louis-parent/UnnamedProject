@@ -12,6 +12,15 @@ public abstract class Tile extends Element
 	public static final int FLOATING_OFFSET = 8;
 	private static final int Z_SPACE_BETWEEN_TILES = 10;
 
+	private static final Tile EMPTY = new Tile(TileType.FLAT, ElementContainer.getEmptyContainer()) {
+
+		@Override
+		public PixelisedImage getSprite()
+		{
+			return PixelisedImage.getEmptyImage();
+		}
+	};
+
 	private static Tile lastSelected;
 
 	private int column;
@@ -154,14 +163,6 @@ public abstract class Tile extends Element
 
 	public static Tile getEmptyTile()
 	{
-		return new Tile(TileType.FLAT, ElementContainer.getEmptyContainer()) {
-
-			@Override
-			public PixelisedImage getSprite()
-			{
-				return PixelisedImage.getEmptyImage();
-			}
-
-		};
+		return Tile.EMPTY;
 	}
 }
