@@ -13,8 +13,12 @@ import unnamed.model.element.map.TileType;
 
 public class MapGenerator
 {
+	private static final int SURFACE_FOR_MOUNTAIN_CHAIN = 2500;
+	private static final int MOUNTAIN_DIAMETER = 15;
 	private static final int DEFAULT_MOUNTAIN_DENSITY = 1;
 	private static final int MOUNTAIN_CHAIN_DENSITY = 99;
+	
+	private static final int HILL_DENSITY_IN_MOUNTAIN = 15;
 	private static final int DEFAULT_HILL_DENSITY = 3;
 	private static final int HILL_DENSITY_AROUND_MOUNTAINS = 25;
 	
@@ -75,8 +79,11 @@ public class MapGenerator
 
 	private void generateMountains()
 	{
-		List<Tile> seeded = this.seedMountains();
-		this.expandMountains(seeded);
+		for(int i = 0; i < (this.rows * this.columns) / SURFACE_FOR_MOUNTAIN_CHAIN; i++)
+		{
+			List<Tile> seeded = this.seedMountains();
+			this.expandMountains(seeded);
+		}
 	}
 
 	private List<Tile> seedMountains()
@@ -165,7 +172,7 @@ public class MapGenerator
 
 	private void expandMountains(List<Tile> seeded)
 	{
-		this.expandMountains(seeded, 10);
+		this.expandMountains(seeded, MOUNTAIN_DIAMETER);
 	}
 
 	private List<Tile> expandMountains(List<Tile> seeded, int iteration)
@@ -275,7 +282,11 @@ public class MapGenerator
 				Tile tile = this.tiles.get(this.getListPosition(i, j));
 				int prob = 0;
 				
-				if(this.getAllAdjacentFor(TileType.MOUNTAIN, Arrays.asList(tile)).size() > 0)
+				if(tile.getType() == TileType.MOUNTAIN)
+				{
+					prob = HILL_DENSITY_IN_MOUNTAIN;
+				}
+				else if(this.getAllAdjacentFor(TileType.MOUNTAIN, Arrays.asList(tile)).size() > 0)
 				{
 					prob = HILL_DENSITY_AROUND_MOUNTAINS;
 				}
