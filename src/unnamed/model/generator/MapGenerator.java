@@ -1,6 +1,7 @@
 package unnamed.model.generator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -12,6 +13,11 @@ import unnamed.model.element.map.TileType;
 
 public class MapGenerator
 {
+	private static final int DEFAULT_MOUNTAIN_DENSITY = 1;
+	private static final int MOUNTAIN_CHAIN_DENSITY = 99;
+	private static final int DEFAULT_HILL_DENSITY = 3;
+	private static final int HILL_DENSITY_AROUND_MOUNTAINS = 25;
+	
 	private int rows;
 	private int columns;
 
@@ -194,11 +200,11 @@ public class MapGenerator
 	{
 		if(numberAdjacents == 1)
 		{
-			return 99;
+			return MOUNTAIN_CHAIN_DENSITY;
 		}
 		else
 		{
-			return 1;
+			return DEFAULT_MOUNTAIN_DENSITY;
 		}
 
 	}
@@ -226,21 +232,6 @@ public class MapGenerator
 		if(position != -1 && this.tiles.get(position).getType() == type)
 		{
 			farAdjacents.add(this.tiles.get(position));
-		}
-	}
-
-	private void removeDoubles(List<Tile> list)
-	{
-		for(int i = 0; i < list.size() - 1; i++)
-		{
-			for(int j = i + 1; j < list.size(); j++)
-			{
-				if(list.get(i) == list.get(j))
-				{
-					list.remove(j);
-					j--;
-				}
-			}
 		}
 	}
 
@@ -277,14 +268,34 @@ public class MapGenerator
 
 	private void generateHills()
 	{
-		// TODO Auto-generated method stub
+		for(int i = 0; i < this.columns; i++)
+		{
+			for(int j = 0; j < this.rows; j++)
+			{
+				Tile tile = this.tiles.get(this.getListPosition(i, j));
+				int prob = 0;
+				
+				if(this.getAllAdjacentFor(TileType.MOUNTAIN, Arrays.asList(tile)).size() > 0)
+				{
+					prob = HILL_DENSITY_AROUND_MOUNTAINS;
+				}
+				else
+				{
+					prob = DEFAULT_HILL_DENSITY;
+				}
+				
+				if(this.rand.nextInt(100) <= prob)
+				{
+					tile.setType(TileType.HILL);
+				}
+			}
+		}
 
 	}
 
 	private void generateBiomes(ElementContainer container)
 	{
-		// TODO Auto-generated method stub
-
+		// TODO 
 	}
 
 }
