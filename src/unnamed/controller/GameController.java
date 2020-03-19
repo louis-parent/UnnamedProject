@@ -16,11 +16,11 @@ import unnamed.view.GameWindow;
 public class GameController
 {
 	public static final int GAME_HEIGHT = 1080;
-
 	public static final int GAME_WIDTH = 1920;
 
 	private static final String GAME_NAME = "Unnamed";
-
+	private static final int TICK_LENGTH_IN_MILLIS = 50;
+	
 	private static GameController instance;
 
 	private CameraController cameraController;
@@ -33,6 +33,8 @@ public class GameController
 	private MapContainer mapContainer;
 
 	private Random random;
+	
+	private int leftOverMillis;
 
 	public static GameController getInstance()
 	{
@@ -54,6 +56,8 @@ public class GameController
 		this.mapContainer = new MapContainer();
 
 		this.random = new Random();
+		
+		this.leftOverMillis = 0;
 	}
 
 	public static void start() throws SlickException
@@ -82,6 +86,15 @@ public class GameController
 
 	public void update(GameContainer container, int delta) throws SlickException
 	{
+		this.leftOverMillis += delta;
+		int ticksPassed = this.leftOverMillis / TICK_LENGTH_IN_MILLIS;
+		this.leftOverMillis %= TICK_LENGTH_IN_MILLIS;
+		
+		for(int i = 0; i < ticksPassed; i++)
+		{
+			this.currentContainer.tickUpdate();
+		}
+		
 		this.view.updateWindow(delta);
 	}
 

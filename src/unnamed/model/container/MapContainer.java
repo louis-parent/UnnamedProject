@@ -7,6 +7,7 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.controller.CameraController;
 import unnamed.controller.GameController;
+import unnamed.model.element.map.CorruptTile;
 import unnamed.model.element.map.DesertTile;
 import unnamed.model.element.map.GrassTile;
 import unnamed.model.element.map.Tile;
@@ -33,14 +34,25 @@ public class MapContainer extends ElementContainer
 		GrassTile.init();
 		WaterTile.init();
 		DesertTile.init();
+		CorruptTile.init();
 
 		MapGenerator gen = new MapGenerator(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
 		List<Tile> tiles = gen.generateMap(this);
+
+		int corruptStart = GameController.getInstance().getRandom().nextInt(tiles.size());
+		Tile oldTile = tiles.get(corruptStart);
+		tiles.set(corruptStart, new CorruptTile(oldTile.getColumn(), oldTile.getRow(), oldTile.getType(), this));
 
 		for(Tile tile : tiles)
 		{
 			this.addElement(tile);
 		}
+	}
+
+	@Override
+	public void tickUpdate()
+	{
+		
 	}
 
 	public int getMapHeight()

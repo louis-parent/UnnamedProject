@@ -37,8 +37,6 @@ public abstract class ElementContainer
 		this.elements.get(z).add(element);
 	}
 
-	public abstract void init() throws SlickException;
-
 	public List<Element> getElementsToDraw()
 	{
 		List<Element> finalList = new ArrayList<Element>();
@@ -96,6 +94,9 @@ public abstract class ElementContainer
 		this.getTopElementAt(x, y).pressed();
 	}
 
+	public abstract void init() throws SlickException;
+	public abstract void tickUpdate();
+	
 	public abstract void mouseWheelMoved(int change);
 
 	public abstract void keyReleased(int key, char c);
