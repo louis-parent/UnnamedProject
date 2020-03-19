@@ -27,7 +27,7 @@ public class MainMenuContainer extends ElementContainer
 
 	@Override
 	public void tickUpdate()
-	{		
+	{
 	}
 
 	@Override

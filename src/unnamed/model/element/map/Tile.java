@@ -1,5 +1,6 @@
 package unnamed.model.element.map;
 
+import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
 
@@ -149,5 +150,18 @@ public abstract class Tile extends Element
 	protected void setSpriteVariant(int spriteVariant)
 	{
 		this.spriteVariant = spriteVariant;
+	}
+
+	public static Tile getEmptyTile()
+	{
+		return new Tile(TileType.FLAT, ElementContainer.getEmptyContainer()) {
+
+			@Override
+			public PixelisedImage getSprite()
+			{
+				return PixelisedImage.getEmptyImage();
+			}
+
+		};
 	}
 }

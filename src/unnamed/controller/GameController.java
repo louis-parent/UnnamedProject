@@ -20,7 +20,7 @@ public class GameController
 
 	private static final String GAME_NAME = "Unnamed";
 	private static final int TICK_LENGTH_IN_MILLIS = 50;
-	
+
 	private static GameController instance;
 
 	private CameraController cameraController;
@@ -33,7 +33,7 @@ public class GameController
 	private MapContainer mapContainer;
 
 	private Random random;
-	
+
 	private int leftOverMillis;
 
 	public static GameController getInstance()
@@ -56,7 +56,7 @@ public class GameController
 		this.mapContainer = new MapContainer();
 
 		this.random = new Random();
-		
+
 		this.leftOverMillis = 0;
 	}
 
@@ -89,12 +89,12 @@ public class GameController
 		this.leftOverMillis += delta;
 		int ticksPassed = this.leftOverMillis / TICK_LENGTH_IN_MILLIS;
 		this.leftOverMillis %= TICK_LENGTH_IN_MILLIS;
-		
+
 		for(int i = 0; i < ticksPassed; i++)
 		{
 			this.currentContainer.tickUpdate();
 		}
-		
+
 		this.view.updateWindow(delta);
 	}
 

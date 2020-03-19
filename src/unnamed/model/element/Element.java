@@ -109,7 +109,7 @@ public abstract class Element
 
 	public static Element getEmptyElement()
 	{
-		return new Element(null) {
+		return new Element(ElementContainer.getEmptyContainer()) {
 			@Override
 			public PixelisedImage getSprite()
 			{

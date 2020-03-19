@@ -7,8 +7,8 @@ import java.util.Random;
 
 import unnamed.controller.GameController;
 import unnamed.model.container.ElementContainer;
-import unnamed.model.element.map.GrassTile;
 import unnamed.model.element.map.Tile;
+import unnamed.model.element.map.TileFactory;
 import unnamed.model.element.map.TileType;
 
 public class MapGenerator
@@ -17,11 +17,11 @@ public class MapGenerator
 	private static final int MOUNTAIN_DIAMETER = 15;
 	private static final int DEFAULT_MOUNTAIN_DENSITY = 1;
 	private static final int MOUNTAIN_CHAIN_DENSITY = 99;
-	
+
 	private static final int HILL_DENSITY_IN_MOUNTAIN = 15;
 	private static final int DEFAULT_HILL_DENSITY = 3;
 	private static final int HILL_DENSITY_AROUND_MOUNTAINS = 25;
-	
+
 	private int rows;
 	private int columns;
 
@@ -66,7 +66,7 @@ public class MapGenerator
 		{
 			for(int j = 0; j < this.rows; j++)
 			{
-				this.tiles.add(new GrassTile(i, j, TileType.FLAT, container));
+				this.tiles.add(TileFactory.create(TileFactory.GRASS_BIOME, i, j, TileType.FLAT, container));
 			}
 		}
 	}
@@ -281,7 +281,7 @@ public class MapGenerator
 			{
 				Tile tile = this.tiles.get(this.getListPosition(i, j));
 				int prob = 0;
-				
+
 				if(tile.getType() == TileType.MOUNTAIN)
 				{
 					prob = HILL_DENSITY_IN_MOUNTAIN;
@@ -294,7 +294,7 @@ public class MapGenerator
 				{
 					prob = DEFAULT_HILL_DENSITY;
 				}
-				
+
 				if(this.rand.nextInt(100) <= prob)
 				{
 					tile.setType(TileType.HILL);
@@ -306,7 +306,7 @@ public class MapGenerator
 
 	private void generateBiomes(ElementContainer container)
 	{
-		// TODO 
+		// TODO
 	}
 
 }

@@ -1,5 +1,6 @@
 package unnamed.model.container;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.newdawn.slick.Input;
@@ -11,6 +12,7 @@ import unnamed.model.element.map.CorruptTile;
 import unnamed.model.element.map.DesertTile;
 import unnamed.model.element.map.GrassTile;
 import unnamed.model.element.map.Tile;
+import unnamed.model.element.map.TileFactory;
 import unnamed.model.element.map.WaterTile;
 import unnamed.model.generator.MapGenerator;
 
@@ -22,10 +24,13 @@ public class MapContainer extends ElementContainer
 
 	private boolean isMouseWheelActivated;
 
+	private List<Tile> corruptTiles;
+
 	public MapContainer()
 	{
 		super();
 		this.isMouseWheelActivated = false;
+		this.corruptTiles = new ArrayList<Tile>();
 	}
 
 	@Override
@@ -41,7 +46,9 @@ public class MapContainer extends ElementContainer
 
 		int corruptStart = GameController.getInstance().getRandom().nextInt(tiles.size());
 		Tile oldTile = tiles.get(corruptStart);
-		tiles.set(corruptStart, new CorruptTile(oldTile.getColumn(), oldTile.getRow(), oldTile.getType(), this));
+		Tile corruptTile = TileFactory.create(TileFactory.CORRUPT_BIOME, oldTile.getColumn(), oldTile.getRow(), oldTile.getType(), this);
+		tiles.set(corruptStart, corruptTile);
+		this.corruptTiles.add(corruptTile);
 
 		for(Tile tile : tiles)
 		{
@@ -52,7 +59,7 @@ public class MapContainer extends ElementContainer
 	@Override
 	public void tickUpdate()
 	{
-		
+
 	}
 
 	public int getMapHeight()

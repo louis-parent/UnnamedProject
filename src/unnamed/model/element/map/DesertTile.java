@@ -11,10 +11,10 @@ public class DesertTile extends Tile
 
 	public static void init() throws SlickException
 	{
-		DesertTile.desertRegistry = new TileImageRegistry("desert");
+		DesertTile.desertRegistry = new TileImageRegistry(TileFactory.DESERT_BIOME);
 	}
 
-	public DesertTile(int column, int row, TileType type, ElementContainer container)
+	protected DesertTile(int column, int row, TileType type, ElementContainer container)
 	{
 		super(column, row, type, container);
 	}

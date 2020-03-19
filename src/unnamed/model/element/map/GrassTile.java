@@ -11,10 +11,10 @@ public class GrassTile extends Tile
 
 	public static void init() throws SlickException
 	{
-		GrassTile.grassRegistry = new TileImageRegistry("grass");
+		GrassTile.grassRegistry = new TileImageRegistry(TileFactory.GRASS_BIOME);
 	}
 
-	public GrassTile(int column, int row, TileType type, ElementContainer container)
+	protected GrassTile(int column, int row, TileType type, ElementContainer container)
 	{
 		super(column, row, type, container);
 	}

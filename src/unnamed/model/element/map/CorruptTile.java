@@ -11,10 +11,10 @@ public class CorruptTile extends Tile
 
 	public static void init() throws SlickException
 	{
-		CorruptTile.corruptRegistry = new TileImageRegistry("corrupt");
+		CorruptTile.corruptRegistry = new TileImageRegistry(TileFactory.CORRUPT_BIOME);
 	}
 
-	public CorruptTile(int column, int row, TileType type, ElementContainer container)
+	protected CorruptTile(int column, int row, TileType type, ElementContainer container)
 	{
 		super(column, row, type, container);
 	}

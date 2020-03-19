@@ -11,10 +11,10 @@ public class WaterTile extends Tile
 
 	public static void init() throws SlickException
 	{
-		WaterTile.waterRegistry = new TileImageRegistry("water_shallow");
+		WaterTile.waterRegistry = new TileImageRegistry(TileFactory.WATER_BIOME);
 	}
 
-	public WaterTile(int column, int row, TileType type, ElementContainer container)
+	protected WaterTile(int column, int row, TileType type, ElementContainer container)
 	{
 		super(column, row, type, container);
 	}

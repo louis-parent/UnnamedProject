@@ -37,6 +37,11 @@ public abstract class ElementContainer
 		this.elements.get(z).add(element);
 	}
 
+	public void removeElement(Element element)
+	{
+		this.elements.get(element.getZ()).remove(element);
+	}
+
 	public List<Element> getElementsToDraw()
 	{
 		List<Element> finalList = new ArrayList<Element>();
@@ -94,9 +99,56 @@ public abstract class ElementContainer
 		this.getTopElementAt(x, y).pressed();
 	}
 
+	public static ElementContainer getEmptyContainer()
+	{
+		return new ElementContainer() {
+
+			@Override
+			public void wheelReleasedAt(int x, int y)
+			{
+			}
+
+			@Override
+			public void wheelPressedAt(int x, int y)
+			{
+			}
+
+			@Override
+			public void tickUpdate()
+			{
+			}
+
+			@Override
+			public void mouseWheelMoved(int change)
+			{
+			}
+
+			@Override
+			public void mouseDragged(int oldx, int oldy, int newx, int newy)
+			{
+			}
+
+			@Override
+			public void keyReleased(int key, char c)
+			{
+			}
+
+			@Override
+			public void keyPressed(int key, char c)
+			{
+			}
+
+			@Override
+			public void init() throws SlickException
+			{
+			}
+		};
+	}
+
 	public abstract void init() throws SlickException;
+
 	public abstract void tickUpdate();
-	
+
 	public abstract void mouseWheelMoved(int change);
 
 	public abstract void keyReleased(int key, char c);
