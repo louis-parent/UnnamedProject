@@ -69,6 +69,11 @@ public abstract class Tile extends Element
 	}
 
 	@Override
+	public void tickUpdate()
+	{	
+	}
+	
+	@Override
 	public void click()
 	{
 		if(this.isSelected())
@@ -91,7 +96,7 @@ public abstract class Tile extends Element
 	{
 	}
 
-	private void select()
+	protected void select()
 	{
 		this.isSelected = true;
 		this.setY(this.getY() - FLOATING_OFFSET);
@@ -104,7 +109,7 @@ public abstract class Tile extends Element
 		Tile.lastSelected = this;
 	}
 
-	private void deselect()
+	protected void deselect()
 	{
 		this.isSelected = false;
 		this.setY(this.getY() + FLOATING_OFFSET);

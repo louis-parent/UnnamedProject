@@ -32,6 +32,13 @@ public class TileFactory
 
 	public static Tile createFrom(String biome, Tile tile)
 	{
-		return create(biome, tile.getColumn(), tile.getRow(), tile.getType(), tile.getContainer());
+		Tile created = create(biome, tile.getColumn(), tile.getRow(), tile.getType(), tile.getContainer());
+		
+		if(tile.isSelected())
+		{
+			created.select();
+		}
+		
+		return created;
 	}
 }

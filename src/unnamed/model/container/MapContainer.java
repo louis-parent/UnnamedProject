@@ -66,6 +66,20 @@ public class MapContainer extends ElementContainer
 	@Override
 	public void tickUpdate()
 	{
+		this.spreadCorruption();
+		this.tickUpdateAllTiles();
+	}
+	
+	private void tickUpdateAllTiles()
+	{
+		for(Tile tile : this.map)
+		{
+			tile.tickUpdate();
+		}
+	}
+
+	private void spreadCorruption()
+	{
 		List<Tile> adjacent = this.map.getAllAdjacent(this.corruptTiles);
 
 		adjacent.removeIf(t -> t instanceof CorruptTile);

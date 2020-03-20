@@ -102,11 +102,10 @@ public abstract class Element
 	{
 		return container;
 	}
-
+	
+	public abstract void tickUpdate();
 	public abstract void click();
-
 	public abstract void pressed();
-
 	public abstract void mouseLeft();
 	
 	private static class EmptyElement extends Element
@@ -135,6 +134,11 @@ public abstract class Element
 
 		@Override
 		public void mouseLeft()
+		{
+		}
+
+		@Override
+		public void tickUpdate()
 		{
 		}
 	}

@@ -16,6 +16,11 @@ public abstract class Button extends Element
 		super(x, y, z, container);
 		this.pressed = false;
 	}
+	
+	@Override
+	public void tickUpdate()
+	{		
+	}
 
 	@Override
 	public void click()
