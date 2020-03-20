@@ -133,7 +133,7 @@ public abstract class ElementContainer implements Serializable
 		}
 	}
 
-	public void clickAt(float x, float y)
+	public void clickAt(float x, float y) throws SlickException
 	{
 		this.getTopElementAt(x, y).click();
 	}
@@ -144,20 +144,15 @@ public abstract class ElementContainer implements Serializable
 	}
 
 	public abstract void init() throws SlickException;
-
 	public abstract void tickUpdate();
-
 	public abstract void mouseWheelMoved(int change);
-
 	public abstract void keyReleased(int key, char c);
-
 	public abstract void keyPressed(int key, char c);
-
 	public abstract void mouseDragged(int oldx, int oldy, int newx, int newy);
-
 	public abstract void wheelPressedAt(int x, int y);
-
 	public abstract void wheelReleasedAt(int x, int y);
+	public abstract int getHeight();
+	public abstract int getWidth();
 
 	private static class EmptyContainer extends ElementContainer
 	{
@@ -201,6 +196,18 @@ public abstract class ElementContainer implements Serializable
 		@Override
 		public void init() throws SlickException
 		{
+		}
+
+		@Override
+		public int getHeight()
+		{
+			return 0;
+		}
+
+		@Override
+		public int getWidth()
+		{
+			return 0;
 		}
 	}
 }

@@ -97,12 +97,12 @@ public class MapContainer extends ElementContainer
 		this.map.set(this.map.indexOf(oldElement), newElement);
 	}
 
-	public int getMapHeight()
+	public int getHeight()
 	{
 		return ((MapContainer.NUMBER_OF_ROWS * Tile.TILE_HEIGHT) - (Tile.FLOATING_OFFSET * MapContainer.NUMBER_OF_ROWS)) + Tile.TILE_HEIGHT + Tile.FLOATING_OFFSET;
 	}
 
-	public int getMapWidth()
+	public int getWidth()
 	{
 		return (MapContainer.NUMBER_OF_COLUMNS * Tile.TILE_WIDTH) + (Tile.TILE_WIDTH / 2);
 	}

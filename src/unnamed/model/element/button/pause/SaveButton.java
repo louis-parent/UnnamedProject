@@ -2,6 +2,7 @@ package unnamed.model.element.button.pause;
 
 import org.newdawn.slick.SlickException;
 
+import unnamed.controller.GameController;
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.button.Button;
@@ -32,7 +33,7 @@ public class SaveButton extends Button
 	@Override
 	protected void action()
 	{
-		//TODO
+		GameController.getInstance().saveGame();
 	}
 
 	@Override

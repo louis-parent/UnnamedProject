@@ -3,6 +3,7 @@ package unnamed.model.element;
 import java.io.Serializable;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.SlickException;
 
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
@@ -109,7 +110,7 @@ public abstract class Element implements Serializable
 
 	public abstract void tickUpdate();
 
-	public abstract void click();
+	public abstract void click() throws SlickException;
 
 	public abstract void pressed();
 

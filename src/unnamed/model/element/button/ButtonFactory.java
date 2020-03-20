@@ -3,7 +3,8 @@ package unnamed.model.element.button;
 import org.newdawn.slick.SlickException;
 
 import unnamed.model.container.ElementContainer;
-import unnamed.model.element.button.main.PlayButton;
+import unnamed.model.element.button.main.LoadButton;
+import unnamed.model.element.button.main.NewButton;
 import unnamed.model.element.button.main.QuitButton;
 import unnamed.model.element.button.pause.MenuButton;
 import unnamed.model.element.button.pause.ResumeButton;
@@ -11,7 +12,8 @@ import unnamed.model.element.button.pause.SaveButton;
 
 public class ButtonFactory
 {
-	public static final String PLAY_BUTTON = "play";
+	public static final String NEW_BUTTON = "new";
+	public static final String LOAD_BUTTON = "load";
 	public static final String QUIT_BUTTON = "quit";
 	public static final String MENU_BUTTON = "menu";
 	public static final String SAVE_BUTTON = "save";
@@ -19,7 +21,8 @@ public class ButtonFactory
 	
 	public static void init() throws SlickException
 	{
-		PlayButton.init();
+		NewButton.init();
+		LoadButton.init();
 		QuitButton.init();
 		MenuButton.init();
 		SaveButton.init();
@@ -30,8 +33,11 @@ public class ButtonFactory
 	{
 		switch(type)
 		{
-			case PLAY_BUTTON:
-				return new PlayButton(container);
+			case NEW_BUTTON:
+				return new NewButton(container);
+				
+			case LOAD_BUTTON:
+				return new LoadButton(container);
 				
 			case QUIT_BUTTON:
 				return new QuitButton(container);

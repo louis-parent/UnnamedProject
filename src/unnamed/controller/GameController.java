@@ -1,5 +1,11 @@
 package unnamed.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Random;
 
 import org.newdawn.slick.AppGameContainer;
@@ -22,6 +28,7 @@ public class GameController
 	public static final int GAME_WIDTH = 1920;
 
 	private static final String GAME_NAME = "Unnamed";
+	private static final String SAVE_FILE = "saves/save.unp";
 	private static final int TICK_LENGTH_IN_MILLIS = 50;
 
 	private static GameController instance;
@@ -58,7 +65,6 @@ public class GameController
 
 		this.mainMenuContainer = new MainMenuContainer();
 		this.pauseMenuContainer = new PauseMenuContainer();
-		this.mapContainer = new MapContainer();		
 
 		this.random = new Random();
 
@@ -80,12 +86,11 @@ public class GameController
 	{
 		ButtonFactory.init();
 		TileFactory.init();
-		
+
 		this.container = container;
 
 		this.mainMenuContainer.init();
 		this.pauseMenuContainer.init();
-		this.mapContainer.init();
 
 		this.setCurrentContainer(this.mainMenuContainer);
 
@@ -131,7 +136,15 @@ public class GameController
 	{
 		Camera camera = this.view.getCamera();
 		float zoomMultiplicator = camera.getZoomMultiplicator();
-		this.currentContainer.clickAt((x / zoomMultiplicator) - camera.getOffsetX(), (y / zoomMultiplicator) - camera.getOffsetY());
+
+		try
+		{
+			this.currentContainer.clickAt((x / zoomMultiplicator) - camera.getOffsetX(), (y / zoomMultiplicator) - camera.getOffsetY());
+		}
+		catch(SlickException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public void pressedAt(int x, int y)
@@ -139,14 +152,14 @@ public class GameController
 		this.currentContainer.pressedAt(x, y);
 	}
 
-	public int getMapHeight()
+	public int getHeight()
 	{
-		return this.mapContainer.getMapHeight();
+		return this.currentContainer.getHeight();
 	}
 
-	public int getMapWidth()
+	public int getWidth()
 	{
-		return this.mapContainer.getMapWidth();
+		return this.currentContainer.getWidth();
 	}
 
 	public void mouseWheelMoved(int change)
@@ -179,7 +192,7 @@ public class GameController
 	{
 		this.setCurrentContainer(this.mainMenuContainer);
 	}
-	
+
 	public void goToPauseMenu()
 	{
 		this.setCurrentContainer(this.pauseMenuContainer);
@@ -198,5 +211,46 @@ public class GameController
 	public void wheelReleasedAt(int x, int y)
 	{
 		this.currentContainer.wheelReleasedAt(x, y);
+	}
+
+	public void saveGame()
+	{
+		try
+		{
+			ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(GameController.SAVE_FILE));
+			stream.writeObject(this.mapContainer);
+			stream.close();
+		}
+		catch(IOException e)
+		{
+		}
+	}
+
+	public void loadGame()
+	{
+		try
+		{
+			ObjectInputStream stream = new ObjectInputStream(new FileInputStream(GameController.SAVE_FILE));
+			this.mapContainer = (MapContainer) stream.readObject();
+			stream.close();
+		}
+		catch(IOException | ClassNotFoundException e)
+		{
+		}
+
+		this.playGame();
+	}
+
+	public void createGame() throws SlickException
+	{
+		this.mapContainer = new MapContainer();
+		this.mapContainer.init();
+
+		this.playGame();
+	}
+
+	public static boolean saveExists()
+	{
+		return new File(SAVE_FILE).exists();
 	}
 }

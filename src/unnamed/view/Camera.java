@@ -40,7 +40,7 @@ public class Camera
 	private void offsetXBy(float i)
 	{
 		float sum = this.offsetX + i;
-		int mapWidth = GameController.getInstance().getMapWidth();
+		int mapWidth = GameController.getInstance().getWidth();
 		float maxWidth = -(mapWidth - (GameController.GAME_WIDTH / this.zoomMultiplicator));
 
 		if(sum > 0)
@@ -60,7 +60,7 @@ public class Camera
 	private void offsetYBy(float i)
 	{
 		float sum = this.offsetY + i;
-		int mapHeight = GameController.getInstance().getMapHeight();
+		int mapHeight = GameController.getInstance().getHeight();
 		float maxHeight = -(mapHeight - (GameController.GAME_HEIGHT / this.zoomMultiplicator));
 
 		if(sum > 0)

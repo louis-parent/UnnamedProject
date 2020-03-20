@@ -14,7 +14,7 @@ public class MainMenuContainer extends MenuContainer
 	@Override
 	public void init() throws SlickException
 	{
-		this.buildMenu(ButtonFactory.PLAY_BUTTON, ButtonFactory.QUIT_BUTTON);
+		this.buildMenu(ButtonFactory.NEW_BUTTON, ButtonFactory.LOAD_BUTTON, ButtonFactory.QUIT_BUTTON);
 	}
 
 	@Override

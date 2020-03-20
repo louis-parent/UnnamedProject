@@ -1,6 +1,7 @@
 package unnamed.model.element.button;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.SlickException;
 
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
@@ -9,16 +10,16 @@ import unnamed.model.element.Element;
 public abstract class Button extends Element
 {
 	private static final long serialVersionUID = 410744874078962405L;
-	
+
 	public static final Button EMPTY = new EmptyButton();
-	
+
 	private boolean pressed;
 
 	public Button(ElementContainer container)
 	{
 		this(0, 0, 0, container);
 	}
-	
+
 	public Button(int x, int y, int z, ElementContainer container)
 	{
 		super(x, y, z, container);
@@ -31,7 +32,7 @@ public abstract class Button extends Element
 	}
 
 	@Override
-	public void click()
+	public void click() throws SlickException
 	{
 		if(this.isPressed())
 		{
@@ -114,9 +115,11 @@ public abstract class Button extends Element
 	}
 
 	protected abstract PixelisedImage getPressedSprite();
+
 	protected abstract PixelisedImage getReleasedSprite();
-	protected abstract void action();
-	
+
+	protected abstract void action() throws SlickException;
+
 	private static class EmptyButton extends Button
 	{
 		private static final long serialVersionUID = 5948308253831601641L;
@@ -142,6 +145,6 @@ public abstract class Button extends Element
 		protected void action()
 		{
 		}
-		
+
 	}
 }
