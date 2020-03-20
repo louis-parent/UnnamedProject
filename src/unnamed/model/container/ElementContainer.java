@@ -1,5 +1,6 @@
 package unnamed.model.container;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,10 +8,13 @@ import java.util.Map;
 
 import org.newdawn.slick.SlickException;
 
+import unnamed.controller.GameController;
 import unnamed.model.element.Element;
 
-public abstract class ElementContainer
+public abstract class ElementContainer implements Serializable
 {
+	private static final long serialVersionUID = 3624575560912630840L;
+
 	public static final ElementContainer EMPTY = new EmptyContainer();
 
 	private Map<Integer, List<Element>> elements;
@@ -20,6 +24,14 @@ public abstract class ElementContainer
 	{
 		this.elements = new HashMap<Integer, List<Element>>();
 		this.maxDepth = 0;
+	}
+	
+	public void addAllElements(List<Element> elements)
+	{
+		for(Element element : elements)
+		{
+			this.addElement(element);
+		}
 	}
 
 	public void addElement(Element element)
@@ -97,6 +109,30 @@ public abstract class ElementContainer
 		}
 	}
 
+	protected void verticalAlign(int padding, Element... elements)
+	{
+		int midX = GameController.GAME_WIDTH / 2;
+		int midY = GameController.GAME_HEIGHT / 2;
+
+		int summedHeight = 0;
+
+		for(Element element : elements)
+		{
+			summedHeight += element.getHeight();
+			summedHeight += padding;
+		}
+
+		summedHeight -= padding;
+
+		int sumOfDone = 0;
+
+		for(Element element : elements)
+		{
+			element.centerElementAt(midX, (midY - (summedHeight / 2)) + sumOfDone);
+			sumOfDone += element.getHeight() + padding;
+		}
+	}
+
 	public void clickAt(float x, float y)
 	{
 		this.getTopElementAt(x, y).click();
@@ -125,6 +161,8 @@ public abstract class ElementContainer
 
 	private static class EmptyContainer extends ElementContainer
 	{
+		private static final long serialVersionUID = 4766154415901796682L;
+
 		@Override
 		public void wheelReleasedAt(int x, int y)
 		{

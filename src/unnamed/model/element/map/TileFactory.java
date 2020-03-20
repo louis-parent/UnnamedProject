@@ -1,5 +1,7 @@
 package unnamed.model.element.map;
 
+import org.newdawn.slick.SlickException;
+
 import unnamed.model.container.ElementContainer;
 
 public class TileFactory
@@ -8,6 +10,14 @@ public class TileFactory
 	public static final String CORRUPT_BIOME = "corrupt";
 	public static final String WATER_BIOME = "water_shallow";
 	public static final String DESERT_BIOME = "desert";
+	
+	public static void init() throws SlickException
+	{
+		GrassTile.init();
+		CorruptTile.init();
+		WaterTile.init();
+		DesertTile.init();
+	}
 
 	public static Tile create(String biome, int column, int row, TileType type, ElementContainer container)
 	{
@@ -32,13 +42,13 @@ public class TileFactory
 
 	public static Tile createFrom(String biome, Tile tile)
 	{
-		Tile created = create(biome, tile.getColumn(), tile.getRow(), tile.getType(), tile.getContainer());
-		
+		Tile created = TileFactory.create(biome, tile.getColumn(), tile.getRow(), tile.getType(), tile.getContainer());
+
 		if(tile.isSelected())
 		{
 			created.select();
 		}
-		
+
 		return created;
 	}
 }

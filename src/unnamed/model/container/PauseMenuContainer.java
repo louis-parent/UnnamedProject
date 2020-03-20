@@ -7,14 +7,14 @@ import unnamed.controller.GameController;
 import unnamed.model.element.Element;
 import unnamed.model.element.button.ButtonFactory;
 
-public class MainMenuContainer extends MenuContainer
+public class PauseMenuContainer extends MenuContainer
 {
-	private static final long serialVersionUID = -4516876692738107879L;
+	private static final long serialVersionUID = 1412919249921734035L;
 
 	@Override
 	public void init() throws SlickException
 	{
-		this.buildMenu(ButtonFactory.PLAY_BUTTON, ButtonFactory.QUIT_BUTTON);
+		this.buildMenu(ButtonFactory.RESUME_BUTTON, ButtonFactory.SAVE_BUTTON, ButtonFactory.MENU_BUTTON);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class MainMenuContainer extends MenuContainer
 		switch(key)
 		{
 			case Input.KEY_ESCAPE:
-				GameController.stop();
+				GameController.getInstance().playGame();
 				break;
 		}
 	}

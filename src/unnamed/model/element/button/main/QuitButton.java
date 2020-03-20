@@ -1,17 +1,24 @@
-package unnamed.model.element.menu;
+package unnamed.model.element.button.main;
 
 import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
+import unnamed.model.element.button.Button;
 
 public class QuitButton extends Button
 {
-
+	private static final long serialVersionUID = -904106979096792682L;
+	
 	private static PixelisedImage released;
 	private static PixelisedImage pressed;
 
+	public QuitButton(ElementContainer container)
+	{
+		super(container);
+	}
+	
 	public QuitButton(int x, int y, int z, ElementContainer container)
 	{
 		super(x, y, z, container);

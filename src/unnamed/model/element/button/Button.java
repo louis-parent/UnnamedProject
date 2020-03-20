@@ -1,4 +1,4 @@
-package unnamed.model.element.menu;
+package unnamed.model.element.button;
 
 import org.newdawn.slick.Color;
 
@@ -8,18 +8,26 @@ import unnamed.model.element.Element;
 
 public abstract class Button extends Element
 {
-
+	private static final long serialVersionUID = 410744874078962405L;
+	
+	public static final Button EMPTY = new EmptyButton();
+	
 	private boolean pressed;
 
+	public Button(ElementContainer container)
+	{
+		this(0, 0, 0, container);
+	}
+	
 	public Button(int x, int y, int z, ElementContainer container)
 	{
 		super(x, y, z, container);
 		this.pressed = false;
 	}
-	
+
 	@Override
 	public void tickUpdate()
-	{		
+	{
 	}
 
 	@Override
@@ -102,12 +110,38 @@ public abstract class Button extends Element
 		PixelisedImage releasedSprite = this.getReleasedSprite();
 		Color releasedPixelColor = releasedSprite.getColor(spriteX, spriteY);
 
-		return pressedPixelColor.getAlpha() == 0 && releasedPixelColor.getAlpha() == 0;
+		return (pressedPixelColor.getAlpha() == 0) && (releasedPixelColor.getAlpha() == 0);
 	}
 
 	protected abstract PixelisedImage getPressedSprite();
-
 	protected abstract PixelisedImage getReleasedSprite();
-
 	protected abstract void action();
+	
+	private static class EmptyButton extends Button
+	{
+		private static final long serialVersionUID = 5948308253831601641L;
+
+		public EmptyButton()
+		{
+			super(ElementContainer.EMPTY);
+		}
+
+		@Override
+		protected PixelisedImage getPressedSprite()
+		{
+			return PixelisedImage.EMPTY;
+		}
+
+		@Override
+		protected PixelisedImage getReleasedSprite()
+		{
+			return PixelisedImage.EMPTY;
+		}
+
+		@Override
+		protected void action()
+		{
+		}
+		
+	}
 }

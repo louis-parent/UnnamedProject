@@ -26,8 +26,8 @@ public class Camera
 
 	public void update(int delta)
 	{
-		this.offsetXBy(((STANDARD_CAMERA_SPEED * this.horizontalSpeedMultiplicator) / this.zoomMultiplicator) * delta);
-		this.offsetYBy(((STANDARD_CAMERA_SPEED * this.verticalSpeedMultiplicator) / this.zoomMultiplicator) * delta);
+		this.offsetXBy(((Camera.STANDARD_CAMERA_SPEED * this.horizontalSpeedMultiplicator) / this.zoomMultiplicator) * delta);
+		this.offsetYBy(((Camera.STANDARD_CAMERA_SPEED * this.verticalSpeedMultiplicator) / this.zoomMultiplicator) * delta);
 	}
 
 	public void render(Graphics g)
@@ -139,12 +139,12 @@ public class Camera
 
 	public float getZoomMultiplicator()
 	{
-		return zoomMultiplicator;
+		return this.zoomMultiplicator;
 	}
 
 	public void zoom()
 	{
-		this.zoomMultiplicator += ZOOM_SPEED;
+		this.zoomMultiplicator += Camera.ZOOM_SPEED;
 
 		if(this.zoomMultiplicator > 5)
 		{
@@ -152,14 +152,14 @@ public class Camera
 		}
 		else
 		{
-			this.offsetX -= getZoomingOffset(1920);
-			this.offsetY -= getZoomingOffset(1080);
+			this.offsetX -= this.getZoomingOffset(1920);
+			this.offsetY -= this.getZoomingOffset(1080);
 		}
 	}
 
 	public void unzoom()
 	{
-		this.zoomMultiplicator -= ZOOM_SPEED;
+		this.zoomMultiplicator -= Camera.ZOOM_SPEED;
 
 		if(this.zoomMultiplicator < 1)
 		{
@@ -167,8 +167,8 @@ public class Camera
 		}
 		else
 		{
-			this.offsetX += getUnzoomingOffset(1920);
-			this.offsetY += getUnzoomingOffset(1080);
+			this.offsetX += this.getUnzoomingOffset(1920);
+			this.offsetY += this.getUnzoomingOffset(1080);
 		}
 	}
 
@@ -186,14 +186,14 @@ public class Camera
 	private float getZoomingOffset(int value)
 	{
 		float actualValue = value - (value / this.zoomMultiplicator);
-		float previousValue = value - (value / (this.zoomMultiplicator - ZOOM_SPEED));
+		float previousValue = value - (value / (this.zoomMultiplicator - Camera.ZOOM_SPEED));
 
 		return (actualValue - previousValue) / 2;
 	}
 
 	private float getUnzoomingOffset(int value)
 	{
-		float previousValue = value - (value / (this.zoomMultiplicator + ZOOM_SPEED));
+		float previousValue = value - (value / (this.zoomMultiplicator + Camera.ZOOM_SPEED));
 		float actualValue = value - (value / this.zoomMultiplicator);
 
 		return (previousValue - actualValue) / 2;

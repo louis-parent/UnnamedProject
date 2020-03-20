@@ -1,17 +1,24 @@
-package unnamed.model.element.menu;
+package unnamed.model.element.button.main;
 
 import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
+import unnamed.model.element.button.Button;
 
 public class PlayButton extends Button
 {
-
+	private static final long serialVersionUID = 3205595142678747391L;
+	
 	private static PixelisedImage released;
 	private static PixelisedImage pressed;
 
+	public PlayButton(ElementContainer container)
+	{
+		super(container);
+	}
+	
 	public PlayButton(int x, int y, int z, ElementContainer container)
 	{
 		super(x, y, z, container);

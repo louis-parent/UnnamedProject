@@ -6,30 +6,30 @@ import java.util.List;
 public class Map extends ArrayList<Tile>
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	private int columns;
 	private int rows;
 
 	public Map(int columns, int rows)
 	{
 		super();
-		
+
 		this.columns = columns;
 		this.rows = rows;
 	}
 
 	public int getListPosition(int x, int y)
 	{
-		if((x >= 0 && y >= 0) && (x < this.columns && y < this.rows))
+		if(((x >= 0) && (y >= 0)) && ((x < this.columns) && (y < this.rows)))
 		{
-			return this.columns * x + y;
+			return (this.columns * x) + y;
 		}
 		else
 		{
 			return -1;
 		}
 	}
-	
+
 	public List<Tile> getAdjacentTiles(Tile changedTile)
 	{
 		List<Tile> adjacent = new ArrayList<Tile>();
@@ -108,7 +108,7 @@ public class Map extends ArrayList<Tile>
 	private void addToWithCondition(List<Tile> farAdjacents, TileType type, int i, int j)
 	{
 		int position = this.getListPosition(i, j);
-		if(position != -1 && this.get(position).getType() == type)
+		if((position != -1) && (this.get(position).getType() == type))
 		{
 			farAdjacents.add(this.get(position));
 		}
@@ -116,7 +116,7 @@ public class Map extends ArrayList<Tile>
 
 	public List<Tile> getAllAdjacentFor(TileType type, List<Tile> tiles)
 	{
-		List<Tile> adjacents = getAllAdjacent(tiles);
+		List<Tile> adjacents = this.getAllAdjacent(tiles);
 
 		for(int i = 0; i < adjacents.size(); i++)
 		{

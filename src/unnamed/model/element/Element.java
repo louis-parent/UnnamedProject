@@ -1,12 +1,16 @@
 package unnamed.model.element;
 
+import java.io.Serializable;
+
 import org.newdawn.slick.Color;
 
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 
-public abstract class Element
+public abstract class Element implements Serializable
 {
+	private static final long serialVersionUID = -8180400148689092894L;
+
 	public static final Element EMPTY = new EmptyElement();
 
 	private ElementContainer container;
@@ -69,8 +73,8 @@ public abstract class Element
 
 	public boolean isInside(float x, float y)
 	{
-		boolean isBefore = x < this.getX() || y < this.getY();
-		boolean isAfter = x > this.getX() + this.getWidth() || y > this.getY() + this.getHeight();
+		boolean isBefore = (x < this.getX()) || (y < this.getY());
+		boolean isAfter = (x > (this.getX() + this.getWidth())) || (y > (this.getY() + this.getHeight()));
 
 		return !isBefore && !isAfter && !this.inTransparency(x, y);
 	}
@@ -100,16 +104,21 @@ public abstract class Element
 
 	public ElementContainer getContainer()
 	{
-		return container;
+		return this.container;
 	}
-	
+
 	public abstract void tickUpdate();
+
 	public abstract void click();
+
 	public abstract void pressed();
+
 	public abstract void mouseLeft();
-	
+
 	private static class EmptyElement extends Element
 	{
+		private static final long serialVersionUID = -8396774274171993181L;
+
 		public EmptyElement()
 		{
 			super(ElementContainer.EMPTY);

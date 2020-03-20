@@ -10,6 +10,9 @@ import org.newdawn.slick.SlickException;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.container.MainMenuContainer;
 import unnamed.model.container.MapContainer;
+import unnamed.model.container.PauseMenuContainer;
+import unnamed.model.element.button.ButtonFactory;
+import unnamed.model.element.map.TileFactory;
 import unnamed.view.Camera;
 import unnamed.view.GameWindow;
 
@@ -29,7 +32,8 @@ public class GameController
 	private GameWindow view;
 
 	private ElementContainer currentContainer;
-	private MainMenuContainer menuContainer;
+	private MainMenuContainer mainMenuContainer;
+	private PauseMenuContainer pauseMenuContainer;
 	private MapContainer mapContainer;
 
 	private Random random;
@@ -48,12 +52,13 @@ public class GameController
 
 	private GameController()
 	{
-		this.view = new GameWindow(GAME_NAME, this);
+		this.view = new GameWindow(GameController.GAME_NAME, this);
 
 		this.cameraController = new CameraController(this.view.getCamera());
 
-		this.menuContainer = new MainMenuContainer();
-		this.mapContainer = new MapContainer();
+		this.mainMenuContainer = new MainMenuContainer();
+		this.pauseMenuContainer = new PauseMenuContainer();
+		this.mapContainer = new MapContainer();		
 
 		this.random = new Random();
 
@@ -62,7 +67,7 @@ public class GameController
 
 	public static void start() throws SlickException
 	{
-		AppGameContainer game = new AppGameContainer(GameController.getInstance().view, GAME_WIDTH, GAME_HEIGHT, true);
+		AppGameContainer game = new AppGameContainer(GameController.getInstance().view, GameController.GAME_WIDTH, GameController.GAME_HEIGHT, true);
 		game.start();
 	}
 
@@ -73,12 +78,16 @@ public class GameController
 
 	public void init(GameContainer container) throws SlickException
 	{
+		ButtonFactory.init();
+		TileFactory.init();
+		
 		this.container = container;
 
-		this.menuContainer.init();
+		this.mainMenuContainer.init();
+		this.pauseMenuContainer.init();
 		this.mapContainer.init();
 
-		this.setCurrentContainer(this.menuContainer);
+		this.setCurrentContainer(this.mainMenuContainer);
 
 		container.getInput().addMouseListener(new MouseController());
 		container.getInput().addKeyListener(new KeyController());
@@ -87,8 +96,8 @@ public class GameController
 	public void update(GameContainer container, int delta) throws SlickException
 	{
 		this.leftOverMillis += delta;
-		int ticksPassed = this.leftOverMillis / TICK_LENGTH_IN_MILLIS;
-		this.leftOverMillis %= TICK_LENGTH_IN_MILLIS;
+		int ticksPassed = this.leftOverMillis / GameController.TICK_LENGTH_IN_MILLIS;
+		this.leftOverMillis %= GameController.TICK_LENGTH_IN_MILLIS;
 
 		for(int i = 0; i < ticksPassed; i++)
 		{
@@ -168,7 +177,12 @@ public class GameController
 
 	public void goToMainMenu()
 	{
-		this.setCurrentContainer(this.menuContainer);
+		this.setCurrentContainer(this.mainMenuContainer);
+	}
+	
+	public void goToPauseMenu()
+	{
+		this.setCurrentContainer(this.pauseMenuContainer);
 	}
 
 	public void mouseDragged(int oldx, int oldy, int newx, int newy)

@@ -9,16 +9,14 @@ import org.newdawn.slick.SlickException;
 import unnamed.controller.CameraController;
 import unnamed.controller.GameController;
 import unnamed.model.element.map.CorruptTile;
-import unnamed.model.element.map.DesertTile;
-import unnamed.model.element.map.GrassTile;
 import unnamed.model.element.map.Map;
 import unnamed.model.element.map.Tile;
 import unnamed.model.element.map.TileFactory;
-import unnamed.model.element.map.WaterTile;
 import unnamed.model.generator.MapGenerator;
 
 public class MapContainer extends ElementContainer
 {
+	private static final long serialVersionUID = -3760401809828849717L;
 
 	private static final int CORRUPTION_SPEED = 1000;
 	private static final int NUMBER_OF_COLUMNS = 75;
@@ -36,19 +34,14 @@ public class MapContainer extends ElementContainer
 
 		this.isMouseWheelActivated = false;
 
-		this.map = new Map(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
+		this.map = new Map(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 		this.corruptTiles = new ArrayList<Tile>();
 	}
 
 	@Override
 	public void init() throws SlickException
 	{
-		GrassTile.init();
-		WaterTile.init();
-		DesertTile.init();
-		CorruptTile.init();
-
-		MapGenerator gen = new MapGenerator(NUMBER_OF_COLUMNS, NUMBER_OF_ROWS);
+		MapGenerator gen = new MapGenerator(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 		this.map.addAll(gen.generateMap(this));
 
 		int corruptStart = GameController.getInstance().getRandom().nextInt(this.map.size());
@@ -69,7 +62,7 @@ public class MapContainer extends ElementContainer
 		this.spreadCorruption();
 		this.tickUpdateAllTiles();
 	}
-	
+
 	private void tickUpdateAllTiles()
 	{
 		for(Tile tile : this.map)
@@ -86,7 +79,7 @@ public class MapContainer extends ElementContainer
 
 		for(Tile tile : adjacent)
 		{
-			if(GameController.getInstance().getRandom().nextInt(CORRUPTION_SPEED) == 0 && !Tile.EMPTY.equals(tile) && this.map.contains(tile))
+			if((GameController.getInstance().getRandom().nextInt(MapContainer.CORRUPTION_SPEED) == 0) && !Tile.EMPTY.equals(tile) && this.map.contains(tile))
 			{
 				Tile corrupt = TileFactory.createFrom(TileFactory.CORRUPT_BIOME, tile);
 
@@ -106,7 +99,7 @@ public class MapContainer extends ElementContainer
 
 	public int getMapHeight()
 	{
-		return (NUMBER_OF_ROWS * Tile.TILE_HEIGHT) - (Tile.FLOATING_OFFSET * NUMBER_OF_ROWS) + Tile.TILE_HEIGHT + Tile.FLOATING_OFFSET;
+		return ((MapContainer.NUMBER_OF_ROWS * Tile.TILE_HEIGHT) - (Tile.FLOATING_OFFSET * MapContainer.NUMBER_OF_ROWS)) + Tile.TILE_HEIGHT + Tile.FLOATING_OFFSET;
 	}
 
 	public int getMapWidth()
@@ -169,7 +162,7 @@ public class MapContainer extends ElementContainer
 				cam.movingRight();
 				break;
 			case Input.KEY_ESCAPE:
-				GameController.getInstance().goToMainMenu();
+				GameController.getInstance().goToPauseMenu();
 				break;
 		}
 	}

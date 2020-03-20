@@ -68,7 +68,7 @@ public class MapGenerator
 
 	private void generateMountains()
 	{
-		for(int i = 0; i < (this.rows * this.columns) / SURFACE_FOR_MOUNTAIN_CHAIN; i++)
+		for(int i = 0; i < ((this.rows * this.columns) / MapGenerator.SURFACE_FOR_MOUNTAIN_CHAIN); i++)
 		{
 			List<Tile> seeded = this.seedMountains();
 			this.expandMountains(seeded);
@@ -103,7 +103,7 @@ public class MapGenerator
 
 	private void expandMountains(List<Tile> seeded)
 	{
-		this.expandMountains(seeded, MOUNTAIN_DIAMETER);
+		this.expandMountains(seeded, MapGenerator.MOUNTAIN_DIAMETER);
 	}
 
 	private List<Tile> expandMountains(List<Tile> seeded, int iteration)
@@ -130,7 +130,7 @@ public class MapGenerator
 				}
 			}
 
-			return expandMountains(allMountains, iteration - 1);
+			return this.expandMountains(allMountains, iteration - 1);
 		}
 	}
 
@@ -138,11 +138,11 @@ public class MapGenerator
 	{
 		if(numberAdjacents == 1)
 		{
-			return MOUNTAIN_CHAIN_DENSITY;
+			return MapGenerator.MOUNTAIN_CHAIN_DENSITY;
 		}
 		else
 		{
-			return DEFAULT_MOUNTAIN_DENSITY;
+			return MapGenerator.DEFAULT_MOUNTAIN_DENSITY;
 		}
 
 	}
@@ -158,15 +158,15 @@ public class MapGenerator
 
 				if(tile.getType() == TileType.MOUNTAIN)
 				{
-					prob = HILL_DENSITY_IN_MOUNTAIN;
+					prob = MapGenerator.HILL_DENSITY_IN_MOUNTAIN;
 				}
 				else if(this.map.getAllAdjacentFor(TileType.MOUNTAIN, Arrays.asList(tile)).size() > 0)
 				{
-					prob = HILL_DENSITY_AROUND_MOUNTAINS;
+					prob = MapGenerator.HILL_DENSITY_AROUND_MOUNTAINS;
 				}
 				else
 				{
-					prob = DEFAULT_HILL_DENSITY;
+					prob = MapGenerator.DEFAULT_HILL_DENSITY;
 				}
 
 				if(this.rand.nextInt(100) <= prob)

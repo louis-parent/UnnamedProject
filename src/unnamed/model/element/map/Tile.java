@@ -6,6 +6,10 @@ import unnamed.model.element.Element;
 
 public abstract class Tile extends Element
 {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -867365679274168458L;
 	public static final int TILE_WIDTH = 32;
 	public static final int TILE_HEIGHT = 29;
 
@@ -32,7 +36,7 @@ public abstract class Tile extends Element
 
 	public Tile(int column, int row, TileType type, ElementContainer container)
 	{
-		super(getXValueFrom(column, row), getYValueFrom(row), getZValueFrom(row), container);
+		super(Tile.getXValueFrom(column, row), Tile.getYValueFrom(row), Tile.getZValueFrom(row), container);
 		this.column = column;
 		this.row = row;
 
@@ -70,9 +74,9 @@ public abstract class Tile extends Element
 
 	@Override
 	public void tickUpdate()
-	{	
+	{
 	}
-	
+
 	@Override
 	public void click()
 	{
@@ -99,7 +103,7 @@ public abstract class Tile extends Element
 	protected void select()
 	{
 		this.isSelected = true;
-		this.setY(this.getY() - FLOATING_OFFSET);
+		this.setY(this.getY() - Tile.FLOATING_OFFSET);
 
 		if(Tile.lastSelected != null)
 		{
@@ -112,7 +116,7 @@ public abstract class Tile extends Element
 	protected void deselect()
 	{
 		this.isSelected = false;
-		this.setY(this.getY() + FLOATING_OFFSET);
+		this.setY(this.getY() + Tile.FLOATING_OFFSET);
 
 		if(Tile.lastSelected == this)
 		{
@@ -122,13 +126,13 @@ public abstract class Tile extends Element
 
 	private static float getXValueFrom(int column, int row)
 	{
-		if(row % 2 == 0)
+		if((row % 2) == 0)
 		{
-			return column * TILE_WIDTH;
+			return column * Tile.TILE_WIDTH;
 		}
 		else
 		{
-			return (column * TILE_WIDTH) + (TILE_WIDTH / 2);
+			return (column * Tile.TILE_WIDTH) + (Tile.TILE_WIDTH / 2);
 		}
 	}
 
@@ -136,17 +140,17 @@ public abstract class Tile extends Element
 	{
 		if(row != 0)
 		{
-			return row * TILE_HEIGHT - (FLOATING_OFFSET * row) + FLOATING_OFFSET;
+			return ((row * Tile.TILE_HEIGHT) - (Tile.FLOATING_OFFSET * row)) + Tile.FLOATING_OFFSET;
 		}
 		else
 		{
-			return FLOATING_OFFSET;
+			return Tile.FLOATING_OFFSET;
 		}
 	}
 
 	private static int getZValueFrom(int row)
 	{
-		return row * Z_SPACE_BETWEEN_TILES;
+		return row * Tile.Z_SPACE_BETWEEN_TILES;
 	}
 
 	protected int getSpriteVariant()
@@ -158,9 +162,14 @@ public abstract class Tile extends Element
 	{
 		this.spriteVariant = spriteVariant;
 	}
-	
+
 	private static class EmptyTile extends Tile
 	{
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 8715601332795760931L;
+
 		public EmptyTile()
 		{
 			super(TileType.FLAT, ElementContainer.EMPTY);

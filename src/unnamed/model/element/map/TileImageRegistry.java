@@ -31,7 +31,7 @@ public class TileImageRegistry
 		for(int i = 1; i <= type.getVariantAmount(); i++)
 		{
 			String imageName = this.getImageNameFor(type, i);
-			this.images.put(imageName, new PixelisedImage(TILES_PATH + imageName + IMAGE_EXTENSION));
+			this.images.put(imageName, new PixelisedImage(TileImageRegistry.TILES_PATH + imageName + TileImageRegistry.IMAGE_EXTENSION));
 		}
 	}
 

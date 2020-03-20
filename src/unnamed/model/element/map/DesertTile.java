@@ -7,6 +7,8 @@ import unnamed.model.container.ElementContainer;
 
 public class DesertTile extends Tile
 {
+	private static final long serialVersionUID = 5315208958463114529L;
+	
 	private static TileImageRegistry desertRegistry;
 
 	public static void init() throws SlickException

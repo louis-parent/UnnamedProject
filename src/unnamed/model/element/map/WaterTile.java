@@ -7,6 +7,10 @@ import unnamed.model.container.ElementContainer;
 
 public class WaterTile extends Tile
 {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -8248943245607482270L;
 	private static TileImageRegistry waterRegistry;
 
 	public static void init() throws SlickException
