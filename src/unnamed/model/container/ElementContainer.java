@@ -11,48 +11,7 @@ import unnamed.model.element.Element;
 
 public abstract class ElementContainer
 {
-	public static final ElementContainer EMPTY = new ElementContainer() {
-
-		@Override
-		public void wheelReleasedAt(int x, int y)
-		{
-		}
-
-		@Override
-		public void wheelPressedAt(int x, int y)
-		{
-		}
-
-		@Override
-		public void tickUpdate()
-		{
-		}
-
-		@Override
-		public void mouseWheelMoved(int change)
-		{
-		}
-
-		@Override
-		public void mouseDragged(int oldx, int oldy, int newx, int newy)
-		{
-		}
-
-		@Override
-		public void keyReleased(int key, char c)
-		{
-		}
-
-		@Override
-		public void keyPressed(int key, char c)
-		{
-		}
-
-		@Override
-		public void init() throws SlickException
-		{
-		}
-	};
+	public static final ElementContainer EMPTY = new EmptyContainer();
 
 	private Map<Integer, List<Element>> elements;
 	private int maxDepth;
@@ -164,4 +123,46 @@ public abstract class ElementContainer
 
 	public abstract void wheelReleasedAt(int x, int y);
 
+	private static class EmptyContainer extends ElementContainer
+	{
+		@Override
+		public void wheelReleasedAt(int x, int y)
+		{
+		}
+
+		@Override
+		public void wheelPressedAt(int x, int y)
+		{
+		}
+
+		@Override
+		public void tickUpdate()
+		{
+		}
+
+		@Override
+		public void mouseWheelMoved(int change)
+		{
+		}
+
+		@Override
+		public void mouseDragged(int oldx, int oldy, int newx, int newy)
+		{
+		}
+
+		@Override
+		public void keyReleased(int key, char c)
+		{
+		}
+
+		@Override
+		public void keyPressed(int key, char c)
+		{
+		}
+
+		@Override
+		public void init() throws SlickException
+		{
+		}
+	}
 }
