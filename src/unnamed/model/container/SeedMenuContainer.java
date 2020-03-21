@@ -28,6 +28,12 @@ public class SeedMenuContainer extends MenuContainer
 	public void tickUpdate()
 	{
 	}
+	
+	@Override
+	public void enter()
+	{
+		this.seedField.setText("");
+	}
 
 	@Override
 	public void keyPressed(int key, char c)

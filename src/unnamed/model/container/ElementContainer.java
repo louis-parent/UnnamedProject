@@ -142,6 +142,16 @@ public abstract class ElementContainer implements Serializable
 	{
 		this.getTopElementAt(x, y).pressed();
 	}
+	
+	public void enter()
+	{
+		
+	}
+	
+	public void leave()
+	{
+		
+	}
 
 	public abstract void init() throws SlickException;
 	public abstract void tickUpdate();

@@ -184,8 +184,11 @@ public class GameController
 
 	public void setCurrentContainer(ElementContainer container)
 	{
+		this.currentContainer.leave();
 		this.currentContainer = container;
+		
 		this.cameraController.reset();
+		this.currentContainer.enter();
 	}
 
 	public void playGame()
