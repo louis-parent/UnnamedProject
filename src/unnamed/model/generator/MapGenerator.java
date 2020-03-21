@@ -15,7 +15,7 @@ import unnamed.model.element.map.tile.TileType;
 
 public class MapGenerator
 {
-	private static final int SURFACE_FOR_MOUNTAIN_CHAIN = 2500;
+	private static final int SURFACE_FOR_TERRAIN_DECORATION = 2500;
 	private static final int MOUNTAIN_DIAMETER = 15;
 	private static final int DEFAULT_MOUNTAIN_DENSITY = 1;
 	private static final int MOUNTAIN_CHAIN_DENSITY = 99;
@@ -23,6 +23,9 @@ public class MapGenerator
 	private static final int HILL_DENSITY_IN_MOUNTAIN = 15;
 	private static final int DEFAULT_HILL_DENSITY = 3;
 	private static final int HILL_DENSITY_AROUND_MOUNTAINS = 25;
+
+	private static final int DESERT_DIAMETER = 20;
+	private static final int DESERT_SPREAD_PERCENTAGE = 18;
 
 	private int columns;
 	private int rows;
@@ -69,7 +72,7 @@ public class MapGenerator
 
 	private void generateMountains()
 	{
-		for(int i = 0; i < ((this.rows * this.columns) / MapGenerator.SURFACE_FOR_MOUNTAIN_CHAIN); i++)
+		for(int i = 0; i < ((this.rows * this.columns) / MapGenerator.SURFACE_FOR_TERRAIN_DECORATION); i++)
 		{
 			List<Tile> seeded = this.seedMountains();
 			this.expandMountains(seeded);
@@ -185,8 +188,7 @@ public class MapGenerator
 
 	private void generateWaterBiome(ElementContainer container)
 	{
-
-		for(int i = 0; i < ((this.rows * this.columns) / MapGenerator.SURFACE_FOR_MOUNTAIN_CHAIN); i++)
+		for(int i = 0; i < ((this.rows * this.columns) / MapGenerator.SURFACE_FOR_TERRAIN_DECORATION); i++)
 		{
 			Tile seeded = this.seedWater();
 			this.expandWater(seeded);
@@ -195,12 +197,16 @@ public class MapGenerator
 
 	private Tile seedWater()
 	{
-		int changedIndex = this.map.getRandomTileIndex();
+		return this.seedBiome(TileFactory.WATER_BIOME);
+	}
+
+	private Tile seedBiome(String desertBiome)
+	{
+		int changedIndex = this.map.getRandomTileIndex(GrassTile.class);
 		Tile changedTile = this.map.get(changedIndex);
-		Tile newTile = TileFactory.createFrom(TileFactory.WATER_BIOME, changedTile);
+		Tile newTile = TileFactory.createFrom(desertBiome, changedTile);
 
 		this.map.set(changedIndex, newTile);
-
 		return newTile;
 	}
 
@@ -208,7 +214,7 @@ public class MapGenerator
 	{
 		List<Tile> toExpand = new ArrayList<Tile>();
 		toExpand.add(seeded);
-		
+
 		double turnCounter = 1.0;
 
 		while(!toExpand.isEmpty())
@@ -218,28 +224,59 @@ public class MapGenerator
 
 			for(Tile tile : toBuild)
 			{
-				boolean b = this.rand.nextDouble() <= ((1.0 / turnCounter) + 0.15);
-				System.out.println(b);
-				if(b)
+				if(this.rand.nextDouble() <= ((1.0 / turnCounter) + 0.15))
 				{
-					if(this.map.contains(tile))
-					{
-						Tile newTile = TileFactory.createFrom(TileFactory.WATER_BIOME, tile);
-						this.map.set(this.map.indexOf(tile), newTile);
-						toExpand.add(newTile);
-					}
+					replaceTileWithIn(tile, TileFactory.WATER_BIOME, toExpand);
 				}
-				
+
 			}
 
 			turnCounter++;
 		}
 	}
 
+	private void replaceTileWithIn(Tile tile, String biome, List<Tile> toExpand)
+	{
+		if(this.map.contains(tile))
+		{
+			Tile newTile = TileFactory.createFrom(biome, tile);
+			this.map.set(this.map.indexOf(tile), newTile);
+			toExpand.add(newTile);
+		}
+	}
+
 	private void generateDesertBiome(ElementContainer container)
 	{
-		// TODO Auto-generated method stub
+		for(int i = 0; i < ((this.rows * this.columns) / MapGenerator.SURFACE_FOR_TERRAIN_DECORATION); i++)
+		{
+			Tile seed = this.generateDesertSeed();
+			this.expandDesert(seed);
+		}
+	}
 
+	private Tile generateDesertSeed()
+	{
+		return this.seedBiome(TileFactory.DESERT_BIOME);
+	}
+
+	private void expandDesert(Tile seed)
+	{
+		List<Tile> desert = new ArrayList<Tile>();
+		desert.add(seed);
+
+		for(int i = 0; i < DESERT_DIAMETER; i++)
+		{
+
+			List<Tile> adjacents = this.map.getAllAdjacentFor(GrassTile.class, desert);
+
+			for(Tile adjacent : adjacents)
+			{
+				if(this.rand.nextInt(100) < DESERT_SPREAD_PERCENTAGE)
+				{
+					this.replaceTileWithIn(adjacent, TileFactory.DESERT_BIOME, desert);
+				}
+			}
+		}
 	}
 
 }

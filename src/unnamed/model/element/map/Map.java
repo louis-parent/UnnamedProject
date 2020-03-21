@@ -170,7 +170,26 @@ public class Map extends ArrayList<Tile>
 	public int getRandomTileIndex()
 	{
 		Random rand = GameController.getInstance().getRandom();
-		
+
 		return rand.nextInt(this.size());
+	}
+
+	public int getRandomTileIndex(Class<? extends Tile> tileClass)
+	{
+		int selected = -1;
+
+		boolean found = false;
+
+		while(!found)
+		{
+			selected = getRandomTileIndex();
+
+			if(this.get(selected).getClass().equals(tileClass))
+			{
+				found = true;
+			}
+		}
+
+		return selected;
 	}
 }
