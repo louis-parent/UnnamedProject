@@ -6,7 +6,7 @@ import unnamed.controller.GameController;
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.menu.button.FieldValidator;
-import unnamed.model.element.menu.field.TextField;
+import unnamed.model.element.menu.field.Field;
 
 public class StartButton extends FieldValidator
 {
@@ -15,7 +15,7 @@ public class StartButton extends FieldValidator
 	private static PixelisedImage released;
 	private static PixelisedImage pressed;
 	
-	public StartButton(TextField field, ElementContainer container)
+	public StartButton(Field field, ElementContainer container)
 	{
 		super(field, container);
 	}

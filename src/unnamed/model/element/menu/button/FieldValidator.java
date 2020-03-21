@@ -3,15 +3,15 @@ package unnamed.model.element.menu.button;
 import org.newdawn.slick.SlickException;
 
 import unnamed.model.container.ElementContainer;
-import unnamed.model.element.menu.field.TextField;
+import unnamed.model.element.menu.field.Field;
 
 public abstract class FieldValidator extends Button
 {
 	private static final long serialVersionUID = 2079967442580121662L;
 
-	private TextField field;
+	private Field field;
 	
-	public FieldValidator(TextField field, ElementContainer container)
+	public FieldValidator(Field field, ElementContainer container)
 	{
 		super(container);
 		this.field = field;
@@ -23,7 +23,7 @@ public abstract class FieldValidator extends Button
 		this.action(this.field.getFormattedText().getText());
 	}
 	
-	public void setField(TextField field)
+	public void setField(Field field)
 	{
 		this.field = field;
 	}

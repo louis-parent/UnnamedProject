@@ -10,20 +10,20 @@ import unnamed.controller.GameController;
 import unnamed.model.element.Element;
 import unnamed.model.element.menu.MenuElement;
 import unnamed.model.element.menu.button.MenuFactory;
-import unnamed.model.element.menu.field.TextField;
+import unnamed.model.element.menu.field.Field;
 
 public abstract class MenuContainer extends ElementContainer
 {
 	private static final long serialVersionUID = 8508648978109147145L;
 	private static final int PADDING = 50;
 	
-	private List<TextField> fields;
+	private List<Field> fields;
 	private MenuElement selectedField;
 	
 	public MenuContainer()
 	{
 		super();
-		this.fields = new ArrayList<TextField>();
+		this.fields = new ArrayList<Field>();
 		this.selectedField = MenuElement.EMPTY;
 	}
 
@@ -47,9 +47,9 @@ public abstract class MenuContainer extends ElementContainer
 	{
 		super.addElement(element);
 		
-		if(element instanceof TextField)
+		if(element instanceof Field)
 		{
-			TextField field = (TextField) element;
+			Field field = (Field) element;
 			this.fields.add(field);
 			
 			if(MenuElement.EMPTY.equals(this.selectedField))

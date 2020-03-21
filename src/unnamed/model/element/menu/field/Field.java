@@ -9,27 +9,27 @@ import unnamed.model.container.ElementContainer;
 import unnamed.model.element.menu.FormattedString;
 import unnamed.model.element.menu.MenuElement;
 
-public class TextField extends MenuElement 
+public abstract class Field extends MenuElement 
 {
-	public static final TextField EMPTY = new EmptyField();
-	
-	private static PixelisedImage sprite;
-	
 	private static final long serialVersionUID = -174723088589298269L;
+	
+	public static final Field EMPTY = new EmptyField();
+	
+	private static PixelisedImage background;
 	
 	private FormattedString text;
 	
 	public static void init() throws SlickException
 	{
-		TextField.sprite = new PixelisedImage("assets/menu/seed_field.png");
+		Field.background = new PixelisedImage("assets/menu/field_background.png");
 	}
 
-	public TextField(ElementContainer container)
+	public Field(ElementContainer container)
 	{
 		this("", container);
 	}
 	
-	public TextField(String defaultText, ElementContainer container)
+	public Field(String defaultText, ElementContainer container)
 	{
 		super(container);
 		this.text = new FormattedString(defaultText, Color.white, 25, 7, 3);
@@ -38,7 +38,7 @@ public class TextField extends MenuElement
 	@Override
 	public PixelisedImage getSprite() throws SlickException
 	{
-		return TextField.sprite;
+		return Field.background;
 	}
 	
 	public void setText(String text)
@@ -64,19 +64,27 @@ public class TextField extends MenuElement
 		{
 			this.text.substring(0, this.text.length() - 1);
 		}
-		else
+		else if(this.isValid(c))
 		{
 			this.text.append(c);
 		}
 	}
 	
-	private static class EmptyField extends TextField
+	public abstract boolean isValid(char c);
+	
+	private static class EmptyField extends Field
 	{
 		private static final long serialVersionUID = 3752879867259651027L;
 
 		public EmptyField()
 		{
 			super(ElementContainer.EMPTY);
+		}
+
+		@Override
+		public boolean isValid(char c)
+		{
+			return false;
 		}
 		
 	}

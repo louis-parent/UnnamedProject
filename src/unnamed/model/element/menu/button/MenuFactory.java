@@ -11,7 +11,8 @@ import unnamed.model.element.menu.button.pause.MenuButton;
 import unnamed.model.element.menu.button.pause.ResumeButton;
 import unnamed.model.element.menu.button.pause.SaveButton;
 import unnamed.model.element.menu.button.seed.StartButton;
-import unnamed.model.element.menu.field.TextField;
+import unnamed.model.element.menu.field.Field;
+import unnamed.model.element.menu.field.SeedField;
 
 public class MenuFactory
 {
@@ -23,7 +24,7 @@ public class MenuFactory
 	public static final String RESUME_BUTTON = "resume";
 	public static final String START_BUTTON = "start";
 	
-	public static final String TEXT_FIELD = "text";
+	public static final String SEED_FIELD = "seed";
 	
 	public static void init() throws SlickException
 	{
@@ -34,7 +35,7 @@ public class MenuFactory
 		SaveButton.init();
 		ResumeButton.init();
 		StartButton.init();
-		TextField.init();
+		Field.init();
 	}
 	
 	public static MenuElement create(String type, ElementContainer container)
@@ -60,10 +61,10 @@ public class MenuFactory
 				return new ResumeButton(container);
 				
 			case START_BUTTON:
-				return new StartButton(TextField.EMPTY, container);
+				return new StartButton(Field.EMPTY, container);
 				
-			case TEXT_FIELD:
-				return new TextField(container);
+			case SEED_FIELD:
+				return new SeedField(container);
 				
 			default:
 				return MenuElement.EMPTY;
