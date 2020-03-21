@@ -18,7 +18,7 @@ import unnamed.model.container.MainMenuContainer;
 import unnamed.model.container.MapContainer;
 import unnamed.model.container.PauseMenuContainer;
 import unnamed.model.container.SeedMenuContainer;
-import unnamed.model.element.map.TileFactory;
+import unnamed.model.element.map.tile.TileFactory;
 import unnamed.model.element.menu.button.MenuFactory;
 import unnamed.view.Camera;
 import unnamed.view.GameWindow;

@@ -1,4 +1,4 @@
-package unnamed.model.element.map;
+package unnamed.model.element.map.tile;
 
 import java.util.HashMap;
 import java.util.Map;

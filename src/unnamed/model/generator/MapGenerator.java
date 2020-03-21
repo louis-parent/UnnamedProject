@@ -8,9 +8,10 @@ import java.util.Random;
 import unnamed.controller.GameController;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.map.Map;
-import unnamed.model.element.map.Tile;
-import unnamed.model.element.map.TileFactory;
-import unnamed.model.element.map.TileType;
+import unnamed.model.element.map.tile.GrassTile;
+import unnamed.model.element.map.tile.Tile;
+import unnamed.model.element.map.tile.TileFactory;
+import unnamed.model.element.map.tile.TileType;
 
 public class MapGenerator
 {
@@ -79,9 +80,7 @@ public class MapGenerator
 	{
 		List<Tile> seeded = new ArrayList<Tile>();
 
-		int spot = this.rand.nextInt(this.map.size());
-
-		Tile changedTile = this.map.get(spot);
+		Tile changedTile = this.map.get(this.map.getRandomTileIndex());
 
 		changedTile.setType(TileType.MOUNTAIN);
 		seeded.add(changedTile);
@@ -180,7 +179,67 @@ public class MapGenerator
 
 	private void generateBiomes(ElementContainer container)
 	{
-		// TODO
+		this.generateWaterBiome(container);
+		this.generateDesertBiome(container);
+	}
+
+	private void generateWaterBiome(ElementContainer container)
+	{
+
+		for(int i = 0; i < ((this.rows * this.columns) / MapGenerator.SURFACE_FOR_MOUNTAIN_CHAIN); i++)
+		{
+			Tile seeded = this.seedWater();
+			this.expandWater(seeded);
+		}
+	}
+
+	private Tile seedWater()
+	{
+		int changedIndex = this.map.getRandomTileIndex();
+		Tile changedTile = this.map.get(changedIndex);
+		Tile newTile = TileFactory.createFrom(TileFactory.WATER_BIOME, changedTile);
+
+		this.map.set(changedIndex, newTile);
+
+		return newTile;
+	}
+
+	private void expandWater(Tile seeded)
+	{
+		List<Tile> toExpand = new ArrayList<Tile>();
+		toExpand.add(seeded);
+		
+		double turnCounter = 1.0;
+
+		while(!toExpand.isEmpty())
+		{
+			List<Tile> toBuild = new ArrayList<Tile>(this.map.getAllAdjacentFor(GrassTile.class, toExpand));
+			toExpand.clear();
+
+			for(Tile tile : toBuild)
+			{
+				boolean b = this.rand.nextDouble() <= ((1.0 / turnCounter) + 0.15);
+				System.out.println(b);
+				if(b)
+				{
+					if(this.map.contains(tile))
+					{
+						Tile newTile = TileFactory.createFrom(TileFactory.WATER_BIOME, tile);
+						this.map.set(this.map.indexOf(tile), newTile);
+						toExpand.add(newTile);
+					}
+				}
+				
+			}
+
+			turnCounter++;
+		}
+	}
+
+	private void generateDesertBiome(ElementContainer container)
+	{
+		// TODO Auto-generated method stub
+
 	}
 
 }

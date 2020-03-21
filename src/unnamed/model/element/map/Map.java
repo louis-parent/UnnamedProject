@@ -2,6 +2,12 @@ package unnamed.model.element.map;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import unnamed.controller.GameController;
+import unnamed.model.element.map.tile.GrassTile;
+import unnamed.model.element.map.tile.Tile;
+import unnamed.model.element.map.tile.TileType;
 
 public class Map extends ArrayList<Tile>
 {
@@ -18,11 +24,11 @@ public class Map extends ArrayList<Tile>
 		this.rows = rows;
 	}
 
-	public int getListPosition(int x, int y)
+	public int getListPosition(float x, float y)
 	{
 		if(((x >= 0) && (y >= 0)) && ((x < this.columns) && (y < this.rows)))
 		{
-			return (this.columns * x) + y;
+			return (int) ((this.columns * x) + y);
 		}
 		else
 		{
@@ -130,6 +136,22 @@ public class Map extends ArrayList<Tile>
 		return adjacents;
 	}
 
+	public List<Tile> getAllAdjacentFor(Class<? extends Tile> tileClass, List<Tile> tiles)
+	{
+		List<Tile> adjacents = this.getAllAdjacent(tiles);
+
+		for(int i = 0; i < adjacents.size(); i++)
+		{
+			if(!adjacents.get(i).getClass().equals(tileClass))
+			{
+				adjacents.remove(i);
+				i--;
+			}
+		}
+
+		return adjacents;
+	}
+
 	public List<Tile> getAllAdjacent(List<Tile> tiles)
 	{
 		List<Tile> typedAdjacent = new ArrayList<Tile>();
@@ -143,5 +165,12 @@ public class Map extends ArrayList<Tile>
 		}
 
 		return typedAdjacent;
+	}
+
+	public int getRandomTileIndex()
+	{
+		Random rand = GameController.getInstance().getRandom();
+		
+		return rand.nextInt(this.size());
 	}
 }

@@ -8,10 +8,10 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.controller.CameraController;
 import unnamed.controller.GameController;
-import unnamed.model.element.map.CorruptTile;
 import unnamed.model.element.map.Map;
-import unnamed.model.element.map.Tile;
-import unnamed.model.element.map.TileFactory;
+import unnamed.model.element.map.tile.CorruptTile;
+import unnamed.model.element.map.tile.Tile;
+import unnamed.model.element.map.tile.TileFactory;
 import unnamed.model.generator.MapGenerator;
 
 public class MapContainer extends ElementContainer
