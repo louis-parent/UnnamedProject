@@ -17,8 +17,8 @@ import unnamed.model.container.ElementContainer;
 import unnamed.model.container.MainMenuContainer;
 import unnamed.model.container.MapContainer;
 import unnamed.model.container.PauseMenuContainer;
-import unnamed.model.element.button.ButtonFactory;
 import unnamed.model.element.map.TileFactory;
+import unnamed.model.element.menu.button.ButtonFactory;
 import unnamed.view.Camera;
 import unnamed.view.GameWindow;
 
@@ -217,7 +217,15 @@ public class GameController
 	{
 		try
 		{
-			ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(GameController.SAVE_FILE));
+			File save = new File(GameController.SAVE_FILE);
+			
+			File saveFolder = save.getParentFile();
+			if(!saveFolder.exists())
+			{
+				saveFolder.mkdir();
+			}
+			
+			ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(save));
 			stream.writeObject(this.mapContainer);
 			stream.close();
 		}
