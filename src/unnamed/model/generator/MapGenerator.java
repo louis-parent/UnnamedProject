@@ -12,6 +12,7 @@ import unnamed.model.element.map.tile.GrassTile;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileFactory;
 import unnamed.model.element.map.tile.TileType;
+import unnamed.model.element.map.tile.WaterTile;
 
 public class MapGenerator
 {
@@ -193,6 +194,11 @@ public class MapGenerator
 			Tile seeded = this.seedWater();
 			this.expandWater(seeded);
 		}
+
+		for(int i = 0; i < (((this.rows * this.columns) / MapGenerator.SURFACE_FOR_TERRAIN_DECORATION) * 8); i++)
+		{
+			this.generateRiver();
+		}
 	}
 
 	private Tile seedWater()
@@ -226,7 +232,7 @@ public class MapGenerator
 			{
 				if(this.rand.nextDouble() <= ((1.0 / turnCounter) + 0.15))
 				{
-					replaceTileWithIn(tile, TileFactory.WATER_BIOME, toExpand);
+					this.replaceTileWithIn(tile, TileFactory.WATER_BIOME, toExpand);
 				}
 
 			}
@@ -243,6 +249,136 @@ public class MapGenerator
 			this.map.set(this.map.indexOf(tile), newTile);
 			toExpand.add(newTile);
 		}
+	}
+
+	private void generateRiver()
+	{
+		int selectedMountain = this.map.getRandomTileIndex(TileType.MOUNTAIN);
+
+		List<Integer> previousIndex = this.initListWith(-1);
+		List<Float> distance = this.initListWith(Float.MAX_VALUE);
+
+		this.dijkstra(selectedMountain, previousIndex, distance);
+
+		int closestIndex = this.findClosestWater(distance);
+
+		this.generateRiverFrom(closestIndex, previousIndex);
+
+	}
+
+	private <T> List<T> initListWith(T defaultValue)
+	{
+		List<T> list = new ArrayList<T>();
+
+		for(int i = 0; i < this.map.size(); i++)
+		{
+			list.add(defaultValue);
+		}
+
+		return list;
+	}
+
+	private void dijkstra(int selectedMountain, List<Integer> previousIndex, List<Float> distance)
+	{
+		List<Float> weight = this.initWeights();
+		List<Boolean> seen = this.initListWith(Boolean.FALSE);
+
+		previousIndex.set(selectedMountain, selectedMountain);
+		distance.set(selectedMountain, 0f);
+
+		while(seen.contains(Boolean.FALSE))
+		{
+			int minValueIndex = this.getSmallestUnseenIndex(seen, distance);
+			float currentDistance = distance.get(minValueIndex);
+
+			seen.set(minValueIndex, true);
+
+			for(Tile tile : this.map.getAdjacentTiles(this.map.get(minValueIndex)))
+			{
+				int current = this.map.indexOf(tile);
+				float newDistance = (currentDistance == Float.MAX_VALUE) || (weight.get(current) == Float.MAX_VALUE) ? Float.MAX_VALUE : currentDistance + weight.get(current);
+
+				if(!seen.get(current) && (distance.get(current) > newDistance))
+				{
+					distance.set(current, newDistance);
+					previousIndex.set(current, minValueIndex);
+				}
+
+			}
+		}
+	}
+
+	private List<Float> initWeights()
+	{
+		List<Float> list = new ArrayList<Float>();
+
+		for(Tile element : this.map)
+		{
+			switch(element.getType())
+			{
+				case FLAT:
+					list.add((this.rand.nextFloat() + 1) * 3);
+					break;
+
+				case HILL:
+					list.add((this.rand.nextFloat() + 1) * 6);
+					break;
+
+				case MOUNTAIN:
+					list.add(20000f);
+					break;
+			}
+		}
+
+		return list;
+	}
+
+	private int getSmallestUnseenIndex(List<Boolean> seen, List<Float> distance)
+	{
+		float min = Float.MAX_VALUE;
+		int pos = -1;
+
+		for(int i = 0; i < distance.size(); i++)
+		{
+			if(!seen.get(i) && (distance.get(i) <= min))
+			{
+				min = distance.get(i);
+				pos = i;
+			}
+		}
+
+		return pos;
+	}
+
+	private int findClosestWater(List<Float> distance)
+	{
+		float min = Float.MAX_VALUE;
+		int pos = -1;
+
+		for(int i = 0; i < distance.size(); i++)
+		{
+			if((this.map.get(i) instanceof WaterTile) && (distance.get(i) <= min))
+			{
+				min = distance.get(i);
+				pos = i;
+			}
+		}
+
+		return pos;
+	}
+
+	private void generateRiverFrom(int closestIndex, List<Integer> previousIndex)
+	{
+		int currentIndex = closestIndex;
+
+		while(previousIndex.get(currentIndex) != currentIndex)
+		{
+			Tile newTile = TileFactory.createFrom(TileFactory.WATER_BIOME, this.map.get(currentIndex));
+			this.map.set(currentIndex, newTile);
+
+			currentIndex = previousIndex.get(currentIndex);
+		}
+
 	}
 
 	private void generateDesertBiome(ElementContainer container)
@@ -264,14 +400,14 @@ public class MapGenerator
 		List<Tile> desert = new ArrayList<Tile>();
 		desert.add(seed);
 
-		for(int i = 0; i < DESERT_DIAMETER; i++)
+		for(int i = 0; i < MapGenerator.DESERT_DIAMETER; i++)
 		{
 
 			List<Tile> adjacents = this.map.getAllAdjacentFor(GrassTile.class, desert);
 
 			for(Tile adjacent : adjacents)
 			{
-				if(this.rand.nextInt(100) < DESERT_SPREAD_PERCENTAGE)
+				if(this.rand.nextInt(100) < MapGenerator.DESERT_SPREAD_PERCENTAGE)
 				{
 					this.replaceTileWithIn(adjacent, TileFactory.DESERT_BIOME, desert);
 				}

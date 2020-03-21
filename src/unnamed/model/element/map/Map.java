@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import unnamed.controller.GameController;
-import unnamed.model.element.map.tile.GrassTile;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileType;
 
@@ -185,6 +184,25 @@ public class Map extends ArrayList<Tile>
 			selected = getRandomTileIndex();
 
 			if(this.get(selected).getClass().equals(tileClass))
+			{
+				found = true;
+			}
+		}
+
+		return selected;
+	}
+
+	public int getRandomTileIndex(TileType type)
+	{
+		int selected = -1;
+
+		boolean found = false;
+
+		while(!found)
+		{
+			selected = getRandomTileIndex();
+
+			if(this.get(selected).getType() == type)
 			{
 				found = true;
 			}
