@@ -2,6 +2,7 @@ package unnamed.controller;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
+import org.newdawn.slick.SlickException;
 
 public class MouseController implements MouseListener
 {
@@ -39,7 +40,14 @@ public class MouseController implements MouseListener
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy)
 	{
-		GameController.getInstance().mouseDragged(oldx, oldy, newx, newy);
+		try
+		{
+			GameController.getInstance().mouseDragged(oldx, oldy, newx, newy);
+		}
+		catch(SlickException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -53,7 +61,14 @@ public class MouseController implements MouseListener
 	{
 		if(button == Input.MOUSE_LEFT_BUTTON)
 		{
-			GameController.getInstance().pressedAt(x, y);
+			try
+			{
+				GameController.getInstance().pressedAt(x, y);
+			}
+			catch(SlickException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		else if(button == Input.MOUSE_MIDDLE_BUTTON)
 		{

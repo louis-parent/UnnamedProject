@@ -7,6 +7,7 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
+import unnamed.model.element.menu.FormattedString;
 
 public abstract class Element implements Serializable
 {
@@ -66,13 +67,13 @@ public abstract class Element implements Serializable
 		this.container.changeZOfElement(this, oldZ);
 	}
 
-	public void centerElementAt(int x, int y)
+	public void centerElementAt(int x, int y) throws SlickException
 	{
 		this.setX(x - (this.getWidth() / 2));
 		this.setY(y - (this.getHeight() / 2));
 	}
 
-	public boolean isInside(float x, float y)
+	public boolean isInside(float x, float y) throws SlickException
 	{
 		boolean isBefore = (x < this.getX()) || (y < this.getY());
 		boolean isAfter = (x > (this.getX() + this.getWidth())) || (y > (this.getY() + this.getHeight()));
@@ -80,17 +81,17 @@ public abstract class Element implements Serializable
 		return !isBefore && !isAfter && !this.inTransparency(x, y);
 	}
 
-	public int getHeight()
+	public int getHeight() throws SlickException
 	{
 		return this.getSprite().getHeight();
 	}
 
-	public int getWidth()
+	public int getWidth() throws SlickException
 	{
 		return this.getSprite().getWidth();
 	}
 
-	protected boolean inTransparency(float x, float y)
+	protected boolean inTransparency(float x, float y) throws SlickException
 	{
 		int spriteX = (int) (x - this.getX());
 		int spriteY = (int) (y - this.getY());
@@ -101,19 +102,16 @@ public abstract class Element implements Serializable
 		return pixelColor.getAlpha() == 0;
 	}
 
-	public abstract PixelisedImage getSprite();
-
 	public ElementContainer getContainer()
 	{
 		return this.container;
 	}
 
+	public abstract PixelisedImage getSprite() throws SlickException;
+	public abstract FormattedString getFormattedText();
 	public abstract void tickUpdate();
-
 	public abstract void click() throws SlickException;
-
 	public abstract void pressed();
-
 	public abstract void mouseLeft();
 
 	private static class EmptyElement extends Element
@@ -126,9 +124,9 @@ public abstract class Element implements Serializable
 		}
 
 		@Override
-		public PixelisedImage getSprite()
+		public PixelisedImage getSprite() throws SlickException
 		{
-			return PixelisedImage.EMPTY;
+			return PixelisedImage.getEmpty();
 
 		}
 
@@ -150,6 +148,12 @@ public abstract class Element implements Serializable
 		@Override
 		public void tickUpdate()
 		{
+		}
+
+		@Override
+		public FormattedString getFormattedText()
+		{
+			return FormattedString.EMPTY;
 		}
 	}
 }

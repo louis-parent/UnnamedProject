@@ -5,16 +5,19 @@ import org.newdawn.slick.SlickException;
 
 public class PixelisedImage extends Image
 {
-	public static final PixelisedImage EMPTY = new PixelisedImage();
-
 	public PixelisedImage(String path) throws SlickException
 	{
 		super(path);
 		this.setFilter(Image.FILTER_NEAREST);
 	}
 
-	private PixelisedImage()
+	private PixelisedImage() throws SlickException
 	{
-
+		super("assets/empty.png");
+	}
+	
+	public static PixelisedImage getEmpty() throws SlickException
+	{
+		return new PixelisedImage();
 	}
 }

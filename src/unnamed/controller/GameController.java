@@ -17,8 +17,9 @@ import unnamed.model.container.ElementContainer;
 import unnamed.model.container.MainMenuContainer;
 import unnamed.model.container.MapContainer;
 import unnamed.model.container.PauseMenuContainer;
+import unnamed.model.container.SeedMenuContainer;
 import unnamed.model.element.map.TileFactory;
-import unnamed.model.element.menu.button.ButtonFactory;
+import unnamed.model.element.menu.button.MenuFactory;
 import unnamed.view.Camera;
 import unnamed.view.GameWindow;
 
@@ -41,6 +42,7 @@ public class GameController
 	private ElementContainer currentContainer;
 	private MainMenuContainer mainMenuContainer;
 	private PauseMenuContainer pauseMenuContainer;
+	private SeedMenuContainer seedMenuContainer;
 	private MapContainer mapContainer;
 
 	private Random random;
@@ -63,9 +65,11 @@ public class GameController
 
 		this.cameraController = new CameraController(this.view.getCamera());
 
+		this.currentContainer = ElementContainer.EMPTY;
 		this.mainMenuContainer = new MainMenuContainer();
 		this.pauseMenuContainer = new PauseMenuContainer();
-
+		this.seedMenuContainer = new SeedMenuContainer();
+		
 		this.random = new Random();
 
 		this.leftOverMillis = 0;
@@ -84,13 +88,14 @@ public class GameController
 
 	public void init(GameContainer container) throws SlickException
 	{
-		ButtonFactory.init();
+		MenuFactory.init();
 		TileFactory.init();
 
 		this.container = container;
 
 		this.mainMenuContainer.init();
 		this.pauseMenuContainer.init();
+		this.seedMenuContainer.init();
 
 		this.setCurrentContainer(this.mainMenuContainer);
 
@@ -147,7 +152,7 @@ public class GameController
 		}
 	}
 
-	public void pressedAt(int x, int y)
+	public void pressedAt(int x, int y) throws SlickException
 	{
 		this.currentContainer.pressedAt(x, y);
 	}
@@ -197,8 +202,13 @@ public class GameController
 	{
 		this.setCurrentContainer(this.pauseMenuContainer);
 	}
+	
+	public void goToSeedMenu()
+	{
+		this.setCurrentContainer(this.seedMenuContainer);
+	}
 
-	public void mouseDragged(int oldx, int oldy, int newx, int newy)
+	public void mouseDragged(int oldx, int oldy, int newx, int newy) throws SlickException
 	{
 		this.currentContainer.mouseDragged(oldx, oldy, newx, newy);
 	}
@@ -249,8 +259,10 @@ public class GameController
 		this.playGame();
 	}
 
-	public void createGame() throws SlickException
+	public void createGame(long seed) throws SlickException
 	{
+		this.random.setSeed(seed);
+		
 		this.mapContainer = new MapContainer();
 		this.mapContainer.init();
 

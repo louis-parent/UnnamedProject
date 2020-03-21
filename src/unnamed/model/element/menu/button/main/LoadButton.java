@@ -1,11 +1,11 @@
-package unnamed.model.element.button.main;
+package unnamed.model.element.menu.button.main;
 
 import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
-import unnamed.model.element.button.Button;
+import unnamed.model.element.menu.button.Button;
 
 public class LoadButton extends Button
 {

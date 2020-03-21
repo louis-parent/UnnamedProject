@@ -1,17 +1,15 @@
-package unnamed.model.element.button;
+package unnamed.model.element.menu.button;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
 
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
-import unnamed.model.element.Element;
+import unnamed.model.element.menu.MenuElement;
 
-public abstract class Button extends Element
+public abstract class Button extends MenuElement
 {
 	private static final long serialVersionUID = 410744874078962405L;
-
-	public static final Button EMPTY = new EmptyButton();
 
 	private boolean pressed;
 
@@ -115,36 +113,6 @@ public abstract class Button extends Element
 	}
 
 	protected abstract PixelisedImage getPressedSprite();
-
 	protected abstract PixelisedImage getReleasedSprite();
-
 	protected abstract void action() throws SlickException;
-
-	private static class EmptyButton extends Button
-	{
-		private static final long serialVersionUID = 5948308253831601641L;
-
-		public EmptyButton()
-		{
-			super(ElementContainer.EMPTY);
-		}
-
-		@Override
-		protected PixelisedImage getPressedSprite()
-		{
-			return PixelisedImage.EMPTY;
-		}
-
-		@Override
-		protected PixelisedImage getReleasedSprite()
-		{
-			return PixelisedImage.EMPTY;
-		}
-
-		@Override
-		protected void action()
-		{
-		}
-
-	}
 }

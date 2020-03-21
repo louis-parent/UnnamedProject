@@ -1,16 +1,19 @@
-package unnamed.model.element.button;
+package unnamed.model.element.menu.button;
 
 import org.newdawn.slick.SlickException;
 
 import unnamed.model.container.ElementContainer;
-import unnamed.model.element.button.main.LoadButton;
-import unnamed.model.element.button.main.NewButton;
-import unnamed.model.element.button.main.QuitButton;
-import unnamed.model.element.button.pause.MenuButton;
-import unnamed.model.element.button.pause.ResumeButton;
-import unnamed.model.element.button.pause.SaveButton;
+import unnamed.model.element.menu.MenuElement;
+import unnamed.model.element.menu.button.main.LoadButton;
+import unnamed.model.element.menu.button.main.NewButton;
+import unnamed.model.element.menu.button.main.QuitButton;
+import unnamed.model.element.menu.button.pause.MenuButton;
+import unnamed.model.element.menu.button.pause.ResumeButton;
+import unnamed.model.element.menu.button.pause.SaveButton;
+import unnamed.model.element.menu.button.seed.StartButton;
+import unnamed.model.element.menu.field.TextField;
 
-public class ButtonFactory
+public class MenuFactory
 {
 	public static final String NEW_BUTTON = "new";
 	public static final String LOAD_BUTTON = "load";
@@ -18,6 +21,9 @@ public class ButtonFactory
 	public static final String MENU_BUTTON = "menu";
 	public static final String SAVE_BUTTON = "save";
 	public static final String RESUME_BUTTON = "resume";
+	public static final String START_BUTTON = "start";
+	
+	public static final String TEXT_FIELD = "text";
 	
 	public static void init() throws SlickException
 	{
@@ -27,9 +33,11 @@ public class ButtonFactory
 		MenuButton.init();
 		SaveButton.init();
 		ResumeButton.init();
+		StartButton.init();
+		TextField.init();
 	}
 	
-	public static Button create(String type, ElementContainer container)
+	public static MenuElement create(String type, ElementContainer container)
 	{
 		switch(type)
 		{
@@ -51,8 +59,14 @@ public class ButtonFactory
 			case RESUME_BUTTON:
 				return new ResumeButton(container);
 				
+			case START_BUTTON:
+				return new StartButton(TextField.EMPTY, container);
+				
+			case TEXT_FIELD:
+				return new TextField(container);
+				
 			default:
-				return Button.EMPTY;
+				return MenuElement.EMPTY;
 		}
 	}
 }

@@ -1,11 +1,11 @@
-package unnamed.model.element.button.main;
+package unnamed.model.element.menu.button.main;
 
 import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
-import unnamed.model.element.button.Button;
+import unnamed.model.element.menu.button.Button;
 
 public class NewButton extends Button
 {
@@ -33,7 +33,7 @@ public class NewButton extends Button
 	@Override
 	protected void action() throws SlickException
 	{
-		GameController.getInstance().createGame();
+		GameController.getInstance().goToSeedMenu();
 	}
 
 	@Override

@@ -1,15 +1,16 @@
 package unnamed.model.element.map;
 
+import org.newdawn.slick.SlickException;
+
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
+import unnamed.model.element.menu.FormattedString;
 
 public abstract class Tile extends Element
 {
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -867365679274168458L;
+	
 	public static final int TILE_WIDTH = 32;
 	public static final int TILE_HEIGHT = 29;
 
@@ -72,6 +73,12 @@ public abstract class Tile extends Element
 		this.setSpriteVariant(type.getRandomVariant());
 	}
 
+	@Override
+	public FormattedString getFormattedText()
+	{
+		return FormattedString.EMPTY;
+	}
+	
 	@Override
 	public void tickUpdate()
 	{
@@ -165,9 +172,6 @@ public abstract class Tile extends Element
 
 	private static class EmptyTile extends Tile
 	{
-		/**
-		 *
-		 */
 		private static final long serialVersionUID = 8715601332795760931L;
 
 		public EmptyTile()
@@ -176,9 +180,9 @@ public abstract class Tile extends Element
 		}
 
 		@Override
-		public PixelisedImage getSprite()
+		public PixelisedImage getSprite() throws SlickException
 		{
-			return PixelisedImage.EMPTY;
+			return PixelisedImage.getEmpty();
 		}
 	}
 }

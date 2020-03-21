@@ -84,7 +84,7 @@ public abstract class ElementContainer implements Serializable
 		this.addElement(newElement);
 	}
 
-	protected Element getTopElementAt(float x, float y)
+	protected Element getTopElementAt(float x, float y) throws SlickException
 	{
 		List<Element> elements = this.getElementsToDraw();
 
@@ -109,7 +109,7 @@ public abstract class ElementContainer implements Serializable
 		}
 	}
 
-	protected void verticalAlign(int padding, Element... elements)
+	protected void verticalAlign(int padding, Element... elements) throws SlickException
 	{
 		int midX = GameController.GAME_WIDTH / 2;
 		int midY = GameController.GAME_HEIGHT / 2;
@@ -138,7 +138,7 @@ public abstract class ElementContainer implements Serializable
 		this.getTopElementAt(x, y).click();
 	}
 
-	public void pressedAt(int x, int y)
+	public void pressedAt(int x, int y) throws SlickException
 	{
 		this.getTopElementAt(x, y).pressed();
 	}
@@ -148,7 +148,7 @@ public abstract class ElementContainer implements Serializable
 	public abstract void mouseWheelMoved(int change);
 	public abstract void keyReleased(int key, char c);
 	public abstract void keyPressed(int key, char c);
-	public abstract void mouseDragged(int oldx, int oldy, int newx, int newy);
+	public abstract void mouseDragged(int oldx, int oldy, int newx, int newy) throws SlickException;
 	public abstract void wheelPressedAt(int x, int y);
 	public abstract void wheelReleasedAt(int x, int y);
 	public abstract int getHeight();
