@@ -34,6 +34,7 @@ public class MapGenerator
 	private Map map;
 
 	private Random rand;
+	private List<Tile> corruptTiles;
 
 	public MapGenerator(int numberOfColumns, int numberOfRows)
 	{
@@ -41,6 +42,7 @@ public class MapGenerator
 		this.rows = numberOfRows;
 
 		this.map = new Map(numberOfColumns, numberOfRows);
+		this.corruptTiles = new ArrayList<Tile>();
 
 		this.rand = GameController.getInstance().getRandom();
 	}
@@ -50,6 +52,8 @@ public class MapGenerator
 		this.generateGrassBase(container);
 		this.generateTerrain();
 		this.generateBiomes(container);
+		this.seedCorruption();
+		this.createFountain();
 
 		return this.map;
 	}
@@ -206,13 +210,17 @@ public class MapGenerator
 		return this.seedBiome(TileFactory.WATER_BIOME);
 	}
 
-	private Tile seedBiome(String desertBiome)
+	private Tile seedBiome(String biome)
 	{
-		int changedIndex = this.map.getRandomTileIndex(GrassTile.class);
-		Tile changedTile = this.map.get(changedIndex);
-		Tile newTile = TileFactory.createFrom(desertBiome, changedTile);
+		return this.setTileAt(this.map.getRandomTileIndex(GrassTile.class), biome);
+	}
+	
+	private Tile setTileAt(int index, String biome)
+	{
+		Tile oldTile = this.map.get(index);
+		Tile newTile = TileFactory.createFrom(biome, oldTile);
+		this.map.set(index, newTile);
 
-		this.map.set(changedIndex, newTile);
 		return newTile;
 	}
 
@@ -415,4 +423,19 @@ public class MapGenerator
 		}
 	}
 
+	private void seedCorruption()
+	{
+		Tile corruptTile = this.setTileAt(this.map.getRandomTileIndex(), TileFactory.CORRUPT_BIOME);
+		this.corruptTiles.add(corruptTile);
+	}
+
+	private void createFountain()
+	{
+		this.setTileAt(this.map.getRandomTileIndex(GrassTile.class, TileType.FLAT), TileFactory.FOUNTAIN_TILE);
+	}
+
+	public List<Tile> getCorruptTiles()
+	{
+		return this.corruptTiles;
+	}
 }

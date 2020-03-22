@@ -3,6 +3,7 @@ package unnamed.model.element.map;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 import unnamed.controller.GameController;
 import unnamed.model.element.map.tile.Tile;
@@ -169,30 +170,25 @@ public class Map extends ArrayList<Tile>
 	public int getRandomTileIndex()
 	{
 		Random rand = GameController.getInstance().getRandom();
-
 		return rand.nextInt(this.size());
 	}
 
 	public int getRandomTileIndex(Class<? extends Tile> tileClass)
 	{
-		int selected = -1;
-
-		boolean found = false;
-
-		while(!found)
-		{
-			selected = getRandomTileIndex();
-
-			if(this.get(selected).getClass().equals(tileClass))
-			{
-				found = true;
-			}
-		}
-
-		return selected;
+		return this.getRandomTileIndex(tile -> tile.getClass().equals(tileClass));
 	}
 
 	public int getRandomTileIndex(TileType type)
+	{
+		return this.getRandomTileIndex(tile -> tile.getType() == type);
+	}
+	
+	public int getRandomTileIndex(Class<? extends Tile> tileClass, TileType type)
+	{
+		return this.getRandomTileIndex(tile -> tile.getClass().equals(tileClass) && tile.getType() == type);
+	}
+	
+	private int getRandomTileIndex(Predicate<Tile> predicate)
 	{
 		int selected = -1;
 
@@ -202,7 +198,8 @@ public class Map extends ArrayList<Tile>
 		{
 			selected = getRandomTileIndex();
 
-			if(this.get(selected).getType() == type)
+			Tile tile = this.get(selected);
+			if(predicate.test(tile))
 			{
 				found = true;
 			}

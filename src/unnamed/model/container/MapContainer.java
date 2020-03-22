@@ -41,14 +41,9 @@ public class MapContainer extends ElementContainer
 	@Override
 	public void init() throws SlickException
 	{
-		MapGenerator gen = new MapGenerator(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
-		this.map.addAll(gen.generateMap(this));
-
-		int corruptStart = GameController.getInstance().getRandom().nextInt(this.map.size());
-		Tile oldTile = this.map.get(corruptStart);
-		Tile corruptTile = TileFactory.createFrom(TileFactory.CORRUPT_BIOME, oldTile);
-		this.map.set(corruptStart, corruptTile);
-		this.corruptTiles.add(corruptTile);
+		MapGenerator generator = new MapGenerator(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
+		this.map.addAll(generator.generateMap(this));
+		this.corruptTiles.addAll(generator.getCorruptTiles());
 
 		for(Tile tile : this.map)
 		{

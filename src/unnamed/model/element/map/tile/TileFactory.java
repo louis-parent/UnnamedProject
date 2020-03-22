@@ -10,6 +10,7 @@ public class TileFactory
 	public static final String CORRUPT_BIOME = "corrupt";
 	public static final String WATER_BIOME = "water_shallow";
 	public static final String DESERT_BIOME = "desert";
+	public static final String FOUNTAIN_TILE = "fountain";
 	
 	public static void init() throws SlickException
 	{
@@ -17,6 +18,7 @@ public class TileFactory
 		CorruptTile.init();
 		WaterTile.init();
 		DesertTile.init();
+		FountainTile.init();
 	}
 
 	public static Tile create(String biome, int column, int row, TileType type, ElementContainer container)
@@ -35,6 +37,9 @@ public class TileFactory
 			case DESERT_BIOME:
 				return new DesertTile(column, row, type, container);
 
+			case FOUNTAIN_TILE:
+				return new FountainTile(column, row, type, container);
+				
 			default:
 				return Tile.EMPTY;
 		}
