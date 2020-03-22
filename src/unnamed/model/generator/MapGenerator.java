@@ -31,6 +31,7 @@ public class MapGenerator
 	private static final int FLAT_WEIGHT_FOR_RIVER = 3;
 	private static final int HILL_WEIGHT_FOR_RIVER = FLAT_WEIGHT_FOR_RIVER * 3;
 	private static final int MOUNTAIN_WEIGHT_FOR_RIVER = 200000;
+	private static final int RIVER_PER_MOUNTAIN_CHAIN = 4;
 
 	private int columns;
 	private int rows;
@@ -205,7 +206,7 @@ public class MapGenerator
 			this.expandWater(seeded);
 		}
 
-		for(int i = 0; i < (((this.rows * this.columns) / MapGenerator.SURFACE_FOR_TERRAIN_DECORATION) * 8); i++)
+		for(int i = 0; i < (((this.rows * this.columns) / MapGenerator.SURFACE_FOR_TERRAIN_DECORATION) * RIVER_PER_MOUNTAIN_CHAIN); i++)
 		{
 			this.generateRiver();
 		}
