@@ -19,7 +19,7 @@ public class MapContainer extends ElementContainer
 {
 	private static final long serialVersionUID = -3760401809828849717L;
 
-	private static final int CORRUPTION_SPEED = 1000;
+	private static final int CORRUPTION_SLOWNESS = 10;
 	private static final int NUMBER_OF_COLUMNS = 75;
 	private static final int NUMBER_OF_ROWS = 75;
 
@@ -69,13 +69,13 @@ public class MapContainer extends ElementContainer
 
 	private void spreadCorruption()
 	{
-		List<Tile> adjacent = this.map.getAllAdjacent(this.corruptTiles);
+		List<Tile> adjacent = this.map.getAllAdjacentFor(TileBiome.GRASS, this.corruptTiles);
 
 		adjacent.removeIf(t -> t instanceof CorruptTile);
 
 		for(Tile tile : adjacent)
 		{
-			if((GameController.getInstance().getRandom().nextInt(MapContainer.CORRUPTION_SPEED) == 0) && !Tile.EMPTY.equals(tile) && this.map.contains(tile))
+			if((GameController.getInstance().getRandom().nextInt(MapContainer.CORRUPTION_SLOWNESS) == 0) && !Tile.EMPTY.equals(tile) && this.map.contains(tile))
 			{
 				Tile corrupt = TileFactory.createFrom(TileBiome.CORRUPT, tile);
 
