@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 import unnamed.controller.GameController;
 import unnamed.model.element.map.tile.Tile;
+import unnamed.model.element.map.tile.TileBiome;
 import unnamed.model.element.map.tile.TileType;
 
 public class Map extends ArrayList<Tile>
@@ -122,27 +123,22 @@ public class Map extends ArrayList<Tile>
 
 	public List<Tile> getAllAdjacentFor(TileType type, List<Tile> tiles)
 	{
-		List<Tile> adjacents = this.getAllAdjacent(tiles);
-
-		for(int i = 0; i < adjacents.size(); i++)
-		{
-			if(adjacents.get(i).getType() != type)
-			{
-				adjacents.remove(i);
-				i--;
-			}
-		}
-
-		return adjacents;
+		return this.getAllAdjacentFor(tile -> tile.getType() == type, tiles);
 	}
 
-	public List<Tile> getAllAdjacentFor(Class<? extends Tile> tileClass, List<Tile> tiles)
+	public List<Tile> getAllAdjacentFor(TileBiome biome, List<Tile> tiles)
+	{
+		return this.getAllAdjacentFor(tile -> tile.getBiome() == biome, tiles);
+	}
+	
+	private List<Tile> getAllAdjacentFor(Predicate<Tile> predicate, List<Tile> tiles)
 	{
 		List<Tile> adjacents = this.getAllAdjacent(tiles);
 
 		for(int i = 0; i < adjacents.size(); i++)
 		{
-			if(!adjacents.get(i).getClass().equals(tileClass))
+			Tile tile = adjacents.get(i);
+			if(!predicate.test(tile))
 			{
 				adjacents.remove(i);
 				i--;
@@ -173,9 +169,9 @@ public class Map extends ArrayList<Tile>
 		return rand.nextInt(this.size());
 	}
 
-	public int getRandomTileIndex(Class<? extends Tile> tileClass)
+	public int getRandomTileIndex(TileBiome biome)
 	{
-		return this.getRandomTileIndex(tile -> tile.getClass().equals(tileClass));
+		return this.getRandomTileIndex(tile -> tile.getBiome() == biome);
 	}
 
 	public int getRandomTileIndex(TileType type)
@@ -183,9 +179,9 @@ public class Map extends ArrayList<Tile>
 		return this.getRandomTileIndex(tile -> tile.getType() == type);
 	}
 	
-	public int getRandomTileIndex(Class<? extends Tile> tileClass, TileType type)
+	public int getRandomTileIndex(TileBiome biome, TileType type)
 	{
-		return this.getRandomTileIndex(tile -> tile.getClass().equals(tileClass) && tile.getType() == type);
+		return this.getRandomTileIndex(tile -> tile.getBiome() == biome && tile.getType() == type);
 	}
 	
 	private int getRandomTileIndex(Predicate<Tile> predicate)

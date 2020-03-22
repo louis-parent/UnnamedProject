@@ -8,7 +8,6 @@ import java.util.Random;
 import unnamed.controller.GameController;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.map.Map;
-import unnamed.model.element.map.tile.GrassTile;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
 import unnamed.model.element.map.tile.TileFactory;
@@ -213,7 +212,7 @@ public class MapGenerator
 
 	private Tile seedBiome(TileBiome biome)
 	{
-		return this.setTileAt(this.map.getRandomTileIndex(GrassTile.class), biome);
+		return this.setTileAt(this.map.getRandomTileIndex(TileBiome.GRASS), biome);
 	}
 	
 	private Tile setTileAt(int index, TileBiome biome)
@@ -234,7 +233,7 @@ public class MapGenerator
 
 		while(!toExpand.isEmpty())
 		{
-			List<Tile> toBuild = new ArrayList<Tile>(this.map.getAllAdjacentFor(GrassTile.class, toExpand));
+			List<Tile> toBuild = new ArrayList<Tile>(this.map.getAllAdjacentFor(TileBiome.GRASS, toExpand));
 			toExpand.clear();
 
 			for(Tile tile : toBuild)
@@ -412,7 +411,7 @@ public class MapGenerator
 		for(int i = 0; i < MapGenerator.DESERT_DIAMETER; i++)
 		{
 
-			List<Tile> adjacents = this.map.getAllAdjacentFor(GrassTile.class, desert);
+			List<Tile> adjacents = this.map.getAllAdjacentFor(TileBiome.GRASS, desert);
 
 			for(Tile adjacent : adjacents)
 			{
@@ -432,7 +431,7 @@ public class MapGenerator
 
 	private void createFountain()
 	{
-		this.setTileAt(this.map.getRandomTileIndex(GrassTile.class, TileType.FLAT), TileBiome.FOUNTAIN);
+		this.setTileAt(this.map.getRandomTileIndex(TileBiome.GRASS, TileType.FLAT), TileBiome.FOUNTAIN);
 	}
 
 	public List<Tile> getCorruptTiles()
