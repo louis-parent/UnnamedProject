@@ -16,9 +16,9 @@ public class TileImageRegistry
 
 	private Map<String, PixelisedImage> images;
 
-	public TileImageRegistry(String name) throws SlickException
+	public TileImageRegistry(TileBiome biome) throws SlickException
 	{
-		this.NAME = name;
+		this.NAME = biome.toString();
 		this.images = new HashMap<String, PixelisedImage>();
 
 		this.initImageFor(TileType.FLAT);

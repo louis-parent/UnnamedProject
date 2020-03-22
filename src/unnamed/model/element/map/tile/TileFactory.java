@@ -5,13 +5,7 @@ import org.newdawn.slick.SlickException;
 import unnamed.model.container.ElementContainer;
 
 public class TileFactory
-{
-	public static final String GRASS_BIOME = "grass";
-	public static final String CORRUPT_BIOME = "corrupt";
-	public static final String WATER_BIOME = "water_shallow";
-	public static final String DESERT_BIOME = "desert";
-	public static final String FOUNTAIN_TILE = "fountain";
-	
+{	
 	public static void init() throws SlickException
 	{
 		GrassTile.init();
@@ -21,23 +15,23 @@ public class TileFactory
 		FountainTile.init();
 	}
 
-	public static Tile create(String biome, int column, int row, TileType type, ElementContainer container)
+	public static Tile create(TileBiome biome, int column, int row, TileType type, ElementContainer container)
 	{
 		switch(biome)
 		{
-			case GRASS_BIOME:
+			case GRASS:
 				return new GrassTile(column, row, type, container);
 
-			case CORRUPT_BIOME:
+			case CORRUPT:
 				return new CorruptTile(column, row, type, container);
 
-			case WATER_BIOME:
+			case SHALLOW_WATER:
 				return new WaterTile(column, row, type, container);
 
-			case DESERT_BIOME:
+			case DESERT:
 				return new DesertTile(column, row, type, container);
 
-			case FOUNTAIN_TILE:
+			case FOUNTAIN:
 				return new FountainTile(column, row, type, container);
 				
 			default:
@@ -45,7 +39,7 @@ public class TileFactory
 		}
 	}
 
-	public static Tile createFrom(String biome, Tile tile)
+	public static Tile createFrom(TileBiome biome, Tile tile)
 	{
 		Tile created = TileFactory.create(biome, tile.getColumn(), tile.getRow(), tile.getType(), tile.getContainer());
 

@@ -26,4 +26,10 @@ public class FountainTile extends Tile
 	{
 		return FountainTile.sprite;
 	}
+	
+	@Override
+	public TileBiome getBiome()
+	{
+		return TileBiome.FOUNTAIN;
+	}
 }

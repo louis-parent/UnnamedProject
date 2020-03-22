@@ -11,6 +11,7 @@ import unnamed.controller.GameController;
 import unnamed.model.element.map.Map;
 import unnamed.model.element.map.tile.CorruptTile;
 import unnamed.model.element.map.tile.Tile;
+import unnamed.model.element.map.tile.TileBiome;
 import unnamed.model.element.map.tile.TileFactory;
 import unnamed.model.generator.MapGenerator;
 
@@ -76,7 +77,7 @@ public class MapContainer extends ElementContainer
 		{
 			if((GameController.getInstance().getRandom().nextInt(MapContainer.CORRUPTION_SPEED) == 0) && !Tile.EMPTY.equals(tile) && this.map.contains(tile))
 			{
-				Tile corrupt = TileFactory.createFrom(TileFactory.CORRUPT_BIOME, tile);
+				Tile corrupt = TileFactory.createFrom(TileBiome.CORRUPT, tile);
 
 				this.replaceTile(tile, corrupt);
 
@@ -92,11 +93,13 @@ public class MapContainer extends ElementContainer
 		this.map.set(this.map.indexOf(oldElement), newElement);
 	}
 
+	@Override
 	public int getHeight()
 	{
 		return ((MapContainer.NUMBER_OF_ROWS * Tile.TILE_HEIGHT) - (Tile.FLOATING_OFFSET * MapContainer.NUMBER_OF_ROWS)) + Tile.TILE_HEIGHT + Tile.FLOATING_OFFSET;
 	}
 
+	@Override
 	public int getWidth()
 	{
 		return (MapContainer.NUMBER_OF_COLUMNS * Tile.TILE_WIDTH) + (Tile.TILE_WIDTH / 2);

@@ -13,7 +13,7 @@ public class DesertTile extends Tile
 
 	public static void init() throws SlickException
 	{
-		DesertTile.desertRegistry = new TileImageRegistry(TileFactory.DESERT_BIOME);
+		DesertTile.desertRegistry = new TileImageRegistry(TileBiome.DESERT);
 	}
 
 	protected DesertTile(int column, int row, TileType type, ElementContainer container)
@@ -25,5 +25,11 @@ public class DesertTile extends Tile
 	public PixelisedImage getSprite()
 	{
 		return DesertTile.desertRegistry.get(DesertTile.desertRegistry.getImageNameFor(this.getType(), this.getSpriteVariant()));
+	}
+
+	@Override
+	public TileBiome getBiome()
+	{
+		return TileBiome.DESERT;
 	}
 }

@@ -16,7 +16,7 @@ public class CorruptTile extends Tile
 
 	public static void init() throws SlickException
 	{
-		CorruptTile.corruptRegistry = new TileImageRegistry(TileFactory.CORRUPT_BIOME);
+		CorruptTile.corruptRegistry = new TileImageRegistry(TileBiome.CORRUPT);
 	}
 
 	private float targetY;
@@ -51,5 +51,11 @@ public class CorruptTile extends Tile
 	public PixelisedImage getSprite()
 	{
 		return CorruptTile.corruptRegistry.get(CorruptTile.corruptRegistry.getImageNameFor(this.getType(), this.getSpriteVariant()));
+	}
+
+	@Override
+	public TileBiome getBiome()
+	{
+		return TileBiome.CORRUPT;
 	}
 }
