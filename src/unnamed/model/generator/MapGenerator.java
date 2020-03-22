@@ -12,7 +12,6 @@ import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
 import unnamed.model.element.map.tile.TileFactory;
 import unnamed.model.element.map.tile.TileType;
-import unnamed.model.element.map.tile.WaterTile;
 
 public class MapGenerator
 {
@@ -27,6 +26,11 @@ public class MapGenerator
 
 	private static final int DESERT_DIAMETER = 20;
 	private static final int DESERT_SPREAD_PERCENTAGE = 18;
+
+	private static final double MIN_CONVERGING_PROBABILITY_WATER_DIAMETER = 0.15;
+	private static final int FLAT_WEIGHT_FOR_RIVER = 3;
+	private static final int HILL_WEIGHT_FOR_RIVER = FLAT_WEIGHT_FOR_RIVER * 3;
+	private static final int MOUNTAIN_WEIGHT_FOR_RIVER = 200000;
 
 	private int columns;
 	private int rows;
@@ -209,14 +213,14 @@ public class MapGenerator
 
 	private Tile seedWater()
 	{
-		return this.seedBiome(TileBiome.SHALLOW_WATER);
+		return this.seedBiome(TileBiome.DEEP_WATER);
 	}
 
 	private Tile seedBiome(TileBiome biome)
 	{
 		return this.setTileAt(this.map.getRandomTileIndex(TileBiome.GRASS), biome);
 	}
-	
+
 	private Tile setTileAt(int index, TileBiome biome)
 	{
 		Tile oldTile = this.map.get(index);
@@ -240,9 +244,9 @@ public class MapGenerator
 
 			for(Tile tile : toBuild)
 			{
-				if(this.rand.nextDouble() <= ((1.0 / turnCounter) + 0.15))
+				if(this.rand.nextDouble() <= ((1.0 / turnCounter) + MIN_CONVERGING_PROBABILITY_WATER_DIAMETER))
 				{
-					this.replaceTileWithIn(tile, TileBiome.SHALLOW_WATER, toExpand);
+					this.replaceTileWithIn(tile, TileBiome.DEEP_WATER, toExpand);
 				}
 
 			}
@@ -270,7 +274,7 @@ public class MapGenerator
 
 		this.dijkstra(selectedMountain, previousIndex, distance);
 
-		int closestIndex = this.findClosestWater(distance);
+		int closestIndex = previousIndex.get(this.findClosestWater(distance));
 
 		this.generateRiverFrom(closestIndex, previousIndex);
 
@@ -324,19 +328,26 @@ public class MapGenerator
 
 		for(Tile element : this.map)
 		{
-			switch(element.getType())
+			if(element.getBiome() != TileBiome.SHALLOW_WATER)
 			{
-				case FLAT:
-					list.add((this.rand.nextFloat() + 1) * 3);
-					break;
+				switch(element.getType())
+				{
+					case FLAT:
+						list.add((this.rand.nextFloat() + 1) * FLAT_WEIGHT_FOR_RIVER);
+						break;
 
-				case HILL:
-					list.add((this.rand.nextFloat() + 1) * 6);
-					break;
+					case HILL:
+						list.add((this.rand.nextFloat() + 1) * HILL_WEIGHT_FOR_RIVER);
+						break;
 
-				case MOUNTAIN:
-					list.add(20000f);
-					break;
+					case MOUNTAIN:
+						list.add((float) MOUNTAIN_WEIGHT_FOR_RIVER);
+						break;
+				}
+			}
+			else
+			{
+				list.add(this.rand.nextFloat());
 			}
 		}
 
@@ -367,7 +378,7 @@ public class MapGenerator
 
 		for(int i = 0; i < distance.size(); i++)
 		{
-			if((this.map.get(i) instanceof WaterTile) && (distance.get(i) <= min))
+			if(this.map.get(i).getBiome() == TileBiome.DEEP_WATER && (distance.get(i) <= min))
 			{
 				min = distance.get(i);
 				pos = i;

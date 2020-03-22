@@ -10,7 +10,8 @@ public class TileFactory
 	{
 		GrassTile.init();
 		CorruptTile.init();
-		WaterTile.init();
+		ShallowWaterTile.init();
+		DeepWaterTile.init();
 		DesertTile.init();
 		FountainTile.init();
 	}
@@ -26,7 +27,10 @@ public class TileFactory
 				return new CorruptTile(column, row, type, container);
 
 			case SHALLOW_WATER:
-				return new WaterTile(column, row, type, container);
+				return new ShallowWaterTile(column, row, type, container);
+
+			case DEEP_WATER:
+				return new DeepWaterTile(column, row, type, container);
 
 			case DESERT:
 				return new DesertTile(column, row, type, container);

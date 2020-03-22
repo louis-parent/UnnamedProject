@@ -4,6 +4,7 @@ public enum TileBiome
 {
 	GRASS,
 	SHALLOW_WATER,
+	DEEP_WATER,
 	DESERT,
 	CORRUPT,
 	FOUNTAIN;

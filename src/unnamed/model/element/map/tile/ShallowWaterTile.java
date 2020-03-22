@@ -5,7 +5,7 @@ import org.newdawn.slick.SlickException;
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 
-public class WaterTile extends Tile
+public class ShallowWaterTile extends Tile
 {
 	private static final long serialVersionUID = -8248943245607482270L;
 	
@@ -13,10 +13,10 @@ public class WaterTile extends Tile
 
 	public static void init() throws SlickException
 	{
-		WaterTile.waterRegistry = new TileImageRegistry(TileBiome.SHALLOW_WATER);
+		ShallowWaterTile.waterRegistry = new TileImageRegistry(TileBiome.SHALLOW_WATER);
 	}
 
-	protected WaterTile(int column, int row, TileType type, ElementContainer container)
+	protected ShallowWaterTile(int column, int row, TileType type, ElementContainer container)
 	{
 		super(column, row, type, container);
 	}
@@ -24,7 +24,7 @@ public class WaterTile extends Tile
 	@Override
 	public PixelisedImage getSprite()
 	{
-		return WaterTile.waterRegistry.get(WaterTile.waterRegistry.getImageNameFor(this.getType(), this.getSpriteVariant()));
+		return ShallowWaterTile.waterRegistry.get(ShallowWaterTile.waterRegistry.getImageNameFor(this.getType(), this.getSpriteVariant()));
 	}
 
 	@Override
