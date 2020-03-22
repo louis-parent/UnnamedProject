@@ -1,5 +1,6 @@
 package unnamed.model.element.map.tile;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import unnamed.model.PixelisedImage;
@@ -9,7 +10,7 @@ public class FountainTile extends Tile
 {
 	private static final long serialVersionUID = 9032972465859204319L;
 	
-	private static PixelisedImage sprite;
+	private static Image sprite;
 
 	public static void init() throws SlickException
 	{
@@ -22,7 +23,7 @@ public class FountainTile extends Tile
 	}
 
 	@Override
-	public PixelisedImage getSprite()
+	public Image getSprite()
 	{
 		return FountainTile.sprite;
 	}

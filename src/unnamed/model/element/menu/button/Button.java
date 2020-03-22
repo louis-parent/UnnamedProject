@@ -1,9 +1,9 @@
 package unnamed.model.element.menu.button;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.menu.MenuElement;
 
@@ -62,7 +62,7 @@ public abstract class Button extends MenuElement
 		return this.getBiggerSpriteForHeight().getHeight();
 	}
 
-	private PixelisedImage getBiggerSpriteForHeight()
+	private Image getBiggerSpriteForHeight()
 	{
 		int pressedHeight = this.getPressedSprite().getHeight();
 		int releasedHeight = this.getReleasedSprite().getHeight();
@@ -76,7 +76,7 @@ public abstract class Button extends MenuElement
 		return this.getBiggerSpriteForWidth().getWidth();
 	}
 
-	private PixelisedImage getBiggerSpriteForWidth()
+	private Image getBiggerSpriteForWidth()
 	{
 		int pressedWidth = this.getPressedSprite().getWidth();
 		int releasedWidth = this.getReleasedSprite().getWidth();
@@ -85,7 +85,7 @@ public abstract class Button extends MenuElement
 	}
 
 	@Override
-	public PixelisedImage getSprite()
+	public Image getSprite()
 	{
 		if(this.isPressed())
 		{
@@ -103,16 +103,16 @@ public abstract class Button extends MenuElement
 		int spriteX = (int) (x - this.getX());
 		int spriteY = (int) (y - this.getY());
 
-		PixelisedImage pressedSprite = this.getPressedSprite();
+		Image pressedSprite = this.getPressedSprite();
 		Color pressedPixelColor = pressedSprite.getColor(spriteX, spriteY);
 
-		PixelisedImage releasedSprite = this.getReleasedSprite();
+		Image releasedSprite = this.getReleasedSprite();
 		Color releasedPixelColor = releasedSprite.getColor(spriteX, spriteY);
 
 		return (pressedPixelColor.getAlpha() == 0) && (releasedPixelColor.getAlpha() == 0);
 	}
 
-	protected abstract PixelisedImage getPressedSprite();
-	protected abstract PixelisedImage getReleasedSprite();
+	protected abstract Image getPressedSprite();
+	protected abstract Image getReleasedSprite();
 	protected abstract void action() throws SlickException;
 }

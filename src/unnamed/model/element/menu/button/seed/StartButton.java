@@ -1,5 +1,6 @@
 package unnamed.model.element.menu.button.seed;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
@@ -12,8 +13,8 @@ public class StartButton extends FieldValidator
 {
 	private static final long serialVersionUID = -3868409855098130358L;
 	
-	private static PixelisedImage released;
-	private static PixelisedImage pressed;
+	private static Image released;
+	private static Image pressed;
 	
 	public StartButton(Field field, ElementContainer container)
 	{
@@ -67,13 +68,13 @@ public class StartButton extends FieldValidator
 	}
 
 	@Override
-	protected PixelisedImage getPressedSprite()
+	protected Image getPressedSprite()
 	{
 		return StartButton.pressed;
 	}
 
 	@Override
-	protected PixelisedImage getReleasedSprite()
+	protected Image getReleasedSprite()
 	{
 		return StartButton.released;
 	}

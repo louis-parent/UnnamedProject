@@ -1,8 +1,8 @@
 package unnamed.model.element.map.tile;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 
 public class ShallowWaterTile extends Tile
@@ -22,7 +22,7 @@ public class ShallowWaterTile extends Tile
 	}
 
 	@Override
-	public PixelisedImage getSprite()
+	public Image getSprite()
 	{
 		return ShallowWaterTile.waterRegistry.get(ShallowWaterTile.waterRegistry.getImageNameFor(this.getType(), this.getSpriteVariant()));
 	}

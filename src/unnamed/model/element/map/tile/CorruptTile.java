@@ -1,8 +1,8 @@
 package unnamed.model.element.map.tile;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 
 public class CorruptTile extends Tile
@@ -48,7 +48,7 @@ public class CorruptTile extends Tile
 	}
 
 	@Override
-	public PixelisedImage getSprite()
+	public Image getSprite()
 	{
 		return CorruptTile.corruptRegistry.get(CorruptTile.corruptRegistry.getImageNameFor(this.getType(), this.getSpriteVariant()));
 	}

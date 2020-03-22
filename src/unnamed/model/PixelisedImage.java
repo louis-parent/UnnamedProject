@@ -16,7 +16,7 @@ public class PixelisedImage extends Image
 		super("assets/empty.png");
 	}
 	
-	public static PixelisedImage getEmpty() throws SlickException
+	public static Image getEmpty() throws SlickException
 	{
 		return new PixelisedImage();
 	}

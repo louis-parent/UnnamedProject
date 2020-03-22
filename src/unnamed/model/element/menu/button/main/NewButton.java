@@ -1,5 +1,6 @@
 package unnamed.model.element.menu.button.main;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
@@ -11,8 +12,8 @@ public class NewButton extends Button
 {
 	private static final long serialVersionUID = 3205595142678747391L;
 	
-	private static PixelisedImage released;
-	private static PixelisedImage pressed;
+	private static Image released;
+	private static Image pressed;
 
 	public NewButton(ElementContainer container)
 	{
@@ -37,13 +38,13 @@ public class NewButton extends Button
 	}
 
 	@Override
-	protected PixelisedImage getPressedSprite()
+	protected Image getPressedSprite()
 	{
 		return NewButton.pressed;
 	}
 
 	@Override
-	protected PixelisedImage getReleasedSprite()
+	protected Image getReleasedSprite()
 	{
 		return NewButton.released;
 	}

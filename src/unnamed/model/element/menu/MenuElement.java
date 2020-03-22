@@ -1,5 +1,6 @@
 package unnamed.model.element.menu;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import unnamed.model.PixelisedImage;
@@ -56,7 +57,7 @@ public abstract class MenuElement extends Element
 		}
 
 		@Override
-		public PixelisedImage getSprite() throws SlickException
+		public Image getSprite() throws SlickException
 		{
 			return PixelisedImage.getEmpty();
 		}

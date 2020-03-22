@@ -3,6 +3,7 @@ package unnamed.model.element.map.tile;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import unnamed.model.PixelisedImage;
@@ -14,12 +15,12 @@ public class TileImageRegistry
 
 	private final String NAME;
 
-	private Map<String, PixelisedImage> images;
+	private Map<String, Image> images;
 
 	public TileImageRegistry(TileBiome biome) throws SlickException
 	{
 		this.NAME = biome.toString();
-		this.images = new HashMap<String, PixelisedImage>();
+		this.images = new HashMap<String, Image>();
 
 		this.initImageFor(TileType.FLAT);
 		this.initImageFor(TileType.HILL);
@@ -40,7 +41,7 @@ public class TileImageRegistry
 		return this.NAME + "_" + type + "_" + variant;
 	}
 
-	public PixelisedImage get(String imageName)
+	public Image get(String imageName)
 	{
 		return this.images.get(imageName);
 	}

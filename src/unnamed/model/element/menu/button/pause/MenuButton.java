@@ -1,5 +1,6 @@
 package unnamed.model.element.menu.button.pause;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
@@ -11,8 +12,8 @@ public class MenuButton extends Button
 {
 	private static final long serialVersionUID = 7693211564246790703L;
 	
-	private static PixelisedImage released;
-	private static PixelisedImage pressed;
+	private static Image released;
+	private static Image pressed;
 
 	public MenuButton(ElementContainer container)
 	{
@@ -37,13 +38,13 @@ public class MenuButton extends Button
 	}
 
 	@Override
-	protected PixelisedImage getPressedSprite()
+	protected Image getPressedSprite()
 	{
 		return MenuButton.pressed;
 	}
 
 	@Override
-	protected PixelisedImage getReleasedSprite()
+	protected Image getReleasedSprite()
 	{
 		return MenuButton.released;
 	}

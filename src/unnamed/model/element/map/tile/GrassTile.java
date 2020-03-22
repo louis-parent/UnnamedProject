@@ -1,8 +1,8 @@
 package unnamed.model.element.map.tile;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 
 public class GrassTile extends Tile
@@ -22,7 +22,7 @@ public class GrassTile extends Tile
 	}
 
 	@Override
-	public PixelisedImage getSprite()
+	public Image getSprite()
 	{
 		return GrassTile.grassRegistry.get(GrassTile.grassRegistry.getImageNameFor(this.getType(), this.getSpriteVariant()));
 	}

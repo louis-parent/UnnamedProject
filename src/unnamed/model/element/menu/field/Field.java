@@ -1,6 +1,7 @@
 package unnamed.model.element.menu.field;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
@@ -15,7 +16,7 @@ public abstract class Field extends MenuElement
 	
 	public static final Field EMPTY = new EmptyField();
 	
-	private static PixelisedImage background;
+	private static Image background;
 	
 	private FormattedString text;
 	
@@ -36,7 +37,7 @@ public abstract class Field extends MenuElement
 	}
 
 	@Override
-	public PixelisedImage getSprite() throws SlickException
+	public Image getSprite() throws SlickException
 	{
 		return Field.background;
 	}

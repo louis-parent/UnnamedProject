@@ -1,5 +1,6 @@
 package unnamed.model.element.map.tile;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import unnamed.model.PixelisedImage;
@@ -183,7 +184,7 @@ public abstract class Tile extends Element
 		}
 
 		@Override
-		public PixelisedImage getSprite() throws SlickException
+		public Image getSprite() throws SlickException
 		{
 			return PixelisedImage.getEmpty();
 		}

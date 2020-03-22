@@ -11,6 +11,7 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.controller.CameraController;
 import unnamed.controller.GameController;
+import unnamed.model.element.entity.Entity;
 import unnamed.model.element.map.Map;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;

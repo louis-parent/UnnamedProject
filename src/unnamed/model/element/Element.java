@@ -3,6 +3,7 @@ package unnamed.model.element;
 import java.io.Serializable;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import unnamed.model.PixelisedImage;
@@ -96,7 +97,7 @@ public abstract class Element implements Serializable
 		int spriteX = (int) (x - this.getX());
 		int spriteY = (int) (y - this.getY());
 
-		PixelisedImage sprite = this.getSprite();
+		Image sprite = this.getSprite();
 		Color pixelColor = sprite.getColor(spriteX, spriteY);
 
 		return pixelColor.getAlpha() == 0;
@@ -107,7 +108,7 @@ public abstract class Element implements Serializable
 		return this.container;
 	}
 
-	public abstract PixelisedImage getSprite() throws SlickException;
+	public abstract Image getSprite() throws SlickException;
 	public abstract FormattedString getFormattedText();
 	public abstract void tickUpdate();
 	public abstract void click() throws SlickException;
@@ -124,7 +125,7 @@ public abstract class Element implements Serializable
 		}
 
 		@Override
-		public PixelisedImage getSprite() throws SlickException
+		public Image getSprite() throws SlickException
 		{
 			return PixelisedImage.getEmpty();
 

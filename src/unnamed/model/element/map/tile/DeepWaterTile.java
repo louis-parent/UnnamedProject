@@ -1,14 +1,14 @@
 package unnamed.model.element.map.tile;
 
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 
 public class DeepWaterTile extends Tile
 {
 	private static final long serialVersionUID = 5853996703796333931L;
-	
+
 	private static TileImageRegistry waterRegistry;
 
 	public static void init() throws SlickException
@@ -22,7 +22,7 @@ public class DeepWaterTile extends Tile
 	}
 
 	@Override
-	public PixelisedImage getSprite()
+	public Image getSprite()
 	{
 		return DeepWaterTile.waterRegistry.get(DeepWaterTile.waterRegistry.getImageNameFor(this.getType(), this.getSpriteVariant()));
 	}
