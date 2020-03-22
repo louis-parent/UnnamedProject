@@ -1,7 +1,10 @@
 package unnamed.model.container;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -9,7 +12,6 @@ import org.newdawn.slick.SlickException;
 import unnamed.controller.CameraController;
 import unnamed.controller.GameController;
 import unnamed.model.element.map.Map;
-import unnamed.model.element.map.tile.CorruptTile;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
 import unnamed.model.element.map.tile.TileFactory;
@@ -27,7 +29,7 @@ public class MapContainer extends ElementContainer
 
 	private Map map;
 
-	private List<Tile> corruptTiles;
+	private List<Tile> adjacentToCorruption;
 
 	public MapContainer()
 	{
@@ -36,7 +38,7 @@ public class MapContainer extends ElementContainer
 		this.isMouseWheelActivated = false;
 
 		this.map = new Map(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
-		this.corruptTiles = new ArrayList<Tile>();
+		this.adjacentToCorruption = new ArrayList<Tile>();
 	}
 
 	@Override
@@ -44,7 +46,7 @@ public class MapContainer extends ElementContainer
 	{
 		MapGenerator generator = new MapGenerator(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 		this.map.addAll(generator.generateMap(this));
-		this.corruptTiles.addAll(generator.getCorruptTiles());
+		this.adjacentToCorruption.addAll(this.map.getAllAdjacentFor(TileBiome.GRASS, generator.getCorruptTiles()));
 
 		for(Tile tile : this.map)
 		{
@@ -69,27 +71,42 @@ public class MapContainer extends ElementContainer
 
 	private void spreadCorruption()
 	{
-		List<Tile> adjacent = this.map.getAllAdjacentFor(TileBiome.GRASS, this.corruptTiles);
+		Set<Tile> toCorrupt = this.selectTilesToCorrupt();
+		this.corruptSelectedTiles(toCorrupt);
+	}
 
-		adjacent.removeIf(t -> t instanceof CorruptTile);
+	private Set<Tile> selectTilesToCorrupt()
+	{
+		Set<Tile> toCorrupt = new HashSet<Tile>();
 
-		for(Tile tile : adjacent)
+		for(Tile tile : this.adjacentToCorruption)
 		{
-			if((GameController.getInstance().getRandom().nextInt(MapContainer.CORRUPTION_SLOWNESS) == 0) && !Tile.EMPTY.equals(tile) && this.map.contains(tile))
+			if((GameController.getInstance().getRandom().nextInt(MapContainer.CORRUPTION_SLOWNESS) == 0))
 			{
-				Tile corrupt = TileFactory.createFrom(TileBiome.CORRUPT, tile);
-
-				this.replaceTile(tile, corrupt);
-
-				this.corruptTiles.add(corrupt);
+				toCorrupt.add(tile);
 			}
+		}
+
+		this.adjacentToCorruption.removeAll(toCorrupt);
+		return toCorrupt;
+	}
+
+	private void corruptSelectedTiles(Set<Tile> toCorrupt)
+	{
+		for(Tile tile : toCorrupt)
+		{
+			Tile corrupt = TileFactory.createFrom(TileBiome.CORRUPT, tile);
+			this.replaceTile(tile, corrupt);
+
+			List<Tile> adjacent = this.map.getAllAdjacentFor(TileBiome.GRASS, Arrays.asList(corrupt));
+			adjacent.removeAll(toCorrupt);
+			this.adjacentToCorruption.addAll(adjacent);
 		}
 	}
 
 	private void replaceTile(Tile oldElement, Tile newElement)
 	{
 		this.replaceElement(oldElement, newElement);
-
 		this.map.set(this.map.indexOf(oldElement), newElement);
 	}
 
