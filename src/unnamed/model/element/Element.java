@@ -22,6 +22,8 @@ public abstract class Element implements Serializable
 	private float y;
 	private int z;
 
+	private boolean isSelected;
+
 	public Element(ElementContainer container)
 	{
 		this(0, 0, 0, container);
@@ -34,6 +36,8 @@ public abstract class Element implements Serializable
 		this.x = x;
 		this.y = y;
 		this.z = z;
+
+		this.isSelected = false;
 	}
 
 	public float getX()
@@ -108,11 +112,52 @@ public abstract class Element implements Serializable
 		return this.container;
 	}
 
+	public boolean isSelected()
+	{
+		return this.isSelected;
+	}
+
+	public void click() throws SlickException
+	{
+		if(this.isSelected())
+		{
+			this.deselect();
+		}
+		else
+		{
+			this.select();
+		}
+	}
+
+	public void select() throws SlickException
+	{
+		this.isSelected = true;
+		this.updateSelect();
+	}
+
+	public void deselect()
+	{
+		this.isSelected = false;
+		this.updateDeselect();
+	}
+	
+	public boolean isEmpty()
+	{
+		return false;
+	}
+
 	public abstract Image getSprite() throws SlickException;
+
 	public abstract FormattedString getFormattedText();
+
 	public abstract void tickUpdate();
-	public abstract void click() throws SlickException;
+
+	protected abstract void updateSelect() throws SlickException;
+
+	protected abstract void updateDeselect();
+
 	public abstract void pressed();
+
 	public abstract void mouseLeft();
 
 	private static class EmptyElement extends Element
@@ -129,11 +174,6 @@ public abstract class Element implements Serializable
 		{
 			return PixelisedImage.getEmpty();
 
-		}
-
-		@Override
-		public void click()
-		{
 		}
 
 		@Override
@@ -155,6 +195,24 @@ public abstract class Element implements Serializable
 		public FormattedString getFormattedText()
 		{
 			return FormattedString.EMPTY;
+		}
+
+		@Override
+		public void updateSelect()
+		{
+
+		}
+
+		@Override
+		public void updateDeselect()
+		{
+
+		}
+		
+		@Override
+		public boolean isEmpty()
+		{
+			return true;
 		}
 	}
 }

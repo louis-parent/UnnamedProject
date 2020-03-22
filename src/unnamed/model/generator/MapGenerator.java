@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.newdawn.slick.SlickException;
+
 import unnamed.controller.GameController;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.map.Map;
@@ -54,7 +56,7 @@ public class MapGenerator
 		this.rand = GameController.getInstance().getRandom();
 	}
 
-	public Map generateMap(ElementContainer container)
+	public Map generateMap(ElementContainer container) throws SlickException
 	{
 		this.generateGrassBase(container);
 		this.generateTerrain();
@@ -192,13 +194,13 @@ public class MapGenerator
 
 	}
 
-	private void generateBiomes(ElementContainer container)
+	private void generateBiomes(ElementContainer container) throws SlickException
 	{
 		this.generateWaterBiome(container);
 		this.generateDesertBiome(container);
 	}
 
-	private void generateWaterBiome(ElementContainer container)
+	private void generateWaterBiome(ElementContainer container) throws SlickException
 	{
 		for(int i = 0; i < ((this.rows * this.columns) / MapGenerator.SURFACE_FOR_TERRAIN_DECORATION); i++)
 		{
@@ -212,17 +214,17 @@ public class MapGenerator
 		}
 	}
 
-	private Tile seedWater()
+	private Tile seedWater() throws SlickException
 	{
 		return this.seedBiome(TileBiome.DEEP_WATER);
 	}
 
-	private Tile seedBiome(TileBiome biome)
+	private Tile seedBiome(TileBiome biome) throws SlickException
 	{
 		return this.setTileAt(this.map.getRandomTileIndex(TileBiome.GRASS), biome);
 	}
 
-	private Tile setTileAt(int index, TileBiome biome)
+	private Tile setTileAt(int index, TileBiome biome) throws SlickException
 	{
 		Tile oldTile = this.map.get(index);
 		Tile newTile = TileFactory.createFrom(biome, oldTile);
@@ -231,7 +233,7 @@ public class MapGenerator
 		return newTile;
 	}
 
-	private void expandWater(Tile seeded)
+	private void expandWater(Tile seeded) throws SlickException
 	{
 		List<Tile> toExpand = new ArrayList<Tile>();
 		toExpand.add(seeded);
@@ -256,7 +258,7 @@ public class MapGenerator
 		}
 	}
 
-	private void replaceTileWithIn(Tile tile, TileBiome biome, List<Tile> toExpand)
+	private void replaceTileWithIn(Tile tile, TileBiome biome, List<Tile> toExpand) throws SlickException
 	{
 		if(this.map.contains(tile))
 		{
@@ -266,7 +268,7 @@ public class MapGenerator
 		}
 	}
 
-	private void generateRiver()
+	private void generateRiver() throws SlickException
 	{
 		int selectedMountain = this.map.getRandomTileIndex(TileType.MOUNTAIN);
 
@@ -389,7 +391,7 @@ public class MapGenerator
 		return pos;
 	}
 
-	private void generateRiverFrom(int closestIndex, List<Integer> previousIndex)
+	private void generateRiverFrom(int closestIndex, List<Integer> previousIndex) throws SlickException
 	{
 		int currentIndex = closestIndex;
 
@@ -403,7 +405,7 @@ public class MapGenerator
 
 	}
 
-	private void generateDesertBiome(ElementContainer container)
+	private void generateDesertBiome(ElementContainer container) throws SlickException
 	{
 		for(int i = 0; i < ((this.rows * this.columns) / MapGenerator.SURFACE_FOR_TERRAIN_DECORATION); i++)
 		{
@@ -412,12 +414,12 @@ public class MapGenerator
 		}
 	}
 
-	private Tile generateDesertSeed()
+	private Tile generateDesertSeed() throws SlickException
 	{
 		return this.seedBiome(TileBiome.DESERT);
 	}
 
-	private void expandDesert(Tile seed)
+	private void expandDesert(Tile seed) throws SlickException
 	{
 		List<Tile> desert = new ArrayList<Tile>();
 		desert.add(seed);
@@ -437,13 +439,13 @@ public class MapGenerator
 		}
 	}
 
-	private void seedCorruption()
+	private void seedCorruption() throws SlickException
 	{
 		Tile corruptTile = this.setTileAt(this.map.getRandomTileIndex(), TileBiome.CORRUPT);
 		this.corruptTiles.add(corruptTile);
 	}
 
-	private void createFountain()
+	private void createFountain() throws SlickException
 	{
 		this.fountain = this.setTileAt(this.map.getRandomTileIndex(TileBiome.GRASS, TileType.FLAT), TileBiome.FOUNTAIN);
 	}

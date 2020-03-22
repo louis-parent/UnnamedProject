@@ -88,5 +88,11 @@ public abstract class Field extends MenuElement
 			return false;
 		}
 		
+		@Override
+		public boolean isEmpty()
+		{
+			return true;
+		}
+		
 	}
 }

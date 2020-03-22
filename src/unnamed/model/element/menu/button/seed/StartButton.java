@@ -51,7 +51,7 @@ public class StartButton extends FieldValidator
 		for(int i = 0; i < value.length(); i++)
 		{
 			int currentByte = 8 - (i % 8);
-			long c = value.charAt(i);
+			long c = value.charAt(i) % 255;
 			c = c << (currentByte - 1) * 8;
 			
 			if((i / 8) % 2 == 0)

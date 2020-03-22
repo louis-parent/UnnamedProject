@@ -8,10 +8,10 @@ import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
 
 public abstract class MenuElement extends Element
-{	
+{
 	private static final long serialVersionUID = 183177966778498672L;
 	public static final MenuElement EMPTY = new EmptyMenuElement();
-	
+
 	public MenuElement(float x, float y, int z, ElementContainer container)
 	{
 		super(x, y, z, container);
@@ -21,11 +21,6 @@ public abstract class MenuElement extends Element
 	{
 		super(container);
 	}
-	
-	@Override
-	public void click() throws SlickException
-	{
-	}
 
 	@Override
 	public void pressed()
@@ -34,19 +29,31 @@ public abstract class MenuElement extends Element
 
 	@Override
 	public void mouseLeft()
-	{		
+	{
 	}
-	
+
 	public void keyPressed(int key, char c)
 	{
 	}
-	
+
 	@Override
 	public FormattedString getFormattedText()
 	{
 		return FormattedString.EMPTY;
 	}
-	
+
+	@Override
+	protected void updateSelect() throws SlickException
+	{
+
+	}
+
+	@Override
+	protected void updateDeselect()
+	{
+		
+	}
+
 	private static class EmptyMenuElement extends MenuElement
 	{
 		private static final long serialVersionUID = -5224604040164389541L;
@@ -64,23 +71,35 @@ public abstract class MenuElement extends Element
 
 		@Override
 		public void tickUpdate()
-		{			
-		}
-
-		@Override
-		public void click() throws SlickException
-		{			
+		{
 		}
 
 		@Override
 		public void pressed()
-		{			
+		{
 		}
 
 		@Override
 		public void mouseLeft()
-		{			
+		{
 		}
-		
+
+		@Override
+		protected void updateSelect()
+		{
+
+		}
+
+		@Override
+		protected void updateDeselect()
+		{
+			
+		}
+
+		@Override
+		public boolean isEmpty()
+		{
+			return true;
+		}
 	}
 }

@@ -6,10 +6,13 @@ import org.newdawn.slick.SlickException;
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
+import unnamed.model.element.entity.Entity;
 import unnamed.model.element.menu.FormattedString;
 
 public abstract class Tile extends Element
 {
+	private static final int Y_ENTITY_OFFSET = 29;
+
 	private static final long serialVersionUID = -867365679274168458L;
 	
 	public static final int TILE_WIDTH = 32;
@@ -20,16 +23,14 @@ public abstract class Tile extends Element
 
 	public static final Tile EMPTY = new EmptyTile();
 
-	private static Tile lastSelected;
-
 	private int column;
 	private int row;
 
 	private TileType type;
 
-	private boolean isSelected;
-
 	private int spriteVariant;
+	
+	private Entity entity;
 
 	public Tile(TileType type, ElementContainer container)
 	{
@@ -44,8 +45,8 @@ public abstract class Tile extends Element
 
 		this.type = type;
 		this.spriteVariant = type.getRandomVariant();
-
-		this.isSelected = false;
+		
+		this.entity = Entity.EMPTY;
 	}
 
 	public int getColumn()
@@ -56,11 +57,6 @@ public abstract class Tile extends Element
 	public int getRow()
 	{
 		return this.row;
-	}
-
-	public boolean isSelected()
-	{
-		return this.isSelected;
 	}
 
 	public TileType getType()
@@ -89,19 +85,6 @@ public abstract class Tile extends Element
 	}
 
 	@Override
-	public void click()
-	{
-		if(this.isSelected())
-		{
-			this.deselect();
-		}
-		else
-		{
-			this.select();
-		}
-	}
-
-	@Override
 	public void pressed()
 	{
 	}
@@ -111,28 +94,16 @@ public abstract class Tile extends Element
 	{
 	}
 
-	protected void select()
+	protected void updateSelect()
 	{
-		this.isSelected = true;
 		this.setY(this.getY() - Tile.FLOATING_OFFSET);
-
-		if(Tile.lastSelected != null)
-		{
-			Tile.lastSelected.deselect();
-		}
-
-		Tile.lastSelected = this;
+		this.entity.setY(this.entity.getY() - Tile.FLOATING_OFFSET);
 	}
 
-	protected void deselect()
+	protected void updateDeselect()
 	{
-		this.isSelected = false;
 		this.setY(this.getY() + Tile.FLOATING_OFFSET);
-
-		if(Tile.lastSelected == this)
-		{
-			Tile.lastSelected = null;
-		}
+		this.entity.setY(this.entity.getY() + Tile.FLOATING_OFFSET);
 	}
 
 	private static float getXValueFrom(int column, int row)
@@ -173,6 +144,14 @@ public abstract class Tile extends Element
 	{
 		this.spriteVariant = spriteVariant;
 	}
+	
+	public void setEntity(Entity entity) throws SlickException {
+		this.entity = entity;
+
+		entity.setX(this.getX() + (this.getWidth() / 2f) - (entity.getWidth() / 2f));
+		entity.setY(this.getY() + Y_ENTITY_OFFSET - entity.getHeight());
+		entity.setZ(this.getZ());
+	}
 
 	private static class EmptyTile extends Tile
 	{
@@ -193,6 +172,12 @@ public abstract class Tile extends Element
 		public TileBiome getBiome()
 		{
 			return TileBiome.GRASS;
+		}
+		
+		@Override
+		public boolean isEmpty()
+		{
+			return true;
 		}
 	}
 }

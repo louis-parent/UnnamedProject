@@ -30,7 +30,7 @@ public abstract class Button extends MenuElement
 	}
 
 	@Override
-	public void click() throws SlickException
+	public void updateSelect() throws SlickException
 	{
 		if(this.isPressed())
 		{

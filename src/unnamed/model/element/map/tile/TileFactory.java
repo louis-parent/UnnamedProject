@@ -43,13 +43,13 @@ public class TileFactory
 		}
 	}
 
-	public static Tile createFrom(TileBiome biome, Tile tile)
+	public static Tile createFrom(TileBiome biome, Tile tile) throws SlickException
 	{
 		Tile created = TileFactory.create(biome, tile.getColumn(), tile.getRow(), tile.getType(), tile.getContainer());
 
 		if(tile.isSelected())
 		{
-			created.select();
+			tile.getContainer().setSelected(created);
 		}
 
 		return created;

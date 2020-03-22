@@ -70,4 +70,12 @@ public class CameraController
 	{
 		this.camera.moveFromPointTo(oldx, oldy, newx, newy);
 	}
+
+	public void zoom(int times)
+	{
+		for(int i = 0; i < times; i++)
+		{
+			this.zoom();
+		}
+	}
 }

@@ -10,6 +10,7 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
 import unnamed.model.element.Element;
+import unnamed.model.element.map.tile.Tile;
 
 public abstract class ElementContainer implements Serializable
 {
@@ -20,10 +21,14 @@ public abstract class ElementContainer implements Serializable
 	private Map<Integer, List<Element>> elements;
 	private int maxDepth;
 
+	private Element lastSelected;
+
 	public ElementContainer()
 	{
 		this.elements = new HashMap<Integer, List<Element>>();
 		this.maxDepth = 0;
+		
+		this.lastSelected = Element.EMPTY;
 	}
 	
 	public void addAllElements(List<Element> elements)
@@ -60,6 +65,13 @@ public abstract class ElementContainer implements Serializable
 	{
 		this.removeElement(oldElement);
 		this.addElement(newElement);
+	}
+	
+	public void setSelected(Element toSelect) throws SlickException
+	{
+		this.lastSelected.deselect();
+		this.lastSelected = toSelect;
+		this.lastSelected.select();
 	}
 
 	public List<Element> getElementsToDraw()
@@ -135,7 +147,18 @@ public abstract class ElementContainer implements Serializable
 
 	public void clickAt(float x, float y) throws SlickException
 	{
-		this.getTopElementAt(x, y).click();
+		Element clicked = this.getTopElementAt(x, y);
+		clicked.click();
+
+		if(!this.lastSelected.equals(clicked))
+		{
+			this.lastSelected.click();
+			this.lastSelected = clicked;
+		}
+		else
+		{
+			this.lastSelected = Element.EMPTY;
+		}
 	}
 
 	public void pressedAt(int x, int y) throws SlickException
@@ -154,7 +177,7 @@ public abstract class ElementContainer implements Serializable
 	}
 
 	public abstract void init() throws SlickException;
-	public abstract void tickUpdate();
+	public abstract void tickUpdate() throws SlickException;
 	public abstract void mouseWheelMoved(int change);
 	public abstract void keyReleased(int key, char c);
 	public abstract void keyPressed(int key, char c);

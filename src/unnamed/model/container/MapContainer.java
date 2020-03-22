@@ -11,6 +11,7 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.controller.CameraController;
 import unnamed.controller.GameController;
+import unnamed.model.element.Element;
 import unnamed.model.element.entity.Entity;
 import unnamed.model.element.map.Map;
 import unnamed.model.element.map.tile.Tile;
@@ -55,17 +56,22 @@ public class MapContainer extends ElementContainer
 		{
 			this.addElement(tile);
 		}
+		
+		Entity.init();
+		Entity player = new Entity(this);
+		this.fountain.setEntity(player);
+		this.addElement(player);
 	}
 
 	@Override
-	public void tickUpdate()
+	public void tickUpdate() throws SlickException
 	{
 		this.spreadCorruption();
 		this.checkDefeat();
 		this.tickUpdateAllTiles();
 	}
 	
-	private void spreadCorruption()
+	private void spreadCorruption() throws SlickException
 	{
 		Set<Tile> toCorrupt = this.selectTilesToCorrupt();
 		this.corruptSelectedTiles(toCorrupt);
@@ -87,7 +93,7 @@ public class MapContainer extends ElementContainer
 		return toCorrupt;
 	}
 	
-	private void corruptSelectedTiles(Set<Tile> toCorrupt)
+	private void corruptSelectedTiles(Set<Tile> toCorrupt) throws SlickException
 	{
 		for(Tile tile : toCorrupt)
 		{
@@ -215,5 +221,11 @@ public class MapContainer extends ElementContainer
 	public void wheelReleasedAt(int x, int y)
 	{
 		this.isMouseWheelActivated = false;
+	}
+	
+	@Override
+	public void enter()
+	{
+		GameController.getInstance().getCameraController().zoom(10);
 	}
 }
