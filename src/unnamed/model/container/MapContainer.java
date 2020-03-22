@@ -28,8 +28,8 @@ public class MapContainer extends ElementContainer
 	private boolean isMouseWheelActivated;
 
 	private Map map;
-
 	private List<Tile> adjacentToCorruption;
+	private Tile fountain;
 
 	public MapContainer()
 	{
@@ -39,6 +39,7 @@ public class MapContainer extends ElementContainer
 
 		this.map = new Map(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 		this.adjacentToCorruption = new ArrayList<Tile>();
+		this.fountain = Tile.EMPTY;
 	}
 
 	@Override
@@ -47,7 +48,8 @@ public class MapContainer extends ElementContainer
 		MapGenerator generator = new MapGenerator(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 		this.map.addAll(generator.generateMap(this));
 		this.adjacentToCorruption.addAll(this.map.getAllAdjacentFor(TileBiome.GRASS, generator.getCorruptTiles()));
-
+		this.fountain = generator.getFountain();
+		
 		for(Tile tile : this.map)
 		{
 			this.addElement(tile);
@@ -58,7 +60,59 @@ public class MapContainer extends ElementContainer
 	public void tickUpdate()
 	{
 		this.spreadCorruption();
+		this.checkDefeat();
 		this.tickUpdateAllTiles();
+	}
+	
+	private void spreadCorruption()
+	{
+		Set<Tile> toCorrupt = this.selectTilesToCorrupt();
+		this.corruptSelectedTiles(toCorrupt);
+	}
+	
+	private Set<Tile> selectTilesToCorrupt()
+	{
+		Set<Tile> toCorrupt = new HashSet<Tile>();
+		
+		for(Tile tile : this.adjacentToCorruption)
+		{
+			if((GameController.getInstance().getRandom().nextInt(MapContainer.CORRUPTION_SLOWNESS) == 0))
+			{
+				toCorrupt.add(tile);
+			}
+		}
+		
+		this.adjacentToCorruption.removeAll(toCorrupt);
+		return toCorrupt;
+	}
+	
+	private void corruptSelectedTiles(Set<Tile> toCorrupt)
+	{
+		for(Tile tile : toCorrupt)
+		{
+			Tile corrupt = TileFactory.createFrom(TileBiome.CORRUPT, tile);
+			this.replaceTile(tile, corrupt);
+			
+			List<Tile> adjacent = this.map.getAllAdjacentFor(TileBiome.GRASS, Arrays.asList(corrupt));
+			adjacent.removeAll(toCorrupt);
+			this.adjacentToCorruption.addAll(adjacent);
+		}
+	}
+	
+	private void replaceTile(Tile oldElement, Tile newElement)
+	{
+		this.replaceElement(oldElement, newElement);
+		this.map.set(this.map.indexOf(oldElement), newElement);
+	}
+	
+	private void checkDefeat()
+	{
+		boolean isDefeat = !this.map.getAllAdjacentFor(TileBiome.CORRUPT, Arrays.asList(this.fountain)).isEmpty();
+		
+		if(isDefeat)
+		{
+			GameController.getInstance().loseGame();
+		}
 	}
 
 	private void tickUpdateAllTiles()
@@ -67,47 +121,6 @@ public class MapContainer extends ElementContainer
 		{
 			tile.tickUpdate();
 		}
-	}
-
-	private void spreadCorruption()
-	{
-		Set<Tile> toCorrupt = this.selectTilesToCorrupt();
-		this.corruptSelectedTiles(toCorrupt);
-	}
-
-	private Set<Tile> selectTilesToCorrupt()
-	{
-		Set<Tile> toCorrupt = new HashSet<Tile>();
-
-		for(Tile tile : this.adjacentToCorruption)
-		{
-			if((GameController.getInstance().getRandom().nextInt(MapContainer.CORRUPTION_SLOWNESS) == 0))
-			{
-				toCorrupt.add(tile);
-			}
-		}
-
-		this.adjacentToCorruption.removeAll(toCorrupt);
-		return toCorrupt;
-	}
-
-	private void corruptSelectedTiles(Set<Tile> toCorrupt)
-	{
-		for(Tile tile : toCorrupt)
-		{
-			Tile corrupt = TileFactory.createFrom(TileBiome.CORRUPT, tile);
-			this.replaceTile(tile, corrupt);
-
-			List<Tile> adjacent = this.map.getAllAdjacentFor(TileBiome.GRASS, Arrays.asList(corrupt));
-			adjacent.removeAll(toCorrupt);
-			this.adjacentToCorruption.addAll(adjacent);
-		}
-	}
-
-	private void replaceTile(Tile oldElement, Tile newElement)
-	{
-		this.replaceElement(oldElement, newElement);
-		this.map.set(this.map.indexOf(oldElement), newElement);
 	}
 
 	@Override

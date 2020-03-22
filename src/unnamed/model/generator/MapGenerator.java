@@ -35,6 +35,7 @@ public class MapGenerator
 
 	private Random rand;
 	private List<Tile> corruptTiles;
+	private Tile fountain;
 
 	public MapGenerator(int numberOfColumns, int numberOfRows)
 	{
@@ -43,6 +44,7 @@ public class MapGenerator
 
 		this.map = new Map(numberOfColumns, numberOfRows);
 		this.corruptTiles = new ArrayList<Tile>();
+		this.fountain = Tile.EMPTY;
 
 		this.rand = GameController.getInstance().getRandom();
 	}
@@ -431,11 +433,16 @@ public class MapGenerator
 
 	private void createFountain()
 	{
-		this.setTileAt(this.map.getRandomTileIndex(TileBiome.GRASS, TileType.FLAT), TileBiome.FOUNTAIN);
+		this.fountain = this.setTileAt(this.map.getRandomTileIndex(TileBiome.GRASS, TileType.FLAT), TileBiome.FOUNTAIN);
 	}
 
 	public List<Tile> getCorruptTiles()
 	{
 		return this.corruptTiles;
+	}
+
+	public Tile getFountain()
+	{
+		return this.fountain;
 	}
 }

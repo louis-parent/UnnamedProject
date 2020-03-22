@@ -14,6 +14,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 import unnamed.model.container.ElementContainer;
+import unnamed.model.container.GameOverMenuContainer;
 import unnamed.model.container.MainMenuContainer;
 import unnamed.model.container.MapContainer;
 import unnamed.model.container.PauseMenuContainer;
@@ -44,6 +45,7 @@ public class GameController
 	private PauseMenuContainer pauseMenuContainer;
 	private SeedMenuContainer seedMenuContainer;
 	private MapContainer mapContainer;
+	private GameOverMenuContainer gameOverContainer;
 
 	private Random random;
 
@@ -69,6 +71,7 @@ public class GameController
 		this.mainMenuContainer = new MainMenuContainer();
 		this.pauseMenuContainer = new PauseMenuContainer();
 		this.seedMenuContainer = new SeedMenuContainer();
+		this.gameOverContainer = new GameOverMenuContainer();
 		
 		this.random = new Random();
 
@@ -96,6 +99,7 @@ public class GameController
 		this.mainMenuContainer.init();
 		this.pauseMenuContainer.init();
 		this.seedMenuContainer.init();
+		this.gameOverContainer.init();
 
 		this.setCurrentContainer(this.mainMenuContainer);
 
@@ -209,6 +213,11 @@ public class GameController
 	public void goToSeedMenu()
 	{
 		this.setCurrentContainer(this.seedMenuContainer);
+	}
+	
+	public void loseGame()
+	{
+		this.setCurrentContainer(this.gameOverContainer);
 	}
 
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) throws SlickException
