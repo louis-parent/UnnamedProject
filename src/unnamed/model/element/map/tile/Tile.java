@@ -66,12 +66,15 @@ public abstract class Tile extends Element
 	{
 		return this.type;
 	}
+	
 
 	public void setType(TileType type)
 	{
 		this.type = type;
 		this.setSpriteVariant(type.getRandomVariant());
 	}
+
+	public abstract TileBiome getBiome();
 
 	@Override
 	public FormattedString getFormattedText()
@@ -183,6 +186,12 @@ public abstract class Tile extends Element
 		public PixelisedImage getSprite() throws SlickException
 		{
 			return PixelisedImage.getEmpty();
+		}
+
+		@Override
+		public TileBiome getBiome()
+		{
+			return TileBiome.GRASS;
 		}
 	}
 }

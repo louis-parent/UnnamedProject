@@ -7,15 +7,13 @@ import unnamed.model.container.ElementContainer;
 
 public class WaterTile extends Tile
 {
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -8248943245607482270L;
+	
 	private static TileImageRegistry waterRegistry;
 
 	public static void init() throws SlickException
 	{
-		WaterTile.waterRegistry = new TileImageRegistry(TileFactory.WATER_BIOME);
+		WaterTile.waterRegistry = new TileImageRegistry(TileBiome.SHALLOW_WATER);
 	}
 
 	protected WaterTile(int column, int row, TileType type, ElementContainer container)
@@ -27,5 +25,11 @@ public class WaterTile extends Tile
 	public PixelisedImage getSprite()
 	{
 		return WaterTile.waterRegistry.get(WaterTile.waterRegistry.getImageNameFor(this.getType(), this.getSpriteVariant()));
+	}
+
+	@Override
+	public TileBiome getBiome()
+	{
+		return TileBiome.SHALLOW_WATER;
 	}
 }

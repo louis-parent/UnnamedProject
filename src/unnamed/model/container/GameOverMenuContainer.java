@@ -6,14 +6,14 @@ import org.newdawn.slick.SlickException;
 import unnamed.controller.GameController;
 import unnamed.model.element.menu.button.MenuFactory;
 
-public class PauseMenuContainer extends MenuContainer
+public class GameOverMenuContainer extends MenuContainer
 {
-	private static final long serialVersionUID = 1412919249921734035L;
+	private static final long serialVersionUID = 3759703099376065619L;
 
 	@Override
 	public void init() throws SlickException
 	{
-		this.buildMenu(MenuFactory.START_BUTTON, MenuFactory.SAVE_BUTTON, MenuFactory.MENU_BUTTON);
+		this.buildMenu(MenuFactory.START_BUTTON, MenuFactory.MENU_BUTTON, MenuFactory.QUIT_BUTTON);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class PauseMenuContainer extends MenuContainer
 		switch(key)
 		{
 			case Input.KEY_ESCAPE:
-				GameController.getInstance().playGame();
+				GameController.getInstance().goToMainMenu();
 				break;
 		}
 	}

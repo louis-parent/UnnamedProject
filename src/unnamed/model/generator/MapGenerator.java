@@ -8,8 +8,8 @@ import java.util.Random;
 import unnamed.controller.GameController;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.map.Map;
-import unnamed.model.element.map.tile.GrassTile;
 import unnamed.model.element.map.tile.Tile;
+import unnamed.model.element.map.tile.TileBiome;
 import unnamed.model.element.map.tile.TileFactory;
 import unnamed.model.element.map.tile.TileType;
 import unnamed.model.element.map.tile.WaterTile;
@@ -34,6 +34,8 @@ public class MapGenerator
 	private Map map;
 
 	private Random rand;
+	private List<Tile> corruptTiles;
+	private Tile fountain;
 
 	public MapGenerator(int numberOfColumns, int numberOfRows)
 	{
@@ -41,6 +43,8 @@ public class MapGenerator
 		this.rows = numberOfRows;
 
 		this.map = new Map(numberOfColumns, numberOfRows);
+		this.corruptTiles = new ArrayList<Tile>();
+		this.fountain = Tile.EMPTY;
 
 		this.rand = GameController.getInstance().getRandom();
 	}
@@ -50,6 +54,8 @@ public class MapGenerator
 		this.generateGrassBase(container);
 		this.generateTerrain();
 		this.generateBiomes(container);
+		this.seedCorruption();
+		this.createFountain();
 
 		return this.map;
 	}
@@ -60,7 +66,7 @@ public class MapGenerator
 		{
 			for(int j = 0; j < this.rows; j++)
 			{
-				this.map.add(TileFactory.create(TileFactory.GRASS_BIOME, i, j, TileType.FLAT, container));
+				this.map.add(TileFactory.create(TileBiome.GRASS, i, j, TileType.FLAT, container));
 			}
 		}
 	}
@@ -203,16 +209,20 @@ public class MapGenerator
 
 	private Tile seedWater()
 	{
-		return this.seedBiome(TileFactory.WATER_BIOME);
+		return this.seedBiome(TileBiome.SHALLOW_WATER);
 	}
 
-	private Tile seedBiome(String desertBiome)
+	private Tile seedBiome(TileBiome biome)
 	{
-		int changedIndex = this.map.getRandomTileIndex(GrassTile.class);
-		Tile changedTile = this.map.get(changedIndex);
-		Tile newTile = TileFactory.createFrom(desertBiome, changedTile);
+		return this.setTileAt(this.map.getRandomTileIndex(TileBiome.GRASS), biome);
+	}
+	
+	private Tile setTileAt(int index, TileBiome biome)
+	{
+		Tile oldTile = this.map.get(index);
+		Tile newTile = TileFactory.createFrom(biome, oldTile);
+		this.map.set(index, newTile);
 
-		this.map.set(changedIndex, newTile);
 		return newTile;
 	}
 
@@ -225,14 +235,14 @@ public class MapGenerator
 
 		while(!toExpand.isEmpty())
 		{
-			List<Tile> toBuild = new ArrayList<Tile>(this.map.getAllAdjacentFor(GrassTile.class, toExpand));
+			List<Tile> toBuild = new ArrayList<Tile>(this.map.getAllAdjacentFor(TileBiome.GRASS, toExpand));
 			toExpand.clear();
 
 			for(Tile tile : toBuild)
 			{
 				if(this.rand.nextDouble() <= ((1.0 / turnCounter) + 0.15))
 				{
-					this.replaceTileWithIn(tile, TileFactory.WATER_BIOME, toExpand);
+					this.replaceTileWithIn(tile, TileBiome.SHALLOW_WATER, toExpand);
 				}
 
 			}
@@ -241,7 +251,7 @@ public class MapGenerator
 		}
 	}
 
-	private void replaceTileWithIn(Tile tile, String biome, List<Tile> toExpand)
+	private void replaceTileWithIn(Tile tile, TileBiome biome, List<Tile> toExpand)
 	{
 		if(this.map.contains(tile))
 		{
@@ -373,7 +383,7 @@ public class MapGenerator
 
 		while(previousIndex.get(currentIndex) != currentIndex)
 		{
-			Tile newTile = TileFactory.createFrom(TileFactory.WATER_BIOME, this.map.get(currentIndex));
+			Tile newTile = TileFactory.createFrom(TileBiome.SHALLOW_WATER, this.map.get(currentIndex));
 			this.map.set(currentIndex, newTile);
 
 			currentIndex = previousIndex.get(currentIndex);
@@ -392,7 +402,7 @@ public class MapGenerator
 
 	private Tile generateDesertSeed()
 	{
-		return this.seedBiome(TileFactory.DESERT_BIOME);
+		return this.seedBiome(TileBiome.DESERT);
 	}
 
 	private void expandDesert(Tile seed)
@@ -403,16 +413,36 @@ public class MapGenerator
 		for(int i = 0; i < MapGenerator.DESERT_DIAMETER; i++)
 		{
 
-			List<Tile> adjacents = this.map.getAllAdjacentFor(GrassTile.class, desert);
+			List<Tile> adjacents = this.map.getAllAdjacentFor(TileBiome.GRASS, desert);
 
 			for(Tile adjacent : adjacents)
 			{
 				if(this.rand.nextInt(100) < MapGenerator.DESERT_SPREAD_PERCENTAGE)
 				{
-					this.replaceTileWithIn(adjacent, TileFactory.DESERT_BIOME, desert);
+					this.replaceTileWithIn(adjacent, TileBiome.DESERT, desert);
 				}
 			}
 		}
 	}
 
+	private void seedCorruption()
+	{
+		Tile corruptTile = this.setTileAt(this.map.getRandomTileIndex(), TileBiome.CORRUPT);
+		this.corruptTiles.add(corruptTile);
+	}
+
+	private void createFountain()
+	{
+		this.fountain = this.setTileAt(this.map.getRandomTileIndex(TileBiome.GRASS, TileType.FLAT), TileBiome.FOUNTAIN);
+	}
+
+	public List<Tile> getCorruptTiles()
+	{
+		return this.corruptTiles;
+	}
+
+	public Tile getFountain()
+	{
+		return this.fountain;
+	}
 }
