@@ -21,7 +21,7 @@ public class MapContainer extends ElementContainer
 {
 	private static final long serialVersionUID = -3760401809828849717L;
 
-	private static final int CORRUPTION_SLOWNESS = 10;
+	private static final int CORRUPTION_SLOWNESS = 1000;
 	private static final int NUMBER_OF_COLUMNS = 75;
 	private static final int NUMBER_OF_ROWS = 75;
 

@@ -13,7 +13,7 @@ public class PauseMenuContainer extends MenuContainer
 	@Override
 	public void init() throws SlickException
 	{
-		this.buildMenu(MenuFactory.START_BUTTON, MenuFactory.SAVE_BUTTON, MenuFactory.MENU_BUTTON);
+		this.buildMenu(MenuFactory.RESUME_BUTTON, MenuFactory.SAVE_BUTTON, MenuFactory.MENU_BUTTON);
 	}
 
 	@Override
