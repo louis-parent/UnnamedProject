@@ -56,7 +56,6 @@ public class MapContainer extends ElementContainer
 			this.addElement(tile);
 		}
 		
-		Entity.init();
 		Entity player = new Entity(this);
 		this.fountain.setEntity(player);
 		this.addElement(player);

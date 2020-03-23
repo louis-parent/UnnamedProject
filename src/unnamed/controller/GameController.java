@@ -19,6 +19,7 @@ import unnamed.model.container.MainMenuContainer;
 import unnamed.model.container.MapContainer;
 import unnamed.model.container.PauseMenuContainer;
 import unnamed.model.container.SeedMenuContainer;
+import unnamed.model.element.entity.Entity;
 import unnamed.model.element.map.tile.TileFactory;
 import unnamed.model.element.menu.button.MenuFactory;
 import unnamed.view.Camera;
@@ -72,7 +73,7 @@ public class GameController
 		this.pauseMenuContainer = new PauseMenuContainer();
 		this.seedMenuContainer = new SeedMenuContainer();
 		this.gameOverContainer = new GameOverMenuContainer();
-		
+
 		this.random = new Random();
 
 		this.leftOverMillis = 0;
@@ -92,7 +93,6 @@ public class GameController
 	public void init(GameContainer container) throws SlickException
 	{
 		MenuFactory.init();
-		TileFactory.init();
 
 		this.container = container;
 
@@ -190,7 +190,7 @@ public class GameController
 	{
 		this.currentContainer.leave();
 		this.currentContainer = container;
-		
+
 		this.cameraController.reset();
 		this.currentContainer.enter();
 	}
@@ -209,12 +209,12 @@ public class GameController
 	{
 		this.setCurrentContainer(this.pauseMenuContainer);
 	}
-	
+
 	public void goToSeedMenu() throws SlickException
 	{
 		this.setCurrentContainer(this.seedMenuContainer);
 	}
-	
+
 	public void loseGame() throws SlickException
 	{
 		this.setCurrentContainer(this.gameOverContainer);
@@ -240,13 +240,13 @@ public class GameController
 		try
 		{
 			File save = new File(GameController.SAVE_FILE);
-			
+
 			File saveFolder = save.getParentFile();
 			if(!saveFolder.exists())
 			{
 				saveFolder.mkdir();
 			}
-			
+
 			ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(save));
 			stream.writeObject(this.mapContainer);
 			stream.close();
@@ -269,17 +269,27 @@ public class GameController
 			e.printStackTrace();
 		}
 
+		this.initGame();
+		
 		this.playGame();
 	}
 
 	public void createGame(long seed) throws SlickException
 	{
 		this.random.setSeed(seed);
-		
+
+		this.initGame();
+
 		this.mapContainer = new MapContainer();
 		this.mapContainer.init();
-
+		
 		this.playGame();
+	}
+
+	private void initGame() throws SlickException
+	{
+		TileFactory.init();
+		Entity.init();
 	}
 
 	public static boolean saveExists()
