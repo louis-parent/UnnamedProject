@@ -181,12 +181,12 @@ public class GameController
 		this.currentContainer.keyReleased(key, c);
 	}
 
-	public void keyPressed(int key, char c)
+	public void keyPressed(int key, char c) throws SlickException
 	{
 		this.currentContainer.keyPressed(key, c);
 	}
 
-	public void setCurrentContainer(ElementContainer container)
+	public void setCurrentContainer(ElementContainer container) throws SlickException
 	{
 		this.currentContainer.leave();
 		this.currentContainer = container;
@@ -195,27 +195,27 @@ public class GameController
 		this.currentContainer.enter();
 	}
 
-	public void playGame()
+	public void playGame() throws SlickException
 	{
 		this.setCurrentContainer(this.mapContainer);
 	}
 
-	public void goToMainMenu()
+	public void goToMainMenu() throws SlickException
 	{
 		this.setCurrentContainer(this.mainMenuContainer);
 	}
 
-	public void goToPauseMenu()
+	public void goToPauseMenu() throws SlickException
 	{
 		this.setCurrentContainer(this.pauseMenuContainer);
 	}
 	
-	public void goToSeedMenu()
+	public void goToSeedMenu() throws SlickException
 	{
 		this.setCurrentContainer(this.seedMenuContainer);
 	}
 	
-	public void loseGame()
+	public void loseGame() throws SlickException
 	{
 		this.setCurrentContainer(this.gameOverContainer);
 	}
@@ -256,7 +256,7 @@ public class GameController
 		}
 	}
 
-	public void loadGame()
+	public void loadGame() throws SlickException
 	{
 		try
 		{
@@ -266,6 +266,7 @@ public class GameController
 		}
 		catch(IOException | ClassNotFoundException e)
 		{
+			e.printStackTrace();
 		}
 
 		this.playGame();

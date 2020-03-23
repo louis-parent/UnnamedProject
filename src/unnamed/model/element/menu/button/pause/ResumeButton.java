@@ -32,7 +32,7 @@ public class ResumeButton extends Button
 	}
 
 	@Override
-	protected void action()
+	protected void action() throws SlickException
 	{
 		GameController.getInstance().playGame();
 	}

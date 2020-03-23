@@ -65,20 +65,6 @@ public class Entity extends Element
 	{
 	}
 
-	@Override
-	protected void updateSelect() throws SlickException
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void updateDeselect()
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
 	private static class EmptyEntity extends Entity
 	{
 		private static final long serialVersionUID = -3517399285369674213L;
@@ -93,5 +79,10 @@ public class Entity extends Element
 		{
 			return true;
 		}
+	}
+
+	@Override
+	public void clickEvent() throws SlickException
+	{
 	}
 }

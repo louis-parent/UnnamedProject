@@ -32,26 +32,10 @@ public abstract class MenuElement extends Element
 	{
 	}
 
-	public void keyPressed(int key, char c)
-	{
-	}
-
 	@Override
 	public FormattedString getFormattedText()
 	{
 		return FormattedString.EMPTY;
-	}
-
-	@Override
-	protected void updateSelect() throws SlickException
-	{
-
-	}
-
-	@Override
-	protected void updateDeselect()
-	{
-		
 	}
 
 	private static class EmptyMenuElement extends MenuElement
@@ -85,21 +69,15 @@ public abstract class MenuElement extends Element
 		}
 
 		@Override
-		protected void updateSelect()
-		{
-
-		}
-
-		@Override
-		protected void updateDeselect()
-		{
-			
-		}
-
-		@Override
 		public boolean isEmpty()
 		{
 			return true;
+		}
+
+		@Override
+		public void clickEvent()
+		{
+
 		}
 	}
 }

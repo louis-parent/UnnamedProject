@@ -40,11 +40,11 @@ public class CorruptTile extends Tile
 	}
 
 	@Override
-	protected void updateSelect()
+	public void selectEvent()
 	{
 		this.setY(this.getY() + this.targetY);
 		this.targetY = 0;
-		super.updateSelect();
+		super.selectEvent();
 	}
 
 	@Override

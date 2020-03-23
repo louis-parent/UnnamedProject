@@ -32,7 +32,7 @@ public class MenuButton extends Button
 	}
 
 	@Override
-	protected void action()
+	protected void action() throws SlickException
 	{
 		GameController.getInstance().goToMainMenu();
 	}

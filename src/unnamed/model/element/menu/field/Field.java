@@ -7,10 +7,11 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
+import unnamed.model.element.SelectableElement;
 import unnamed.model.element.menu.FormattedString;
 import unnamed.model.element.menu.MenuElement;
 
-public abstract class Field extends MenuElement 
+public abstract class Field extends MenuElement implements SelectableElement
 {
 	private static final long serialVersionUID = -174723088589298269L;
 	
@@ -19,6 +20,8 @@ public abstract class Field extends MenuElement
 	private static Image background;
 	
 	private FormattedString text;
+	
+	private boolean isSelected;
 	
 	public static void init() throws SlickException
 	{
@@ -34,6 +37,8 @@ public abstract class Field extends MenuElement
 	{
 		super(container);
 		this.text = new FormattedString(defaultText, Color.white, 25, 7, 3);
+		
+		this.isSelected = false;
 	}
 
 	@Override
@@ -70,6 +75,36 @@ public abstract class Field extends MenuElement
 			this.text.append(c);
 		}
 	}
+
+	@Override
+	public void clickEvent()
+	{
+		
+	}
+
+	@Override
+	public boolean isSelected()
+	{
+		return this.isSelected;
+	}
+
+	@Override
+	public void selectEvent()
+	{
+		
+	}
+
+	@Override
+	public void deselectEvent()
+	{
+		
+	}
+
+	@Override
+	public void setSelected(boolean toSelect)
+	{
+		this.isSelected = toSelect;
+	}
 	
 	public abstract boolean isValid(char c);
 	
@@ -92,6 +127,30 @@ public abstract class Field extends MenuElement
 		public boolean isEmpty()
 		{
 			return true;
+		}
+
+		@Override
+		public boolean isSelected()
+		{
+			return false;
+		}
+
+		@Override
+		public void selectEvent()
+		{
+
+		}
+
+		@Override
+		public void deselectEvent()
+		{
+
+		}
+
+		@Override
+		public void setSelected(boolean toSelect)
+		{
+
 		}
 		
 	}

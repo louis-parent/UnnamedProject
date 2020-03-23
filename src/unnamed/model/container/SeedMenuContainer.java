@@ -30,13 +30,14 @@ public class SeedMenuContainer extends MenuContainer
 	}
 	
 	@Override
-	public void enter()
+	public void enter() throws SlickException
 	{
+		super.enter();
 		this.seedField.setText("");
 	}
 
 	@Override
-	public void keyPressed(int key, char c)
+	public void keyPressed(int key, char c) throws SlickException
 	{
 		super.keyPressed(key, c);
 		switch(key)

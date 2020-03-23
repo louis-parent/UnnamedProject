@@ -22,8 +22,6 @@ public abstract class Element implements Serializable
 	private float y;
 	private int z;
 
-	private boolean isSelected;
-
 	public Element(ElementContainer container)
 	{
 		this(0, 0, 0, container);
@@ -36,8 +34,6 @@ public abstract class Element implements Serializable
 		this.x = x;
 		this.y = y;
 		this.z = z;
-
-		this.isSelected = false;
 	}
 
 	public float getX()
@@ -65,7 +61,7 @@ public abstract class Element implements Serializable
 		return this.z;
 	}
 
-	public void setZ(int z)
+	public void setZ(int z) throws SlickException
 	{
 		int oldZ = this.z;
 		this.z = z;
@@ -112,38 +108,37 @@ public abstract class Element implements Serializable
 		return this.container;
 	}
 
-	public boolean isSelected()
+	public boolean isEmpty()
 	{
-		return this.isSelected;
+		return false;
+	}
+
+	public void keyPressed(int key, char c)
+	{
+
 	}
 
 	public void click() throws SlickException
 	{
-		if(this.isSelected())
+		if(!(this instanceof SelectableElement))
 		{
-			this.deselect();
+			this.clickEvent();
 		}
 		else
 		{
-			this.select();
+			SelectableElement select = (SelectableElement) this;
+
+			if(select.isSelected())
+			{
+				select.setSelected(false);
+				select.deselectEvent();
+			}
+			else
+			{
+				select.setSelected(true);
+				select.selectEvent();
+			}
 		}
-	}
-
-	public void select() throws SlickException
-	{
-		this.isSelected = true;
-		this.updateSelect();
-	}
-
-	public void deselect()
-	{
-		this.isSelected = false;
-		this.updateDeselect();
-	}
-	
-	public boolean isEmpty()
-	{
-		return false;
 	}
 
 	public abstract Image getSprite() throws SlickException;
@@ -152,9 +147,7 @@ public abstract class Element implements Serializable
 
 	public abstract void tickUpdate();
 
-	protected abstract void updateSelect() throws SlickException;
-
-	protected abstract void updateDeselect();
+	public abstract void clickEvent() throws SlickException;
 
 	public abstract void pressed();
 
@@ -198,21 +191,15 @@ public abstract class Element implements Serializable
 		}
 
 		@Override
-		public void updateSelect()
-		{
-
-		}
-
-		@Override
-		public void updateDeselect()
-		{
-
-		}
-		
-		@Override
 		public boolean isEmpty()
 		{
 			return true;
+		}
+
+		@Override
+		public void clickEvent()
+		{
+			
 		}
 	}
 }

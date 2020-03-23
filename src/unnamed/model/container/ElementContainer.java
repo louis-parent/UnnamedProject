@@ -10,7 +10,7 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
 import unnamed.model.element.Element;
-import unnamed.model.element.map.tile.Tile;
+import unnamed.model.element.SelectableElement;
 
 public abstract class ElementContainer implements Serializable
 {
@@ -21,17 +21,17 @@ public abstract class ElementContainer implements Serializable
 	private Map<Integer, List<Element>> elements;
 	private int maxDepth;
 
-	private Element lastSelected;
+	private SelectableElement lastSelected;
 
 	public ElementContainer()
 	{
 		this.elements = new HashMap<Integer, List<Element>>();
 		this.maxDepth = 0;
-		
-		this.lastSelected = Element.EMPTY;
+
+		this.lastSelected = SelectableElement.EMPTY;
 	}
-	
-	public void addAllElements(List<Element> elements)
+
+	public void addAllElements(List<Element> elements) throws SlickException
 	{
 		for(Element element : elements)
 		{
@@ -39,7 +39,7 @@ public abstract class ElementContainer implements Serializable
 		}
 	}
 
-	public void addElement(Element element)
+	public void addElement(Element element) throws SlickException
 	{
 		int z = element.getZ();
 
@@ -61,17 +61,10 @@ public abstract class ElementContainer implements Serializable
 		this.elements.get(element.getZ()).remove(element);
 	}
 
-	public void replaceElement(Element oldElement, Element newElement)
+	public void replaceElement(Element oldElement, Element newElement) throws SlickException
 	{
 		this.removeElement(oldElement);
 		this.addElement(newElement);
-	}
-	
-	public void setSelected(Element toSelect) throws SlickException
-	{
-		this.lastSelected.deselect();
-		this.lastSelected = toSelect;
-		this.lastSelected.select();
 	}
 
 	public List<Element> getElementsToDraw()
@@ -89,7 +82,7 @@ public abstract class ElementContainer implements Serializable
 		return finalList;
 	}
 
-	public void changeZOfElement(Element newElement, int oldZ)
+	public void changeZOfElement(Element newElement, int oldZ) throws SlickException
 	{
 		this.elements.get(oldZ).remove(newElement);
 
@@ -148,16 +141,34 @@ public abstract class ElementContainer implements Serializable
 	public void clickAt(float x, float y) throws SlickException
 	{
 		Element clicked = this.getTopElementAt(x, y);
-		clicked.click();
 
-		if(!this.lastSelected.equals(clicked))
+		if(clicked instanceof SelectableElement)
 		{
-			this.lastSelected.click();
-			this.lastSelected = clicked;
+			this.setSelected((SelectableElement) clicked);
 		}
 		else
 		{
-			this.lastSelected = Element.EMPTY;
+			clicked.click();
+		}
+	}
+	
+	public SelectableElement getSelected()
+	{
+		return this.lastSelected;
+	}
+
+	public void setSelected(SelectableElement selected) throws SlickException
+	{
+		((Element) selected).click();
+
+		if(!selected.equals(this.lastSelected))
+		{
+			((Element) this.lastSelected).click();
+			this.lastSelected = selected;
+		}
+		else
+		{
+			this.lastSelected = SelectableElement.EMPTY;
 		}
 	}
 
@@ -165,26 +176,35 @@ public abstract class ElementContainer implements Serializable
 	{
 		this.getTopElementAt(x, y).pressed();
 	}
-	
-	public void enter()
+
+	public void enter() throws SlickException
 	{
-		
+
 	}
-	
-	public void leave()
+
+	public void leave() throws SlickException
 	{
-		
+
 	}
 
 	public abstract void init() throws SlickException;
+
 	public abstract void tickUpdate() throws SlickException;
+
 	public abstract void mouseWheelMoved(int change);
+
 	public abstract void keyReleased(int key, char c);
-	public abstract void keyPressed(int key, char c);
+
+	public abstract void keyPressed(int key, char c) throws SlickException;
+
 	public abstract void mouseDragged(int oldx, int oldy, int newx, int newy) throws SlickException;
+
 	public abstract void wheelPressedAt(int x, int y);
+
 	public abstract void wheelReleasedAt(int x, int y);
+
 	public abstract int getHeight();
+
 	public abstract int getWidth();
 
 	private static class EmptyContainer extends ElementContainer

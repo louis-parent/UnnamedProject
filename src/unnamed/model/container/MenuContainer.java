@@ -8,6 +8,7 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
 import unnamed.model.element.Element;
+import unnamed.model.element.SelectableElement;
 import unnamed.model.element.menu.MenuElement;
 import unnamed.model.element.menu.button.MenuFactory;
 import unnamed.model.element.menu.field.Field;
@@ -16,15 +17,13 @@ public abstract class MenuContainer extends ElementContainer
 {
 	private static final long serialVersionUID = 8508648978109147145L;
 	private static final int PADDING = 50;
-	
+
 	private List<Field> fields;
-	private MenuElement selectedField;
-	
+
 	public MenuContainer()
 	{
 		super();
 		this.fields = new ArrayList<Field>();
-		this.selectedField = MenuElement.EMPTY;
 	}
 
 	public MenuElement[] buildMenu(String... menuElementTypes) throws SlickException
@@ -38,27 +37,37 @@ public abstract class MenuContainer extends ElementContainer
 
 		this.addAllElements(Arrays.asList(elements));
 		this.verticalAlign(MenuContainer.PADDING, elements);
-		
+
 		return elements;
 	}
-	
+
 	@Override
-	public void addElement(Element element)
+	public void addElement(Element element) throws SlickException
 	{
 		super.addElement(element);
-		
+
 		if(element instanceof Field)
 		{
 			Field field = (Field) element;
 			this.fields.add(field);
-			
-			if(MenuElement.EMPTY.equals(this.selectedField))
-			{
-				this.selectedField = field;
-			}
+		}
+	}
+
+	@Override
+	public void enter() throws SlickException
+	{
+		if(!this.fields.isEmpty())
+		{
+			this.setSelected(this.fields.get(0));
 		}
 	}
 	
+	@Override
+	public void leave() throws SlickException
+	{
+		this.setSelected(SelectableElement.EMPTY);
+	}
+
 	@Override
 	public void mouseWheelMoved(int change)
 	{
@@ -70,23 +79,9 @@ public abstract class MenuContainer extends ElementContainer
 	}
 
 	@Override
-	public void keyPressed(int key, char c)
+	public void keyPressed(int key, char c) throws SlickException
 	{
-		this.selectedField.keyPressed(key, c);
-	}
-	
-	@Override
-	public void clickAt(float x, float y) throws SlickException
-	{
-		super.clickAt(x, y);
-		
-		for(MenuElement element : this.fields)
-		{
-			if(element.isInside(x, y))
-			{
-				this.selectedField = element;
-			}
-		}
+		((Element) this.getSelected()).keyPressed(key, c);
 	}
 
 	@Override
@@ -100,7 +95,7 @@ public abstract class MenuContainer extends ElementContainer
 			oldElement.mouseLeft();
 		}
 	}
-	
+
 	@Override
 	public void wheelPressedAt(int x, int y)
 	{
@@ -110,7 +105,7 @@ public abstract class MenuContainer extends ElementContainer
 	public void wheelReleasedAt(int x, int y)
 	{
 	}
-	
+
 	@Override
 	public int getHeight()
 	{

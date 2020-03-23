@@ -22,7 +22,7 @@ public class GameOverMenuContainer extends MenuContainer
 	}
 
 	@Override
-	public void keyPressed(int key, char c)
+	public void keyPressed(int key, char c) throws SlickException
 	{
 		super.keyPressed(key, c);
 		

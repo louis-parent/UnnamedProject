@@ -11,7 +11,6 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.controller.CameraController;
 import unnamed.controller.GameController;
-import unnamed.model.element.Element;
 import unnamed.model.element.entity.Entity;
 import unnamed.model.element.map.Map;
 import unnamed.model.element.map.tile.Tile;
@@ -106,13 +105,13 @@ public class MapContainer extends ElementContainer
 		}
 	}
 	
-	private void replaceTile(Tile oldElement, Tile newElement)
+	private void replaceTile(Tile oldElement, Tile newElement) throws SlickException
 	{
 		this.replaceElement(oldElement, newElement);
 		this.map.set(this.map.indexOf(oldElement), newElement);
 	}
 	
-	private void checkDefeat()
+	private void checkDefeat() throws SlickException
 	{
 		boolean isDefeat = !this.map.getAllAdjacentFor(TileBiome.CORRUPT, Arrays.asList(this.fountain)).isEmpty();
 		
@@ -178,7 +177,7 @@ public class MapContainer extends ElementContainer
 	}
 
 	@Override
-	public void keyPressed(int key, char c)
+	public void keyPressed(int key, char c) throws SlickException
 	{
 		CameraController cam = GameController.getInstance().getCameraController();
 
