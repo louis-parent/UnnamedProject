@@ -203,6 +203,7 @@ public abstract class ElementContainer implements Serializable
 
 	public abstract void wheelReleasedAt(int x, int y);
 
+	public abstract void rightClickAt(int x, int y);
 	public abstract int getHeight();
 
 	public abstract int getWidth();
@@ -245,6 +246,12 @@ public abstract class ElementContainer implements Serializable
 		public void keyPressed(int key, char c)
 		{
 		}
+		
+		@Override
+		public void rightClickAt(int x, int y)
+		{
+			
+		}
 
 		@Override
 		public void init() throws SlickException
@@ -263,4 +270,5 @@ public abstract class ElementContainer implements Serializable
 			return 0;
 		}
 	}
+
 }

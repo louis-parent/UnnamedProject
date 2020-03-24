@@ -74,6 +74,10 @@ public class MouseController implements MouseListener
 		{
 			GameController.getInstance().wheelPressedAt(x, y);
 		}
+		else if(button == Input.MOUSE_LEFT_BUTTON)
+		{
+			GameController.getInstance().rightClickAt(x, y);
+		}
 	}
 
 	@Override

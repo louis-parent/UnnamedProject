@@ -105,6 +105,11 @@ public abstract class MenuContainer extends ElementContainer
 	public void wheelReleasedAt(int x, int y)
 	{
 	}
+	
+	@Override
+	public void rightClickAt(int x, int y)
+	{		
+	}
 
 	@Override
 	public int getHeight()

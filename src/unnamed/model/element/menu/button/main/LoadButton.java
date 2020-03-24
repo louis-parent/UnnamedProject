@@ -6,7 +6,6 @@ import org.newdawn.slick.SlickException;
 import unnamed.controller.GameController;
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
-import unnamed.model.element.map.tile.TileFactory;
 import unnamed.model.element.menu.button.Button;
 
 public class LoadButton extends Button

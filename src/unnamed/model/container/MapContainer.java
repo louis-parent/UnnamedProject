@@ -31,8 +31,10 @@ public class MapContainer extends ElementContainer
 	private Map map;
 	private List<Tile> adjacentToCorruption;
 	private Tile fountain;
+	
+	private Entity entity;
 
-	public MapContainer()
+	public MapContainer() throws SlickException
 	{
 		super();
 
@@ -41,6 +43,8 @@ public class MapContainer extends ElementContainer
 		this.map = new Map(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 		this.adjacentToCorruption = new ArrayList<Tile>();
 		this.fountain = Tile.EMPTY;
+		
+		this.entity = Entity.getEmptyEntity();
 	}
 
 	@Override
@@ -56,9 +60,8 @@ public class MapContainer extends ElementContainer
 			this.addElement(tile);
 		}
 		
-		Entity player = new Entity(this);
-		this.fountain.setEntity(player);
-		this.addElement(player);
+		this.entity = new Entity(this.fountain, this);
+		this.addElement(this.entity);
 	}
 
 	@Override
@@ -67,6 +70,7 @@ public class MapContainer extends ElementContainer
 		this.spreadCorruption();
 		this.checkDefeat();
 		this.tickUpdateAllTiles();
+		this.entity.tickUpdate();
 	}
 	
 	private void spreadCorruption() throws SlickException
@@ -219,6 +223,15 @@ public class MapContainer extends ElementContainer
 	public void wheelReleasedAt(int x, int y)
 	{
 		this.isMouseWheelActivated = false;
+	}
+	
+	@Override
+	public void rightClickAt(int x, int y)
+	{
+		if(this.getSelected() instanceof Entity)
+		{
+			
+		}
 	}
 	
 	@Override

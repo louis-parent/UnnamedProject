@@ -7,12 +7,11 @@ import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
 import unnamed.model.element.SelectableElement;
-import unnamed.model.element.entity.Entity;
 import unnamed.model.element.menu.FormattedString;
 
 public abstract class Tile extends Element implements SelectableElement
 {
-	private static final int Y_ENTITY_OFFSET = 29;
+	public static final int Y_ENTITY_OFFSET = 29;
 
 	private static final long serialVersionUID = -867365679274168458L;
 
@@ -31,8 +30,6 @@ public abstract class Tile extends Element implements SelectableElement
 
 	private int spriteVariant;
 
-	private Entity entity;
-
 	private boolean isSelected;
 
 	public Tile(TileType type, ElementContainer container)
@@ -48,8 +45,6 @@ public abstract class Tile extends Element implements SelectableElement
 
 		this.type = type;
 		this.spriteVariant = type.getRandomVariant();
-
-		this.entity = Entity.EMPTY;
 
 		this.isSelected = false;
 	}
@@ -137,15 +132,6 @@ public abstract class Tile extends Element implements SelectableElement
 		this.spriteVariant = spriteVariant;
 	}
 
-	public void setEntity(Entity entity) throws SlickException
-	{
-		this.entity = entity;
-
-		entity.setX((this.getX() + (this.getWidth() / 2f)) - (entity.getWidth() / 2f));
-		entity.setY((this.getY() + Tile.Y_ENTITY_OFFSET) - entity.getHeight());
-		entity.setZ(this.getZ());
-	}
-
 	@Override
 	public void clickEvent()
 	{
@@ -162,14 +148,12 @@ public abstract class Tile extends Element implements SelectableElement
 	public void selectEvent()
 	{
 		this.setY(this.getY() - Tile.FLOATING_OFFSET);
-		this.entity.setY(this.entity.getY() - Tile.FLOATING_OFFSET);
 	}
 
 	@Override
 	public void deselectEvent()
 	{
 		this.setY(this.getY() + Tile.FLOATING_OFFSET);
-		this.entity.setY(this.entity.getY() + Tile.FLOATING_OFFSET);
 	}
 
 	@Override

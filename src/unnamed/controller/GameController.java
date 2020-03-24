@@ -234,6 +234,11 @@ public class GameController
 	{
 		this.currentContainer.wheelReleasedAt(x, y);
 	}
+	
+	public void rightClickAt(int x, int y)
+	{
+		this.currentContainer.rightClickAt(x, y);
+	}
 
 	public void saveGame()
 	{

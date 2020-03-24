@@ -145,7 +145,7 @@ public abstract class Element implements Serializable
 
 	public abstract FormattedString getFormattedText();
 
-	public abstract void tickUpdate();
+	public abstract void tickUpdate() throws SlickException;
 
 	public abstract void clickEvent() throws SlickException;
 
