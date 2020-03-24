@@ -14,7 +14,7 @@ public abstract class Element implements Serializable
 {
 	private static final long serialVersionUID = -8180400148689092894L;
 
-	public static final Element EMPTY = new EmptyElement();
+	private static final Element EMPTY = new EmptyElement();
 
 	private ElementContainer container;
 
@@ -153,13 +153,18 @@ public abstract class Element implements Serializable
 
 	public abstract void mouseLeft();
 	
+	public static Element getEmpty()
+	{
+		return Element.EMPTY;
+	}
+	
 	private static class EmptyElement extends Element
 	{
 		private static final long serialVersionUID = -8396774274171993181L;
 
 		public EmptyElement()
 		{
-			super(ElementContainer.EMPTY);
+			super(ElementContainer.getEmpty());
 		}
 
 		@Override
@@ -187,7 +192,7 @@ public abstract class Element implements Serializable
 		@Override
 		public FormattedString getFormattedText()
 		{
-			return FormattedString.EMPTY;
+			return FormattedString.getEmpty();
 		}
 
 		@Override

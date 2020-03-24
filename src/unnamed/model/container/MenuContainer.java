@@ -65,7 +65,7 @@ public abstract class MenuContainer extends ElementContainer
 	@Override
 	public void leave() throws SlickException
 	{
-		this.setSelected(SelectableElement.EMPTY);
+		this.setSelected(SelectableElement.getEmpty());
 	}
 
 	@Override

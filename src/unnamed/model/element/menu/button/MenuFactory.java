@@ -61,13 +61,13 @@ public class MenuFactory
 				return new ResumeButton(container);
 				
 			case START_BUTTON:
-				return new StartButton(Field.EMPTY, container);
+				return new StartButton(Field.getEmpty(), container);
 				
 			case SEED_FIELD:
 				return new SeedField(container);
 				
 			default:
-				return MenuElement.EMPTY;
+				return MenuElement.getEmpty();
 		}
 	}
 }

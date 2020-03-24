@@ -9,7 +9,6 @@ import unnamed.model.element.menu.FormattedString;
 
 public interface SelectableElement
 {
-
 	public static final SelectableElement EMPTY = new EmptySelectableElement();
 
 	public abstract boolean isSelected();
@@ -19,6 +18,11 @@ public interface SelectableElement
 	public abstract void deselectEvent();
 
 	public abstract void setSelected(boolean toSelect);
+	
+	public static SelectableElement getEmpty()
+	{
+		return SelectableElement.EMPTY;
+	}
 
 	public static final class EmptySelectableElement extends Element implements SelectableElement
 	{
@@ -26,7 +30,7 @@ public interface SelectableElement
 
 		public EmptySelectableElement()
 		{
-			super(ElementContainer.EMPTY);
+			super(ElementContainer.getEmpty());
 		}
 
 		private boolean isSelected;
@@ -64,7 +68,7 @@ public interface SelectableElement
 		@Override
 		public FormattedString getFormattedText()
 		{
-			return FormattedString.EMPTY;
+			return FormattedString.getEmpty();
 		}
 
 		@Override

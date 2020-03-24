@@ -39,7 +39,7 @@ public class TileFactory
 				return new FountainTile(column, row, type, container);
 				
 			default:
-				return Tile.EMPTY;
+				return Tile.getEmpty();
 		}
 	}
 

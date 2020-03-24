@@ -13,6 +13,8 @@ import unnamed.model.element.menu.FormattedString;
 public class Entity extends Element implements SelectableElement
 {
 	private static final long serialVersionUID = 8553384493664910671L;
+	
+	private static Entity EMPTY;
 
 	private static Image idle;
 //	private static Image down_left;
@@ -38,7 +40,7 @@ public class Entity extends Element implements SelectableElement
 
 	public Entity(ElementContainer container) throws SlickException
 	{
-		this(Tile.EMPTY, container);
+		this(Tile.getEmpty(), container);
 	}
 
 	public Entity(Tile tile, ElementContainer container) throws SlickException
@@ -69,7 +71,7 @@ public class Entity extends Element implements SelectableElement
 	@Override
 	public FormattedString getFormattedText()
 	{
-		return FormattedString.EMPTY;
+		return FormattedString.getEmpty();
 	}
 
 	@Override
@@ -124,7 +126,12 @@ public class Entity extends Element implements SelectableElement
 
 	public static Entity getEmptyEntity() throws SlickException
 	{
-		return new EmptyEntity();
+		if(Entity.EMPTY == null)
+		{
+			Entity.EMPTY = new EmptyEntity();
+		}
+		
+		return Entity.EMPTY;
 	}
 
 	private static class EmptyEntity extends Entity
@@ -133,7 +140,7 @@ public class Entity extends Element implements SelectableElement
 
 		public EmptyEntity() throws SlickException
 		{
-			super(ElementContainer.EMPTY);
+			super(ElementContainer.getEmpty());
 		}
 
 		@Override

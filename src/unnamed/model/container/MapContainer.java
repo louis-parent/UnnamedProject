@@ -42,7 +42,7 @@ public class MapContainer extends ElementContainer
 
 		this.map = new Map(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 		this.adjacentToCorruption = new ArrayList<Tile>();
-		this.fountain = Tile.EMPTY;
+		this.fountain = Tile.getEmpty();
 		
 		this.entity = Entity.getEmptyEntity();
 	}
@@ -240,7 +240,7 @@ public class MapContainer extends ElementContainer
 		tiles.sort((left, right) -> Integer.compare(left.getZ(), right.getZ()));
 		Tile topTile = this.getTopElementAtIn(x, y, tiles);
 		
-		return topTile == null ? Tile.EMPTY : topTile;
+		return topTile == null ? Tile.getEmpty() : topTile;
 	}
 
 	@Override

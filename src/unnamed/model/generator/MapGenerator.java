@@ -51,7 +51,7 @@ public class MapGenerator
 
 		this.map = new Map(numberOfColumns, numberOfRows);
 		this.corruptTiles = new ArrayList<Tile>();
-		this.fountain = Tile.EMPTY;
+		this.fountain = Tile.getEmpty();
 
 		this.rand = GameController.getInstance().getRandom();
 	}

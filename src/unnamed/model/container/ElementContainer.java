@@ -17,7 +17,7 @@ public abstract class ElementContainer implements Serializable
 {
 	private static final long serialVersionUID = 3624575560912630840L;
 
-	public static final ElementContainer EMPTY = new EmptyContainer();
+	private static final ElementContainer EMPTY = new EmptyContainer();
 
 	private Map<Integer, List<Element>> elements;
 	private int maxDepth;
@@ -29,7 +29,7 @@ public abstract class ElementContainer implements Serializable
 		this.elements = new HashMap<Integer, List<Element>>();
 		this.maxDepth = 0;
 
-		this.lastSelected = SelectableElement.EMPTY;
+		this.lastSelected = SelectableElement.getEmpty();
 	}
 
 	public void addAllElements(List<Element> elements) throws SlickException
@@ -93,7 +93,7 @@ public abstract class ElementContainer implements Serializable
 	protected Element getTopElementAt(float x, float y) throws SlickException
 	{
 		Element topElement = this.getTopElementAtIn(x, y, this.getElementsToDraw());
-		return topElement == null ? Element.EMPTY : topElement;
+		return topElement == null ? Element.getEmpty() : topElement;
 	}
 
 	@Nullable
@@ -215,6 +215,11 @@ public abstract class ElementContainer implements Serializable
 
 	public abstract int getWidth();
 
+	public static ElementContainer getEmpty()
+	{
+		return ElementContainer.EMPTY;
+	}
+	
 	private static class EmptyContainer extends ElementContainer
 	{
 		private static final long serialVersionUID = 4766154415901796682L;

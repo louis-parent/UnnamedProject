@@ -21,7 +21,7 @@ public abstract class Tile extends Element implements SelectableElement
 	public static final int FLOATING_OFFSET = 8;
 	private static final int Z_SPACE_BETWEEN_TILES = 10;
 
-	public static final Tile EMPTY = new EmptyTile();
+	private static final Tile EMPTY = new EmptyTile();
 
 	private int column;
 	private int row;
@@ -75,7 +75,7 @@ public abstract class Tile extends Element implements SelectableElement
 	@Override
 	public FormattedString getFormattedText()
 	{
-		return FormattedString.EMPTY;
+		return FormattedString.getEmpty();
 	}
 
 	@Override
@@ -162,13 +162,18 @@ public abstract class Tile extends Element implements SelectableElement
 		this.isSelected = toSelect;
 	}
 
+	public static Tile getEmpty()
+	{
+		return Tile.EMPTY;
+	}
+	
 	private static class EmptyTile extends Tile
 	{
 		private static final long serialVersionUID = 8715601332795760931L;
 
 		public EmptyTile()
 		{
-			super(TileType.FLAT, ElementContainer.EMPTY);
+			super(TileType.FLAT, ElementContainer.getEmpty());
 		}
 
 		@Override

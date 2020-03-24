@@ -4,7 +4,7 @@ import org.newdawn.slick.Color;
 
 public class FormattedString
 {
-	public static FormattedString EMPTY = new FormattedString("");
+	private static FormattedString EMPTY = new FormattedString("");
 	
 	private String text;
 
@@ -93,5 +93,10 @@ public class FormattedString
 	public void append(char c)
 	{
 		this.text += c;
+	}
+	
+	public static FormattedString getEmpty()
+	{
+		return FormattedString.EMPTY;
 	}
 }
