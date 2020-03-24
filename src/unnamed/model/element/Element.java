@@ -152,7 +152,7 @@ public abstract class Element implements Serializable
 	public abstract void pressed();
 
 	public abstract void mouseLeft();
-
+	
 	private static class EmptyElement extends Element
 	{
 		private static final long serialVersionUID = -8396774274171993181L;

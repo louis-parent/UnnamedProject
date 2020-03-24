@@ -6,10 +6,11 @@ import org.newdawn.slick.SlickException;
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
+import unnamed.model.element.SelectableElement;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.menu.FormattedString;
 
-public class Entity extends Element
+public class Entity extends Element implements SelectableElement
 {
 	private static final long serialVersionUID = 8553384493664910671L;
 
@@ -22,6 +23,7 @@ public class Entity extends Element
 //	private static Image right;
 
 	private Tile standingOn;
+	private boolean isSelected;
 
 	public static void init() throws SlickException
 	{
@@ -43,9 +45,10 @@ public class Entity extends Element
 	{
 		super(container);
 		this.standOn(tile);
+		this.isSelected = false;
 	}
 
-	public void standOn(Tile tile) throws SlickException
+	public void standOn(Tile tile)
 	{
 		this.standingOn = tile;
 	}
@@ -88,6 +91,35 @@ public class Entity extends Element
 	@Override
 	public void clickEvent() throws SlickException
 	{
+	}
+
+	public void moveTo(Tile newTile)
+	{
+		this.standOn(newTile);
+	}
+	
+	@Override
+	public boolean isSelected()
+	{
+		return this.isSelected;
+	}
+	
+	@Override
+	public void selectEvent()
+	{
+		
+	}
+	
+	@Override
+	public void deselectEvent()
+	{
+		
+	}
+	
+	@Override
+	public void setSelected(boolean toSelect)
+	{
+		this.isSelected = toSelect;
 	}
 
 	public static Entity getEmptyEntity() throws SlickException

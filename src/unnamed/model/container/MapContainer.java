@@ -205,7 +205,7 @@ public class MapContainer extends ElementContainer
 	}
 
 	@Override
-	public void mouseDragged(int oldx, int oldy, int newx, int newy)
+	public void mouseDragged(float oldx, float oldy, float newx, float newy)
 	{
 		if(this.isMouseWheelActivated)
 		{
@@ -214,26 +214,35 @@ public class MapContainer extends ElementContainer
 	}
 
 	@Override
-	public void wheelPressedAt(int x, int y)
+	public void wheelPressedAt(float x, float y)
 	{
 		this.isMouseWheelActivated = true;
 	}
 
 	@Override
-	public void wheelReleasedAt(int x, int y)
+	public void wheelReleasedAt(float x, float y)
 	{
 		this.isMouseWheelActivated = false;
 	}
 	
 	@Override
-	public void rightClickAt(int x, int y)
+	public void rightClickAt(float x, float y) throws SlickException
 	{
 		if(this.getSelected() instanceof Entity)
 		{
-			
+			((Entity) this.getSelected()).moveTo(this.getTopTileAt(x, y));
 		}
 	}
 	
+	private Tile getTopTileAt(float x, float y) throws SlickException
+	{
+		List<Tile> tiles = new ArrayList<Tile>(this.map);
+		tiles.sort((left, right) -> Integer.compare(left.getZ(), right.getZ()));
+		Tile topTile = this.getTopElementAtIn(x, y, tiles);
+		
+		return topTile == null ? Tile.EMPTY : topTile;
+	}
+
 	@Override
 	public void enter()
 	{

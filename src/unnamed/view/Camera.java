@@ -199,12 +199,9 @@ public class Camera
 		return (previousValue - actualValue) / 2;
 	}
 
-	public void moveFromPointTo(int oldx, int oldy, int newx, int newy)
+	public void moveFromPointTo(float oldx, float oldy, float newx, float newy)
 	{
-		int xChange = oldx - newx;
-		int yChange = oldy - newy;
-
-		this.offsetX -= xChange / this.zoomMultiplicator;
-		this.offsetY -= yChange / this.zoomMultiplicator;
+		this.offsetX -= oldx - newx;
+		this.offsetY -= oldy - newy;
 	}
 }

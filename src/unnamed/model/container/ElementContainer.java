@@ -11,6 +11,7 @@ import org.newdawn.slick.SlickException;
 import unnamed.controller.GameController;
 import unnamed.model.element.Element;
 import unnamed.model.element.SelectableElement;
+import unnamed.util.Nullable;
 
 public abstract class ElementContainer implements Serializable
 {
@@ -91,8 +92,13 @@ public abstract class ElementContainer implements Serializable
 
 	protected Element getTopElementAt(float x, float y) throws SlickException
 	{
-		List<Element> elements = this.getElementsToDraw();
+		Element topElement = this.getTopElementAtIn(x, y, this.getElementsToDraw());
+		return topElement == null ? Element.EMPTY : topElement;
+	}
 
+	@Nullable
+	protected <T extends Element> T getTopElementAtIn(float x, float y, List<T> elements) throws SlickException
+	{
 		for(int i = 0; i < elements.size(); i++)
 		{
 			Element element = elements.get(i);
@@ -110,7 +116,7 @@ public abstract class ElementContainer implements Serializable
 		}
 		else
 		{
-			return Element.EMPTY;
+			return null;
 		}
 	}
 
@@ -151,7 +157,7 @@ public abstract class ElementContainer implements Serializable
 			clicked.click();
 		}
 	}
-	
+
 	public SelectableElement getSelected()
 	{
 		return this.lastSelected;
@@ -172,9 +178,9 @@ public abstract class ElementContainer implements Serializable
 		}
 	}
 
-	public void pressedAt(int x, int y) throws SlickException
+	public void pressedAt(float f, float g) throws SlickException
 	{
-		this.getTopElementAt(x, y).pressed();
+		this.getTopElementAt(f, g).pressed();
 	}
 
 	public void enter() throws SlickException
@@ -197,13 +203,14 @@ public abstract class ElementContainer implements Serializable
 
 	public abstract void keyPressed(int key, char c) throws SlickException;
 
-	public abstract void mouseDragged(int oldx, int oldy, int newx, int newy) throws SlickException;
+	public abstract void mouseDragged(float f, float g, float h, float i) throws SlickException;
 
-	public abstract void wheelPressedAt(int x, int y);
+	public abstract void wheelPressedAt(float f, float g);
 
-	public abstract void wheelReleasedAt(int x, int y);
+	public abstract void wheelReleasedAt(float x, float y);
 
-	public abstract void rightClickAt(int x, int y);
+	public abstract void rightClickAt(float x, float y) throws SlickException;
+
 	public abstract int getHeight();
 
 	public abstract int getWidth();
@@ -213,12 +220,12 @@ public abstract class ElementContainer implements Serializable
 		private static final long serialVersionUID = 4766154415901796682L;
 
 		@Override
-		public void wheelReleasedAt(int x, int y)
+		public void wheelReleasedAt(float x, float y)
 		{
 		}
 
 		@Override
-		public void wheelPressedAt(int x, int y)
+		public void wheelPressedAt(float x, float y)
 		{
 		}
 
@@ -233,7 +240,7 @@ public abstract class ElementContainer implements Serializable
 		}
 
 		@Override
-		public void mouseDragged(int oldx, int oldy, int newx, int newy)
+		public void mouseDragged(float oldx, float oldy, float newx, float newy)
 		{
 		}
 
@@ -246,11 +253,11 @@ public abstract class ElementContainer implements Serializable
 		public void keyPressed(int key, char c)
 		{
 		}
-		
+
 		@Override
-		public void rightClickAt(int x, int y)
+		public void rightClickAt(float x, float y)
 		{
-			
+
 		}
 
 		@Override

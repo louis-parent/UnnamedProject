@@ -59,24 +59,24 @@ public class MouseController implements MouseListener
 	@Override
 	public void mousePressed(int button, int x, int y)
 	{
-		if(button == Input.MOUSE_LEFT_BUTTON)
+		try
 		{
-			try
+			if(button == Input.MOUSE_LEFT_BUTTON)
 			{
 				GameController.getInstance().pressedAt(x, y);
 			}
-			catch(SlickException e)
+			else if(button == Input.MOUSE_MIDDLE_BUTTON)
 			{
-				e.printStackTrace();
+				GameController.getInstance().wheelPressedAt(x, y);
+			}
+			else if(button == Input.MOUSE_RIGHT_BUTTON)
+			{
+				GameController.getInstance().rightClickAt(x, y);
 			}
 		}
-		else if(button == Input.MOUSE_MIDDLE_BUTTON)
+		catch(SlickException e)
 		{
-			GameController.getInstance().wheelPressedAt(x, y);
-		}
-		else if(button == Input.MOUSE_LEFT_BUTTON)
-		{
-			GameController.getInstance().rightClickAt(x, y);
+			e.printStackTrace();
 		}
 	}
 

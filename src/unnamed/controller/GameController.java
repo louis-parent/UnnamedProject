@@ -143,12 +143,9 @@ public class GameController
 
 	public void clickAt(int x, int y)
 	{
-		Camera camera = this.view.getCamera();
-		float zoomMultiplicator = camera.getZoomMultiplicator();
-
 		try
 		{
-			this.currentContainer.clickAt((x / zoomMultiplicator) - camera.getOffsetX(), (y / zoomMultiplicator) - camera.getOffsetY());
+			this.currentContainer.clickAt(this.getTrueMouseX(x), this.getTrueMouseY(y));
 		}
 		catch(SlickException e)
 		{
@@ -156,9 +153,21 @@ public class GameController
 		}
 	}
 
+	private float getTrueMouseY(int y)
+	{
+		Camera camera = this.view.getCamera();
+		return (y / camera.getZoomMultiplicator()) - this.view.getCamera().getOffsetY();
+	}
+
+	private float getTrueMouseX(int x)
+	{
+		Camera camera = this.view.getCamera();
+		return (x / camera.getZoomMultiplicator()) - this.view.getCamera().getOffsetX();
+	}
+
 	public void pressedAt(int x, int y) throws SlickException
 	{
-		this.currentContainer.pressedAt(x, y);
+		this.currentContainer.pressedAt(this.getTrueMouseX(x), this.getTrueMouseY(y));
 	}
 
 	public int getHeight()
@@ -222,22 +231,22 @@ public class GameController
 
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) throws SlickException
 	{
-		this.currentContainer.mouseDragged(oldx, oldy, newx, newy);
+		this.currentContainer.mouseDragged(this.getTrueMouseX(oldx), this.getTrueMouseY(oldy), this.getTrueMouseX(newx), this.getTrueMouseY(newy));
 	}
 
 	public void wheelPressedAt(int x, int y)
 	{
-		this.currentContainer.wheelPressedAt(x, y);
+		this.currentContainer.wheelPressedAt(this.getTrueMouseX(x), this.getTrueMouseY(y));
 	}
 
 	public void wheelReleasedAt(int x, int y)
 	{
-		this.currentContainer.wheelReleasedAt(x, y);
+		this.currentContainer.wheelReleasedAt(this.getTrueMouseX(x), this.getTrueMouseY(y));
 	}
-	
-	public void rightClickAt(int x, int y)
+
+	public void rightClickAt(int x, int y) throws SlickException
 	{
-		this.currentContainer.rightClickAt(x, y);
+		this.currentContainer.rightClickAt(this.getTrueMouseX(x), this.getTrueMouseY(y));
 	}
 
 	public void saveGame()
@@ -275,7 +284,7 @@ public class GameController
 		}
 
 		this.initGame();
-		
+
 		this.playGame();
 	}
 
@@ -287,7 +296,7 @@ public class GameController
 
 		this.mapContainer = new MapContainer();
 		this.mapContainer.init();
-		
+
 		this.playGame();
 	}
 
@@ -299,6 +308,6 @@ public class GameController
 
 	public static boolean saveExists()
 	{
-		return new File(SAVE_FILE).exists();
+		return new File(GameController.SAVE_FILE).exists();
 	}
 }

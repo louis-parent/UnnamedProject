@@ -85,7 +85,7 @@ public abstract class MenuContainer extends ElementContainer
 	}
 
 	@Override
-	public void mouseDragged(int oldx, int oldy, int newx, int newy) throws SlickException
+	public void mouseDragged(float oldx, float oldy, float newx, float newy) throws SlickException
 	{
 		Element oldElement = this.getTopElementAt(oldx, oldy);
 		Element newElement = this.getTopElementAt(newx, newy);
@@ -97,17 +97,17 @@ public abstract class MenuContainer extends ElementContainer
 	}
 
 	@Override
-	public void wheelPressedAt(int x, int y)
+	public void wheelPressedAt(float x, float y)
 	{
 	}
 
 	@Override
-	public void wheelReleasedAt(int x, int y)
+	public void wheelReleasedAt(float x, float y)
 	{
 	}
 	
 	@Override
-	public void rightClickAt(int x, int y)
+	public void rightClickAt(float x, float y)
 	{		
 	}
 

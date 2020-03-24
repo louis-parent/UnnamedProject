@@ -66,7 +66,7 @@ public class CameraController
 		this.camera.setToOrigin();
 	}
 
-	public void mouseWheelDragged(int oldx, int oldy, int newx, int newy)
+	public void mouseWheelDragged(float oldx, float oldy, float newx, float newy)
 	{
 		this.camera.moveFromPointTo(oldx, oldy, newx, newy);
 	}
