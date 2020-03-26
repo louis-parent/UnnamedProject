@@ -66,12 +66,6 @@ public interface SelectableElement
 		}
 
 		@Override
-		public FormattedString getFormattedText()
-		{
-			return FormattedString.getEmpty();
-		}
-
-		@Override
 		public void tickUpdate()
 		{
 		}

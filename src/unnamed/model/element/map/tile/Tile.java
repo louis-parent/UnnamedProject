@@ -1,19 +1,23 @@
 package unnamed.model.element.map.tile;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
 import unnamed.model.element.SelectableElement;
+import unnamed.model.element.map.tile.behaviour.TileBehaviour;
 import unnamed.model.element.menu.FormattedString;
 
-public abstract class Tile extends Element implements SelectableElement
+public class Tile extends Element implements SelectableElement
 {
-	public static final int Y_ENTITY_OFFSET = 29;
-
 	private static final long serialVersionUID = -867365679274168458L;
+
+	private static final Tile EMPTY = new Tile();
+
+	public static final int Y_ENTITY_OFFSET = 29;
 
 	public static final int TILE_WIDTH = 32;
 	public static final int TILE_HEIGHT = 29;
@@ -21,10 +25,13 @@ public abstract class Tile extends Element implements SelectableElement
 	public static final int FLOATING_OFFSET = 8;
 	private static final int Z_SPACE_BETWEEN_TILES = 10;
 
-	private static final Tile EMPTY = new EmptyTile();
+	private static TileImageRegistry registry;
 
 	private int column;
 	private int row;
+
+	private TileBiome biome;
+	private TileBehaviour behaviour;
 
 	private TileType type;
 
@@ -32,20 +39,33 @@ public abstract class Tile extends Element implements SelectableElement
 
 	private boolean isSelected;
 
-	public Tile(TileType type, ElementContainer container)
+	public static void init() throws SlickException
 	{
-		this(0, 0, type, container);
+		Tile.registry = new TileImageRegistry();
 	}
 
-	public Tile(int column, int row, TileType type, ElementContainer container)
+	private Tile()
+	{
+		this(ElementContainer.getEmpty());
+	}
+
+	public Tile(ElementContainer container)
+	{
+		this(0, 0, container);
+	}
+
+	public Tile(int column, int row, ElementContainer container)
 	{
 		super(Tile.getXValueFrom(column, row), Tile.getYValueFrom(row), Tile.getZValueFrom(row), container);
+
 		this.column = column;
 		this.row = row;
 
-		this.type = type;
-		this.spriteVariant = type.getRandomVariant();
+		this.setBiome(TileBiome.GRASS);
 
+		this.type = TileType.FLAT;
+		this.spriteVariant = type.getRandomVariant();
+		
 		this.isSelected = false;
 	}
 
@@ -70,27 +90,41 @@ public abstract class Tile extends Element implements SelectableElement
 		this.setSpriteVariant(type.getRandomVariant());
 	}
 
-	public abstract TileBiome getBiome();
-
-	@Override
-	public FormattedString getFormattedText()
+	public TileBiome getBiome()
 	{
-		return FormattedString.getEmpty();
+		return this.biome;
+	}
+
+	public void setBiome(TileBiome biome)
+	{
+		this.biome = biome;
+		
+		try
+		{
+			this.behaviour = this.biome.getBehaviour().getConstructor(Tile.class).newInstance(this);
+		}
+		catch(InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void tickUpdate()
 	{
+		this.behaviour.tickUpdate();
 	}
 
 	@Override
 	public void pressed()
 	{
+		this.behaviour.pressed();
 	}
 
 	@Override
 	public void mouseLeft()
 	{
+		this.behaviour.mouseLeft();
 	}
 
 	private static float getXValueFrom(int column, int row)
@@ -135,7 +169,7 @@ public abstract class Tile extends Element implements SelectableElement
 	@Override
 	public void clickEvent()
 	{
-
+		this.behaviour.clickEvent();
 	}
 
 	@Override
@@ -148,12 +182,14 @@ public abstract class Tile extends Element implements SelectableElement
 	public void selectEvent()
 	{
 		this.setY(this.getY() - Tile.FLOATING_OFFSET);
+		this.behaviour.selectEvent();
 	}
 
 	@Override
 	public void deselectEvent()
 	{
 		this.setY(this.getY() + Tile.FLOATING_OFFSET);
+		this.behaviour.deselectEvent();
 	}
 
 	@Override
@@ -162,66 +198,14 @@ public abstract class Tile extends Element implements SelectableElement
 		this.isSelected = toSelect;
 	}
 
+	@Override
+	public Image getSprite() throws SlickException
+	{
+		return Tile.registry.get(Tile.registry.getImageNameFor(this.biome, this.type, this.spriteVariant));
+	}
+
 	public static Tile getEmpty()
 	{
 		return Tile.EMPTY;
-	}
-	
-	private static class EmptyTile extends Tile
-	{
-		private static final long serialVersionUID = 8715601332795760931L;
-
-		public EmptyTile()
-		{
-			super(TileType.FLAT, ElementContainer.getEmpty());
-		}
-
-		@Override
-		public Image getSprite() throws SlickException
-		{
-			return PixelisedImage.getEmpty();
-		}
-
-		@Override
-		public TileBiome getBiome()
-		{
-			return TileBiome.GRASS;
-		}
-
-		@Override
-		public boolean isEmpty()
-		{
-			return true;
-		}
-
-		@Override
-		public boolean isSelected()
-		{
-			return false;
-		}
-
-		@Override
-		public void selectEvent()
-		{
-
-		}
-
-		@Override
-		public void deselectEvent()
-		{
-
-		}
-
-		@Override
-		public void setSelected(boolean toSelect)
-		{
-
-		}
-
-		@Override
-		public void clickEvent()
-		{
-
-		}
 	}
 }

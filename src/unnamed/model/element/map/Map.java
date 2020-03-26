@@ -130,7 +130,7 @@ public class Map extends ArrayList<Tile>
 	{
 		return this.getAllAdjacentFor(tile -> tile.getBiome() == biome, tiles);
 	}
-	
+
 	private List<Tile> getAllAdjacentFor(Predicate<Tile> predicate, List<Tile> tiles)
 	{
 		List<Tile> adjacents = this.getAllAdjacent(tiles);
@@ -163,39 +163,38 @@ public class Map extends ArrayList<Tile>
 		return typedAdjacent;
 	}
 
-	public int getRandomTileIndex()
+	public Tile getRandomTile()
 	{
 		Random rand = GameController.getInstance().getRandom();
-		return rand.nextInt(this.size());
+		return this.get(rand.nextInt(this.size()));
 	}
 
-	public int getRandomTileIndex(TileBiome biome)
+	public Tile getRandomTile(TileBiome biome)
 	{
-		return this.getRandomTileIndex(tile -> tile.getBiome() == biome);
+		return this.getRandomTile(tile -> tile.getBiome() == biome);
 	}
 
-	public int getRandomTileIndex(TileType type)
+	public Tile getRandomTile(TileType type)
 	{
-		return this.getRandomTileIndex(tile -> tile.getType() == type);
+		return this.getRandomTile(tile -> tile.getType() == type);
 	}
-	
-	public int getRandomTileIndex(TileBiome biome, TileType type)
+
+	public Tile getRandomTile(TileBiome biome, TileType type)
 	{
-		return this.getRandomTileIndex(tile -> tile.getBiome() == biome && tile.getType() == type);
+		return this.getRandomTile(tile -> (tile.getBiome() == biome) && (tile.getType() == type));
 	}
-	
-	private int getRandomTileIndex(Predicate<Tile> predicate)
+
+	private Tile getRandomTile(Predicate<Tile> predicate)
 	{
-		int selected = -1;
+		Tile selected = Tile.getEmpty();
 
 		boolean found = false;
 
 		while(!found)
 		{
-			selected = getRandomTileIndex();
+			selected = this.getRandomTile();
 
-			Tile tile = this.get(selected);
-			if(predicate.test(tile))
+			if(predicate.test(selected))
 			{
 				found = true;
 			}

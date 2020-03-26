@@ -15,14 +15,13 @@ import unnamed.model.element.entity.Entity;
 import unnamed.model.element.map.Map;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
-import unnamed.model.element.map.tile.TileFactory;
 import unnamed.model.generator.MapGenerator;
 
 public class MapContainer extends ElementContainer
 {
 	private static final long serialVersionUID = -3760401809828849717L;
 
-	private static final int CORRUPTION_SLOWNESS = 1000;
+	private static final int CORRUPTION_SLOWNESS = 500;
 	private static final int NUMBER_OF_COLUMNS = 75;
 	private static final int NUMBER_OF_ROWS = 75;
 
@@ -42,6 +41,7 @@ public class MapContainer extends ElementContainer
 
 		this.map = new Map(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 		this.adjacentToCorruption = new ArrayList<Tile>();
+		
 		this.fountain = Tile.getEmpty();
 		
 		this.entity = Entity.getEmptyEntity();
@@ -99,19 +99,10 @@ public class MapContainer extends ElementContainer
 	{
 		for(Tile tile : toCorrupt)
 		{
-			Tile corrupt = TileFactory.createFrom(TileBiome.CORRUPT, tile);
-			this.replaceTile(tile, corrupt);
+			tile.setBiome(TileBiome.CORRUPT);
 			
-			List<Tile> adjacent = this.map.getAllAdjacentFor(TileBiome.GRASS, Arrays.asList(corrupt));
-			adjacent.removeAll(toCorrupt);
-			this.adjacentToCorruption.addAll(adjacent);
-		}
-	}
-	
-	private void replaceTile(Tile oldElement, Tile newElement) throws SlickException
-	{
-		this.replaceElement(oldElement, newElement);
-		this.map.set(this.map.indexOf(oldElement), newElement);
+			this.adjacentToCorruption.removeAll(toCorrupt);
+		}		
 	}
 	
 	private void checkDefeat() throws SlickException

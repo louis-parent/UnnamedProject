@@ -12,7 +12,6 @@ import unnamed.model.container.ElementContainer;
 import unnamed.model.element.map.Map;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
-import unnamed.model.element.map.tile.TileFactory;
 import unnamed.model.element.map.tile.TileType;
 
 public class MapGenerator
@@ -73,7 +72,7 @@ public class MapGenerator
 		{
 			for(int j = 0; j < this.rows; j++)
 			{
-				this.map.add(TileFactory.create(TileBiome.GRASS, i, j, TileType.FLAT, container));
+				this.map.add(new Tile(i, j, container));
 			}
 		}
 	}
@@ -97,7 +96,7 @@ public class MapGenerator
 	{
 		List<Tile> seeded = new ArrayList<Tile>();
 
-		Tile changedTile = this.map.get(this.map.getRandomTileIndex());
+		Tile changedTile = this.map.getRandomTile();
 
 		changedTile.setType(TileType.MOUNTAIN);
 		seeded.add(changedTile);
@@ -221,16 +220,9 @@ public class MapGenerator
 
 	private Tile seedBiome(TileBiome biome) throws SlickException
 	{
-		return this.setTileAt(this.map.getRandomTileIndex(TileBiome.GRASS), biome);
-	}
+		Tile seed = this.map.getRandomTile(TileBiome.GRASS);
 
-	private Tile setTileAt(int index, TileBiome biome) throws SlickException
-	{
-		Tile oldTile = this.map.get(index);
-		Tile newTile = TileFactory.createFrom(biome, oldTile);
-		this.map.set(index, newTile);
-
-		return newTile;
+		return seed;
 	}
 
 	private void expandWater(Tile seeded) throws SlickException
@@ -260,22 +252,19 @@ public class MapGenerator
 
 	private void replaceTileWithIn(Tile tile, TileBiome biome, List<Tile> toExpand) throws SlickException
 	{
-		if(this.map.contains(tile))
-		{
-			Tile newTile = TileFactory.createFrom(biome, tile);
-			this.map.set(this.map.indexOf(tile), newTile);
-			toExpand.add(newTile);
-		}
+		tile.setBiome(biome);
+		toExpand.add(tile);
+
 	}
 
 	private void generateRiver() throws SlickException
 	{
-		int selectedMountain = this.map.getRandomTileIndex(TileType.MOUNTAIN);
+		Tile selectedMountain = this.map.getRandomTile(TileType.MOUNTAIN);
 
 		List<Integer> previousIndex = this.initListWith(-1);
 		List<Float> distance = this.initListWith(Float.MAX_VALUE);
 
-		this.dijkstra(selectedMountain, previousIndex, distance);
+		this.dijkstra(this.map.indexOf(selectedMountain), previousIndex, distance);
 
 		int closestIndex = previousIndex.get(this.findClosestWater(distance));
 
@@ -397,9 +386,7 @@ public class MapGenerator
 
 		while(previousIndex.get(currentIndex) != currentIndex)
 		{
-			Tile newTile = TileFactory.createFrom(TileBiome.SHALLOW_WATER, this.map.get(currentIndex));
-			this.map.set(currentIndex, newTile);
-
+			this.map.get(currentIndex).setBiome(TileBiome.SHALLOW_WATER);
 			currentIndex = previousIndex.get(currentIndex);
 		}
 
@@ -441,13 +428,17 @@ public class MapGenerator
 
 	private void seedCorruption() throws SlickException
 	{
-		Tile corruptTile = this.setTileAt(this.map.getRandomTileIndex(), TileBiome.CORRUPT);
+		Tile corruptTile = this.map.getRandomTile();
+		
+		corruptTile.setBiome(TileBiome.CORRUPT);
+		
 		this.corruptTiles.add(corruptTile);
 	}
 
 	private void createFountain() throws SlickException
 	{
-		this.fountain = this.setTileAt(this.map.getRandomTileIndex(TileBiome.GRASS, TileType.FLAT), TileBiome.FOUNTAIN);
+		this.fountain = this.map.getRandomTile(TileBiome.GRASS, TileType.FLAT);
+		this.fountain.setBiome(TileBiome.FOUNTAIN);
 	}
 
 	public List<Tile> getCorruptTiles()

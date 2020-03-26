@@ -20,7 +20,7 @@ import unnamed.model.container.MapContainer;
 import unnamed.model.container.PauseMenuContainer;
 import unnamed.model.container.SeedMenuContainer;
 import unnamed.model.element.entity.Entity;
-import unnamed.model.element.map.tile.TileFactory;
+import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.menu.button.MenuFactory;
 import unnamed.view.Camera;
 import unnamed.view.GameWindow;
@@ -302,7 +302,7 @@ public class GameController
 
 	private void initGame() throws SlickException
 	{
-		TileFactory.init();
+		Tile.init();
 		Entity.init();
 	}
 

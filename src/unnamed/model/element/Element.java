@@ -141,9 +141,12 @@ public abstract class Element implements Serializable
 		}
 	}
 
-	public abstract Image getSprite() throws SlickException;
+	public FormattedString getFormattedText()
+	{
+		return FormattedString.getEmpty();
+	}
 
-	public abstract FormattedString getFormattedText();
+	public abstract Image getSprite() throws SlickException;
 
 	public abstract void tickUpdate() throws SlickException;
 
@@ -187,12 +190,6 @@ public abstract class Element implements Serializable
 		@Override
 		public void tickUpdate()
 		{
-		}
-
-		@Override
-		public FormattedString getFormattedText()
-		{
-			return FormattedString.getEmpty();
 		}
 
 		@Override

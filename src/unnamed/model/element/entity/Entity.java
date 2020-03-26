@@ -8,7 +8,7 @@ import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
 import unnamed.model.element.SelectableElement;
 import unnamed.model.element.map.tile.Tile;
-import unnamed.model.element.menu.FormattedString;
+import unnamed.model.element.map.tile.TileBiome;
 
 public class Entity extends Element implements SelectableElement
 {
@@ -26,6 +26,8 @@ public class Entity extends Element implements SelectableElement
 
 	private Tile standingOn;
 	private boolean isSelected;
+
+	private boolean isCharged;
 
 	public static void init() throws SlickException
 	{
@@ -48,6 +50,8 @@ public class Entity extends Element implements SelectableElement
 		super(container);
 		this.standOn(tile);
 		this.isSelected = false;
+		
+		this.isCharged = false;
 	}
 
 	public void standOn(Tile tile)
@@ -69,15 +73,19 @@ public class Entity extends Element implements SelectableElement
 	}
 
 	@Override
-	public FormattedString getFormattedText()
-	{
-		return FormattedString.getEmpty();
-	}
-
-	@Override
 	public void tickUpdate() throws SlickException
 	{
 		this.centerPosToTile();
+		
+		if(this.standingOn.getBiome() == TileBiome.CORRUPT)
+		{
+			this.isCharged = false;
+			this.standingOn.setBiome(TileBiome.GRASS);
+		}
+		else if(this.standingOn.getBiome() == TileBiome.FOUNTAIN)
+		{
+			this.isCharged = true;
+		}
 	}
 
 	@Override

@@ -33,12 +33,6 @@ public abstract class MenuElement extends Element
 	{
 	}
 
-	@Override
-	public FormattedString getFormattedText()
-	{
-		return FormattedString.getEmpty();
-	}
-
 	public static MenuElement getEmpty()
 	{
 		return MenuElement.EMPTY;
