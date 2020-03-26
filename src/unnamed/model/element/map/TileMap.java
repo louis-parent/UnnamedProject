@@ -1,23 +1,26 @@
 package unnamed.model.element.map;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 
 import unnamed.controller.GameController;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
+import unnamed.model.element.map.tile.TileDirection;
 import unnamed.model.element.map.tile.TileType;
 
-public class Map extends ArrayList<Tile>
+public class TileMap extends ArrayList<Tile>
 {
 	private static final long serialVersionUID = 1L;
 
 	private int columns;
 	private int rows;
 
-	public Map(int columns, int rows)
+	public TileMap(int columns, int rows)
 	{
 		super();
 
@@ -37,88 +40,41 @@ public class Map extends ArrayList<Tile>
 		}
 	}
 
-	public List<Tile> getAdjacentTiles(Tile changedTile)
+	public Map<TileDirection, Tile> getAdjacentTilesRaw(Tile tile)
 	{
-		List<Tile> adjacent = new ArrayList<Tile>();
+		Map<TileDirection, Tile> adjacents = new HashMap<TileDirection, Tile>();
 
-		adjacent.addAll(this.getTopTiles(changedTile));
+		adjacents.put(TileDirection.NE, getTileAt((tile.getColumn() + 1) - ((tile.getRow() - 1)  % 2), tile.getRow() - 1));
+		adjacents.put(TileDirection.E, getTileAt(tile.getColumn() + 1, tile.getRow()));
+		adjacents.put(TileDirection.SE, getTileAt((tile.getColumn() + 1) - ((tile.getRow() + 1) % 2), tile.getRow() + 1));
+		adjacents.put(TileDirection.SW, getTileAt(tile.getColumn() - ((tile.getRow() + 1) % 2), tile.getRow() + 1));
+		adjacents.put(TileDirection.W, getTileAt(tile.getColumn() - 1, tile.getRow()));
+		adjacents.put(TileDirection.NW, getTileAt(tile.getColumn() - ((tile.getRow() - 1) % 2), tile.getRow() - 1));
 
-		int listPosition = this.getListPosition(changedTile.getColumn() - 1, changedTile.getRow());
-
-		if(listPosition != -1)
-		{
-			adjacent.add(this.get(listPosition));
-		}
-
-		listPosition = this.getListPosition(changedTile.getColumn() + 1, changedTile.getRow());
-
-		if(listPosition != -1)
-		{
-			adjacent.add(this.get(listPosition));
-		}
-
-		adjacent.addAll(this.getBottomTiles(changedTile));
-
-		return adjacent;
+		return adjacents;
 	}
 
-	private List<Tile> getTopTiles(Tile changedTile)
+	private Tile getTileAt(int x, int y)
 	{
-		return this.getAdjacentTilesForRow(changedTile, -1);
-	}
-
-	private List<Tile> getBottomTiles(Tile changedTile)
-	{
-		return this.getAdjacentTilesForRow(changedTile, 1);
-	}
-
-	private List<Tile> getAdjacentTilesForRow(Tile changedTile, int offset)
-	{
-		List<Tile> row = new ArrayList<Tile>();
-
-		int leftTileValue = changedTile.getColumn() - ((changedTile.getRow() + 1) % 2);
-
-		int listPosition = this.getListPosition(leftTileValue, changedTile.getRow() + offset);
-
+		int listPosition = this.getListPosition(x, y);
+		
 		if(listPosition != -1)
 		{
-			row.add(this.get(listPosition));
+			return this.get(listPosition);
 		}
-
-		listPosition = this.getListPosition(leftTileValue + 1, changedTile.getRow() + offset);
-
-		if(listPosition != -1)
+		else
 		{
-			row.add(this.get(listPosition));
+			return Tile.getEmpty();
 		}
-
-		return row;
 	}
 
 	public int getNumberAdjacentsOf(TileType type, Tile source)
 	{
-		List<Tile> farAdjacents = new ArrayList<Tile>();
+		List<Tile> adjacents = source.getAdjacents();
 
-		int i = source.getColumn();
-		int j = source.getRow();
-
-		this.addToWithCondition(farAdjacents, type, i - 1, j + 2);
-		this.addToWithCondition(farAdjacents, type, i + 1, j + 2);
-		this.addToWithCondition(farAdjacents, type, i - 2, j);
-		this.addToWithCondition(farAdjacents, type, i + 2, j);
-		this.addToWithCondition(farAdjacents, type, i - 1, j - 2);
-		this.addToWithCondition(farAdjacents, type, i + 1, j - 2);
-
-		return farAdjacents.size();
-	}
-
-	private void addToWithCondition(List<Tile> farAdjacents, TileType type, int i, int j)
-	{
-		int position = this.getListPosition(i, j);
-		if((position != -1) && (this.get(position).getType() == type))
-		{
-			farAdjacents.add(this.get(position));
-		}
+		adjacents.removeIf(tile -> tile.getType() != type);
+		
+		return adjacents.size();
 	}
 
 	public List<Tile> getAllAdjacentFor(TileType type, List<Tile> tiles)
@@ -154,10 +110,7 @@ public class Map extends ArrayList<Tile>
 
 		for(Tile tile : tiles)
 		{
-			for(Tile adjacent : this.getAdjacentTiles(tile))
-			{
-				typedAdjacent.add(adjacent);
-			}
+			typedAdjacent.addAll(tile.getAdjacents());
 		}
 
 		return typedAdjacent;

@@ -75,8 +75,6 @@ public class Entity extends Element implements SelectableElement
 	@Override
 	public void tickUpdate() throws SlickException
 	{
-		this.centerPosToTile();
-		
 		if(this.standingOn.getBiome() == TileBiome.CORRUPT)
 		{
 			this.isCharged = false;
@@ -86,6 +84,8 @@ public class Entity extends Element implements SelectableElement
 		{
 			this.isCharged = true;
 		}
+
+		this.centerPosToTile();
 	}
 
 	@Override

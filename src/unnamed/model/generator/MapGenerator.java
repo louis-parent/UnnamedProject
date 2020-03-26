@@ -9,7 +9,7 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
 import unnamed.model.container.ElementContainer;
-import unnamed.model.element.map.Map;
+import unnamed.model.element.map.TileMap;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
 import unnamed.model.element.map.tile.TileType;
@@ -17,9 +17,9 @@ import unnamed.model.element.map.tile.TileType;
 public class MapGenerator
 {
 	private static final int SURFACE_FOR_TERRAIN_DECORATION = 2500;
-	private static final int MOUNTAIN_DIAMETER = 15;
-	private static final int DEFAULT_MOUNTAIN_DENSITY = 1;
-	private static final int MOUNTAIN_CHAIN_DENSITY = 99;
+	private static final int MOUNTAIN_DIAMETER = 12;
+	private static final int DEFAULT_MOUNTAIN_DENSITY = 3;
+	private static final int MOUNTAIN_CHAIN_DENSITY = 50;
 
 	private static final int HILL_DENSITY_IN_MOUNTAIN = 15;
 	private static final int DEFAULT_HILL_DENSITY = 3;
@@ -30,14 +30,14 @@ public class MapGenerator
 
 	private static final double MIN_CONVERGING_PROBABILITY_WATER_DIAMETER = 0.15;
 	private static final int FLAT_WEIGHT_FOR_RIVER = 3;
-	private static final int HILL_WEIGHT_FOR_RIVER = FLAT_WEIGHT_FOR_RIVER * 3;
+	private static final int HILL_WEIGHT_FOR_RIVER = MapGenerator.FLAT_WEIGHT_FOR_RIVER * 3;
 	private static final int MOUNTAIN_WEIGHT_FOR_RIVER = 200000;
 	private static final int RIVER_PER_MOUNTAIN_CHAIN = 4;
 
 	private int columns;
 	private int rows;
 
-	private Map map;
+	private TileMap map;
 
 	private Random rand;
 	private List<Tile> corruptTiles;
@@ -48,14 +48,14 @@ public class MapGenerator
 		this.columns = numberOfColumns;
 		this.rows = numberOfRows;
 
-		this.map = new Map(numberOfColumns, numberOfRows);
+		this.map = new TileMap(numberOfColumns, numberOfRows);
 		this.corruptTiles = new ArrayList<Tile>();
 		this.fountain = Tile.getEmpty();
 
 		this.rand = GameController.getInstance().getRandom();
 	}
 
-	public Map generateMap(ElementContainer container) throws SlickException
+	public TileMap generateMap(ElementContainer container) throws SlickException
 	{
 		this.generateGrassBase(container);
 		this.generateTerrain();
@@ -74,6 +74,16 @@ public class MapGenerator
 			{
 				this.map.add(new Tile(i, j, container));
 			}
+		}
+
+		this.linkAdjacentTiles();
+	}
+
+	private void linkAdjacentTiles()
+	{
+		for(Tile tile : this.map)
+		{
+			tile.setAdjacents(this.map.getAdjacentTilesRaw(tile));
 		}
 	}
 
@@ -101,7 +111,7 @@ public class MapGenerator
 		changedTile.setType(TileType.MOUNTAIN);
 		seeded.add(changedTile);
 
-		List<Tile> adjacentTiles = this.map.getAdjacentTiles(changedTile);
+		List<Tile> adjacentTiles = changedTile.getAdjacents();
 
 		Tile randomAdjacentTile;
 
@@ -175,7 +185,7 @@ public class MapGenerator
 				{
 					prob = MapGenerator.HILL_DENSITY_IN_MOUNTAIN;
 				}
-				else if(this.map.getAllAdjacentFor(TileType.MOUNTAIN, Arrays.asList(tile)).size() > 0)
+				else if(this.map.getNumberAdjacentsOf(TileType.MOUNTAIN, tile) > 0)
 				{
 					prob = MapGenerator.HILL_DENSITY_AROUND_MOUNTAINS;
 				}
@@ -207,7 +217,7 @@ public class MapGenerator
 			this.expandWater(seeded);
 		}
 
-		for(int i = 0; i < (((this.rows * this.columns) / MapGenerator.SURFACE_FOR_TERRAIN_DECORATION) * RIVER_PER_MOUNTAIN_CHAIN); i++)
+		for(int i = 0; i < (((this.rows * this.columns) / MapGenerator.SURFACE_FOR_TERRAIN_DECORATION) * MapGenerator.RIVER_PER_MOUNTAIN_CHAIN); i++)
 		{
 			this.generateRiver();
 		}
@@ -221,6 +231,8 @@ public class MapGenerator
 	private Tile seedBiome(TileBiome biome) throws SlickException
 	{
 		Tile seed = this.map.getRandomTile(TileBiome.GRASS);
+		
+		seed.setBiome(biome);
 
 		return seed;
 	}
@@ -239,22 +251,16 @@ public class MapGenerator
 
 			for(Tile tile : toBuild)
 			{
-				if(this.rand.nextDouble() <= ((1.0 / turnCounter) + MIN_CONVERGING_PROBABILITY_WATER_DIAMETER))
+				if(this.rand.nextDouble() <= ((1.0 / turnCounter) + MapGenerator.MIN_CONVERGING_PROBABILITY_WATER_DIAMETER))
 				{
-					this.replaceTileWithIn(tile, TileBiome.DEEP_WATER, toExpand);
+					tile.setBiome(TileBiome.DEEP_WATER);
+					toExpand.add(tile);
 				}
 
 			}
 
 			turnCounter++;
 		}
-	}
-
-	private void replaceTileWithIn(Tile tile, TileBiome biome, List<Tile> toExpand) throws SlickException
-	{
-		tile.setBiome(biome);
-		toExpand.add(tile);
-
 	}
 
 	private void generateRiver() throws SlickException
@@ -299,7 +305,7 @@ public class MapGenerator
 
 			seen.set(minValueIndex, true);
 
-			for(Tile tile : this.map.getAdjacentTiles(this.map.get(minValueIndex)))
+			for(Tile tile : this.map.get(minValueIndex).getAdjacents())
 			{
 				int current = this.map.indexOf(tile);
 				float newDistance = (currentDistance == Float.MAX_VALUE) || (weight.get(current) == Float.MAX_VALUE) ? Float.MAX_VALUE : currentDistance + weight.get(current);
@@ -325,15 +331,15 @@ public class MapGenerator
 				switch(element.getType())
 				{
 					case FLAT:
-						list.add((this.rand.nextFloat() + 1) * FLAT_WEIGHT_FOR_RIVER);
+						list.add((this.rand.nextFloat() + 1) * MapGenerator.FLAT_WEIGHT_FOR_RIVER);
 						break;
 
 					case HILL:
-						list.add((this.rand.nextFloat() + 1) * HILL_WEIGHT_FOR_RIVER);
+						list.add((this.rand.nextFloat() + 1) * MapGenerator.HILL_WEIGHT_FOR_RIVER);
 						break;
 
 					case MOUNTAIN:
-						list.add((float) MOUNTAIN_WEIGHT_FOR_RIVER);
+						list.add((float) MapGenerator.MOUNTAIN_WEIGHT_FOR_RIVER);
 						break;
 				}
 			}
@@ -370,7 +376,7 @@ public class MapGenerator
 
 		for(int i = 0; i < distance.size(); i++)
 		{
-			if(this.map.get(i).getBiome() == TileBiome.DEEP_WATER && (distance.get(i) <= min))
+			if((this.map.get(i).getBiome() == TileBiome.DEEP_WATER) && (distance.get(i) <= min))
 			{
 				min = distance.get(i);
 				pos = i;
@@ -420,7 +426,8 @@ public class MapGenerator
 			{
 				if(this.rand.nextInt(100) < MapGenerator.DESERT_SPREAD_PERCENTAGE)
 				{
-					this.replaceTileWithIn(adjacent, TileBiome.DESERT, desert);
+					adjacent.setBiome(TileBiome.DESERT);
+					desert.add(adjacent);
 				}
 			}
 		}
@@ -429,9 +436,9 @@ public class MapGenerator
 	private void seedCorruption() throws SlickException
 	{
 		Tile corruptTile = this.map.getRandomTile();
-		
+
 		corruptTile.setBiome(TileBiome.CORRUPT);
-		
+
 		this.corruptTiles.add(corruptTile);
 	}
 

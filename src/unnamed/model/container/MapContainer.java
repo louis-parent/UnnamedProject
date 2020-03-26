@@ -12,7 +12,7 @@ import org.newdawn.slick.SlickException;
 import unnamed.controller.CameraController;
 import unnamed.controller.GameController;
 import unnamed.model.element.entity.Entity;
-import unnamed.model.element.map.Map;
+import unnamed.model.element.map.TileMap;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
 import unnamed.model.generator.MapGenerator;
@@ -21,14 +21,12 @@ public class MapContainer extends ElementContainer
 {
 	private static final long serialVersionUID = -3760401809828849717L;
 
-	private static final int CORRUPTION_SLOWNESS = 500;
 	private static final int NUMBER_OF_COLUMNS = 75;
 	private static final int NUMBER_OF_ROWS = 75;
 
 	private boolean isMouseWheelActivated;
 
-	private Map map;
-	private List<Tile> adjacentToCorruption;
+	private TileMap map;
 	private Tile fountain;
 	
 	private Entity entity;
@@ -39,8 +37,7 @@ public class MapContainer extends ElementContainer
 
 		this.isMouseWheelActivated = false;
 
-		this.map = new Map(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
-		this.adjacentToCorruption = new ArrayList<Tile>();
+		this.map = new TileMap(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 		
 		this.fountain = Tile.getEmpty();
 		
@@ -52,7 +49,6 @@ public class MapContainer extends ElementContainer
 	{
 		MapGenerator generator = new MapGenerator(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 		this.map.addAll(generator.generateMap(this));
-		this.adjacentToCorruption.addAll(this.map.getAllAdjacentFor(TileBiome.GRASS, generator.getCorruptTiles()));
 		this.fountain = generator.getFountain();
 		
 		for(Tile tile : this.map)
@@ -67,55 +63,11 @@ public class MapContainer extends ElementContainer
 	@Override
 	public void tickUpdate() throws SlickException
 	{
-		this.spreadCorruption();
-		this.checkDefeat();
 		this.tickUpdateAllTiles();
 		this.entity.tickUpdate();
 	}
-	
-	private void spreadCorruption() throws SlickException
-	{
-		Set<Tile> toCorrupt = this.selectTilesToCorrupt();
-		this.corruptSelectedTiles(toCorrupt);
-	}
-	
-	private Set<Tile> selectTilesToCorrupt()
-	{
-		Set<Tile> toCorrupt = new HashSet<Tile>();
-		
-		for(Tile tile : this.adjacentToCorruption)
-		{
-			if((GameController.getInstance().getRandom().nextInt(MapContainer.CORRUPTION_SLOWNESS) == 0))
-			{
-				toCorrupt.add(tile);
-			}
-		}
-		
-		this.adjacentToCorruption.removeAll(toCorrupt);
-		return toCorrupt;
-	}
-	
-	private void corruptSelectedTiles(Set<Tile> toCorrupt) throws SlickException
-	{
-		for(Tile tile : toCorrupt)
-		{
-			tile.setBiome(TileBiome.CORRUPT);
-			
-			this.adjacentToCorruption.removeAll(toCorrupt);
-		}		
-	}
-	
-	private void checkDefeat() throws SlickException
-	{
-		boolean isDefeat = !this.map.getAllAdjacentFor(TileBiome.CORRUPT, Arrays.asList(this.fountain)).isEmpty();
-		
-		if(isDefeat)
-		{
-			GameController.getInstance().loseGame();
-		}
-	}
 
-	private void tickUpdateAllTiles()
+	private void tickUpdateAllTiles() throws SlickException
 	{
 		for(Tile tile : this.map)
 		{

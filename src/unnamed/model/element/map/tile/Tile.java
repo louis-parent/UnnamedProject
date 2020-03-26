@@ -1,6 +1,10 @@
 package unnamed.model.element.map.tile;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -9,13 +13,20 @@ import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
 import unnamed.model.element.SelectableElement;
 import unnamed.model.element.map.tile.behaviour.TileBehaviour;
-import unnamed.model.element.menu.FormattedString;
 
 public class Tile extends Element implements SelectableElement
 {
 	private static final long serialVersionUID = -867365679274168458L;
 
-	private static final Tile EMPTY = new Tile();
+	private static final Tile EMPTY = new Tile() {
+		private static final long serialVersionUID = -8890671615849566986L;
+
+		@Override
+		public boolean isEmpty()
+		{
+			return true;
+		}
+	};
 
 	public static final int Y_ENTITY_OFFSET = 29;
 
@@ -26,6 +37,8 @@ public class Tile extends Element implements SelectableElement
 	private static final int Z_SPACE_BETWEEN_TILES = 10;
 
 	private static TileImageRegistry registry;
+
+	private Map<TileDirection, Tile> adjacents;
 
 	private int column;
 	private int row;
@@ -58,14 +71,16 @@ public class Tile extends Element implements SelectableElement
 	{
 		super(Tile.getXValueFrom(column, row), Tile.getYValueFrom(row), Tile.getZValueFrom(row), container);
 
+		this.setAdjacents(new HashMap<TileDirection, Tile>());
+
 		this.column = column;
 		this.row = row;
 
 		this.setBiome(TileBiome.GRASS);
 
 		this.type = TileType.FLAT;
-		this.spriteVariant = type.getRandomVariant();
-		
+		this.spriteVariant = this.type.getRandomVariant();
+
 		this.isSelected = false;
 	}
 
@@ -98,9 +113,14 @@ public class Tile extends Element implements SelectableElement
 	public void setBiome(TileBiome biome)
 	{
 		this.biome = biome;
-		
+
 		try
 		{
+			if(this.behaviour != null)
+			{
+				this.behaviour.cleanUp();
+			}
+			
 			this.behaviour = this.biome.getBehaviour().getConstructor(Tile.class).newInstance(this);
 		}
 		catch(InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e)
@@ -109,8 +129,27 @@ public class Tile extends Element implements SelectableElement
 		}
 	}
 
+	public Tile getAdjacentFrom(TileDirection direction)
+	{
+		return this.adjacents.get(direction);
+	}
+
+	public List<Tile> getAdjacents()
+	{
+		ArrayList<Tile> adjacents = new ArrayList<Tile>(this.adjacents.values());
+
+		adjacents.removeIf(tile -> tile.isEmpty());
+
+		return adjacents;
+	}
+
+	public void setAdjacents(Map<TileDirection, Tile> adjacents)
+	{
+		this.adjacents = adjacents;
+	}
+
 	@Override
-	public void tickUpdate()
+	public void tickUpdate() throws SlickException
 	{
 		this.behaviour.tickUpdate();
 	}

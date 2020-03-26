@@ -47,4 +47,10 @@ public class DefaultBehaviour implements TileBehaviour
 	{
 
 	}
+
+	@Override
+	public void cleanUp()
+	{
+		
+	}
 }

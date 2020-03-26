@@ -2,6 +2,7 @@ package unnamed.model.element.map.tile;
 
 import unnamed.model.element.map.tile.behaviour.CorruptBehaviour;
 import unnamed.model.element.map.tile.behaviour.DefaultBehaviour;
+import unnamed.model.element.map.tile.behaviour.FountainBehaviour;
 import unnamed.model.element.map.tile.behaviour.TileBehaviour;
 
 public enum TileBiome
@@ -11,7 +12,7 @@ public enum TileBiome
 	DEEP_WATER(DefaultBehaviour.class),
 	DESERT(DefaultBehaviour.class),
 	CORRUPT(CorruptBehaviour.class),
-	FOUNTAIN(DefaultBehaviour.class);
+	FOUNTAIN(FountainBehaviour.class);
 
 	private final Class<? extends TileBehaviour> behaviourClass;
 
