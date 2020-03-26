@@ -5,7 +5,6 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
-import unnamed.model.element.menu.FormattedString;
 
 public interface SelectableElement
 {
@@ -18,8 +17,8 @@ public interface SelectableElement
 	public abstract void deselectEvent();
 
 	public abstract void setSelected(boolean toSelect);
-	
-	public static SelectableElement getEmpty()
+
+	public static SelectableElement getEmptySelectable()
 	{
 		return SelectableElement.EMPTY;
 	}
@@ -30,7 +29,7 @@ public interface SelectableElement
 
 		public EmptySelectableElement()
 		{
-			super(ElementContainer.getEmpty());
+			super(ElementContainer.getEmptyElement());
 		}
 
 		private boolean isSelected;
@@ -62,7 +61,7 @@ public interface SelectableElement
 		@Override
 		public Image getSprite() throws SlickException
 		{
-			return PixelisedImage.getEmpty();
+			return PixelisedImage.getEmptyPixelisedImage();
 		}
 
 		@Override

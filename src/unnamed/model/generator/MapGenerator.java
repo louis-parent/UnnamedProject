@@ -1,7 +1,6 @@
 package unnamed.model.generator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -43,14 +42,14 @@ public class MapGenerator
 	private List<Tile> corruptTiles;
 	private Tile fountain;
 
-	public MapGenerator(int numberOfColumns, int numberOfRows)
+	public MapGenerator(int numberOfColumns, int numberOfRows) throws SlickException
 	{
 		this.columns = numberOfColumns;
 		this.rows = numberOfRows;
 
 		this.map = new TileMap(numberOfColumns, numberOfRows);
 		this.corruptTiles = new ArrayList<Tile>();
-		this.fountain = Tile.getEmpty();
+		this.fountain = Tile.getEmptyTile();
 
 		this.rand = GameController.getInstance().getRandom();
 	}
@@ -66,7 +65,7 @@ public class MapGenerator
 		return this.map;
 	}
 
-	private void generateGrassBase(ElementContainer container)
+	private void generateGrassBase(ElementContainer container) throws SlickException
 	{
 		for(int i = 0; i < this.columns; i++)
 		{
@@ -79,7 +78,7 @@ public class MapGenerator
 		this.linkAdjacentTiles();
 	}
 
-	private void linkAdjacentTiles()
+	private void linkAdjacentTiles() throws SlickException
 	{
 		for(Tile tile : this.map)
 		{
@@ -231,7 +230,7 @@ public class MapGenerator
 	private Tile seedBiome(TileBiome biome) throws SlickException
 	{
 		Tile seed = this.map.getRandomTile(TileBiome.GRASS);
-		
+
 		seed.setBiome(biome);
 
 		return seed;

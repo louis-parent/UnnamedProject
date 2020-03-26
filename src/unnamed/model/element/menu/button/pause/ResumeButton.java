@@ -11,10 +11,10 @@ import unnamed.model.element.menu.button.Button;
 public class ResumeButton extends Button
 {
 	private static final long serialVersionUID = -1805146767265116468L;
-	
+
 	private static Image released;
 	private static Image pressed;
-	
+
 	public ResumeButton(ElementContainer container)
 	{
 		super(container);

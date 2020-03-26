@@ -23,9 +23,9 @@ public class MenuFactory
 	public static final String SAVE_BUTTON = "save";
 	public static final String RESUME_BUTTON = "resume";
 	public static final String START_BUTTON = "start";
-	
+
 	public static final String SEED_FIELD = "seed";
-	
+
 	public static void init() throws SlickException
 	{
 		NewButton.init();
@@ -37,37 +37,37 @@ public class MenuFactory
 		StartButton.init();
 		Field.init();
 	}
-	
+
 	public static MenuElement create(String type, ElementContainer container)
 	{
 		switch(type)
 		{
 			case NEW_BUTTON:
 				return new NewButton(container);
-				
+
 			case LOAD_BUTTON:
 				return new LoadButton(container);
-				
+
 			case QUIT_BUTTON:
 				return new QuitButton(container);
-				
+
 			case MENU_BUTTON:
 				return new MenuButton(container);
-				
+
 			case SAVE_BUTTON:
 				return new SaveButton(container);
-				
+
 			case RESUME_BUTTON:
 				return new ResumeButton(container);
-				
+
 			case START_BUTTON:
-				return new StartButton(Field.getEmpty(), container);
-				
+				return new StartButton(Field.getEmptyField(), container);
+
 			case SEED_FIELD:
 				return new SeedField(container);
-				
+
 			default:
-				return MenuElement.getEmpty();
+				return MenuElement.getEmptyMenuElement();
 		}
 	}
 }

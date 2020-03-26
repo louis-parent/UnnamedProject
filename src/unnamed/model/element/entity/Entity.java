@@ -13,7 +13,7 @@ import unnamed.model.element.map.tile.TileBiome;
 public class Entity extends Element implements SelectableElement
 {
 	private static final long serialVersionUID = 8553384493664910671L;
-	
+
 	private static Entity EMPTY;
 
 	private static Image idle;
@@ -42,7 +42,7 @@ public class Entity extends Element implements SelectableElement
 
 	public Entity(ElementContainer container) throws SlickException
 	{
-		this(Tile.getEmpty(), container);
+		this(Tile.getEmptyTile(), container);
 	}
 
 	public Entity(Tile tile, ElementContainer container) throws SlickException
@@ -50,8 +50,10 @@ public class Entity extends Element implements SelectableElement
 		super(container);
 		this.standOn(tile);
 		this.isSelected = false;
-		
+
 		this.isCharged = false;
+
+		this.getContainer().addElementToTickUpdate(this);
 	}
 
 	public void standOn(Tile tile)
@@ -107,25 +109,25 @@ public class Entity extends Element implements SelectableElement
 	{
 		this.standOn(newTile);
 	}
-	
+
 	@Override
 	public boolean isSelected()
 	{
 		return this.isSelected;
 	}
-	
+
 	@Override
 	public void selectEvent()
 	{
-		
+
 	}
-	
+
 	@Override
 	public void deselectEvent()
 	{
-		
+
 	}
-	
+
 	@Override
 	public void setSelected(boolean toSelect)
 	{
@@ -138,7 +140,7 @@ public class Entity extends Element implements SelectableElement
 		{
 			Entity.EMPTY = new EmptyEntity();
 		}
-		
+
 		return Entity.EMPTY;
 	}
 
@@ -148,7 +150,7 @@ public class Entity extends Element implements SelectableElement
 
 		public EmptyEntity() throws SlickException
 		{
-			super(ElementContainer.getEmpty());
+			super(ElementContainer.getEmptyElement());
 		}
 
 		@Override

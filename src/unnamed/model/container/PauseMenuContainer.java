@@ -17,15 +17,10 @@ public class PauseMenuContainer extends MenuContainer
 	}
 
 	@Override
-	public void tickUpdate()
-	{
-	}
-
-	@Override
 	public void keyPressed(int key, char c) throws SlickException
 	{
 		super.keyPressed(key, c);
-		
+
 		switch(key)
 		{
 			case Input.KEY_ESCAPE:

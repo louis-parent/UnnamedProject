@@ -11,7 +11,7 @@ import unnamed.model.element.menu.button.Button;
 public class MenuButton extends Button
 {
 	private static final long serialVersionUID = 7693211564246790703L;
-	
+
 	private static Image released;
 	private static Image pressed;
 
@@ -19,7 +19,7 @@ public class MenuButton extends Button
 	{
 		super(container);
 	}
-	
+
 	public MenuButton(int x, int y, int z, ElementContainer container)
 	{
 		super(x, y, z, container);

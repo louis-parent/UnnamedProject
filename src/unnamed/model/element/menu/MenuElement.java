@@ -10,7 +10,7 @@ import unnamed.model.element.Element;
 public abstract class MenuElement extends Element
 {
 	private static final long serialVersionUID = 183177966778498672L;
-	
+
 	private static final MenuElement EMPTY = new EmptyMenuElement();
 
 	public MenuElement(float x, float y, int z, ElementContainer container)
@@ -33,24 +33,24 @@ public abstract class MenuElement extends Element
 	{
 	}
 
-	public static MenuElement getEmpty()
+	public static MenuElement getEmptyMenuElement()
 	{
 		return MenuElement.EMPTY;
 	}
-	
+
 	private static class EmptyMenuElement extends MenuElement
 	{
 		private static final long serialVersionUID = -5224604040164389541L;
 
 		public EmptyMenuElement()
 		{
-			super(ElementContainer.getEmpty());
+			super(ElementContainer.getEmptyElement());
 		}
 
 		@Override
 		public Image getSprite() throws SlickException
 		{
-			return PixelisedImage.getEmpty();
+			return PixelisedImage.getEmptyPixelisedImage();
 		}
 
 		@Override

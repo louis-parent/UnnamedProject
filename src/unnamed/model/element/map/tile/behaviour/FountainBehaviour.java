@@ -21,7 +21,7 @@ public class FountainBehaviour implements TileBehaviour
 	@Override
 	public void tickUpdate() throws SlickException
 	{
-		this.checkDefeat();
+
 	}
 
 	private void checkDefeat() throws SlickException
@@ -70,5 +70,11 @@ public class FountainBehaviour implements TileBehaviour
 	public void cleanUp()
 	{
 
+	}
+
+	@Override
+	public void informNeighbourChange() throws SlickException
+	{
+		this.checkDefeat();
 	}
 }

@@ -5,8 +5,8 @@ import org.newdawn.slick.SlickException;
 
 public class PixelisedImage extends Image
 {
-	private static PixelisedImage EMPTY;	
-	
+	private static PixelisedImage EMPTY;
+
 	public PixelisedImage(String path) throws SlickException
 	{
 		super(path);
@@ -17,14 +17,14 @@ public class PixelisedImage extends Image
 	{
 		super("assets/empty.png");
 	}
-	
-	public static Image getEmpty() throws SlickException
+
+	public static Image getEmptyPixelisedImage() throws SlickException
 	{
 		if(PixelisedImage.EMPTY == null)
 		{
 			PixelisedImage.EMPTY = new PixelisedImage();
 		}
-		
+
 		return PixelisedImage.EMPTY;
 	}
 }

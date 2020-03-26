@@ -68,7 +68,7 @@ public class GameController
 
 		this.cameraController = new CameraController(this.view.getCamera());
 
-		this.currentContainer = ElementContainer.getEmpty();
+		this.currentContainer = ElementContainer.getEmptyElement();
 		this.mainMenuContainer = new MainMenuContainer();
 		this.pauseMenuContainer = new PauseMenuContainer();
 		this.seedMenuContainer = new SeedMenuContainer();

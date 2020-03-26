@@ -11,7 +11,7 @@ import unnamed.model.element.menu.button.Button;
 public class QuitButton extends Button
 {
 	private static final long serialVersionUID = -904106979096792682L;
-	
+
 	private static Image released;
 	private static Image pressed;
 
@@ -19,7 +19,7 @@ public class QuitButton extends Button
 	{
 		super(container);
 	}
-	
+
 	public QuitButton(int x, int y, int z, ElementContainer container)
 	{
 		super(x, y, z, container);

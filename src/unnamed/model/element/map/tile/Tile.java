@@ -18,15 +18,7 @@ public class Tile extends Element implements SelectableElement
 {
 	private static final long serialVersionUID = -867365679274168458L;
 
-	private static final Tile EMPTY = new Tile() {
-		private static final long serialVersionUID = -8890671615849566986L;
-
-		@Override
-		public boolean isEmpty()
-		{
-			return true;
-		}
-	};
+	private static Tile EMPTY;
 
 	public static final int Y_ENTITY_OFFSET = 29;
 
@@ -57,17 +49,17 @@ public class Tile extends Element implements SelectableElement
 		Tile.registry = new TileImageRegistry();
 	}
 
-	private Tile()
+	private Tile() throws SlickException
 	{
-		this(ElementContainer.getEmpty());
+		this(ElementContainer.getEmptyElement());
 	}
 
-	public Tile(ElementContainer container)
+	public Tile(ElementContainer container) throws SlickException
 	{
 		this(0, 0, container);
 	}
 
-	public Tile(int column, int row, ElementContainer container)
+	public Tile(int column, int row, ElementContainer container) throws SlickException
 	{
 		super(Tile.getXValueFrom(column, row), Tile.getYValueFrom(row), Tile.getZValueFrom(row), container);
 
@@ -110,7 +102,7 @@ public class Tile extends Element implements SelectableElement
 		return this.biome;
 	}
 
-	public void setBiome(TileBiome biome)
+	public void setBiome(TileBiome biome) throws SlickException
 	{
 		this.biome = biome;
 
@@ -120,13 +112,28 @@ public class Tile extends Element implements SelectableElement
 			{
 				this.behaviour.cleanUp();
 			}
-			
+
 			this.behaviour = this.biome.getBehaviour().getConstructor(Tile.class).newInstance(this);
+
+			this.informAllNeighboursOfChange();
 		}
 		catch(InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	private void informAllNeighboursOfChange() throws SlickException
+	{
+		for(Tile tile : this.getAdjacents())
+		{
+			tile.informNeighbourChange();
+		}
+	}
+
+	public void informNeighbourChange() throws SlickException
+	{
+		this.behaviour.informNeighbourChange();
 	}
 
 	public Tile getAdjacentFrom(TileDirection direction)
@@ -243,8 +250,22 @@ public class Tile extends Element implements SelectableElement
 		return Tile.registry.get(Tile.registry.getImageNameFor(this.biome, this.type, this.spriteVariant));
 	}
 
-	public static Tile getEmpty()
+	public static Tile getEmptyTile() throws SlickException
 	{
+		if(Tile.EMPTY == null)
+		{
+			Tile.EMPTY = new Tile() {
+
+				private static final long serialVersionUID = -7401166447770248461L;
+
+				@Override
+				public boolean isEmpty()
+				{
+					return true;
+				}
+			};
+		}
+
 		return Tile.EMPTY;
 	}
 }

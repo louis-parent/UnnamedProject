@@ -14,15 +14,15 @@ import unnamed.model.element.menu.MenuElement;
 public abstract class Field extends MenuElement implements SelectableElement
 {
 	private static final long serialVersionUID = -174723088589298269L;
-	
+
 	private static final Field EMPTY = new EmptyField();
-	
+
 	private static Image background;
-	
+
 	private FormattedString text;
-	
+
 	private boolean isSelected;
-	
+
 	public static void init() throws SlickException
 	{
 		Field.background = new PixelisedImage("assets/menu/field_background.png");
@@ -32,12 +32,12 @@ public abstract class Field extends MenuElement implements SelectableElement
 	{
 		this("", container);
 	}
-	
+
 	public Field(String defaultText, ElementContainer container)
 	{
 		super(container);
 		this.text = new FormattedString(defaultText, Color.white, 25, 7, 3);
-		
+
 		this.isSelected = false;
 	}
 
@@ -46,12 +46,12 @@ public abstract class Field extends MenuElement implements SelectableElement
 	{
 		return Field.background;
 	}
-	
+
 	public void setText(String text)
 	{
 		this.text.setText(text);
 	}
-	
+
 	@Override
 	public FormattedString getFormattedText()
 	{
@@ -66,7 +66,7 @@ public abstract class Field extends MenuElement implements SelectableElement
 	@Override
 	public void keyPressed(int key, char c)
 	{
-		if(key == Input.KEY_BACK && !this.text.isEmpty())
+		if((key == Input.KEY_BACK) && !this.text.isEmpty())
 		{
 			this.text.substring(0, this.text.length() - 1);
 		}
@@ -79,7 +79,7 @@ public abstract class Field extends MenuElement implements SelectableElement
 	@Override
 	public void clickEvent()
 	{
-		
+
 	}
 
 	@Override
@@ -91,13 +91,13 @@ public abstract class Field extends MenuElement implements SelectableElement
 	@Override
 	public void selectEvent()
 	{
-		
+
 	}
 
 	@Override
 	public void deselectEvent()
 	{
-		
+
 	}
 
 	@Override
@@ -105,21 +105,21 @@ public abstract class Field extends MenuElement implements SelectableElement
 	{
 		this.isSelected = toSelect;
 	}
-	
+
 	public abstract boolean isValid(char c);
-	
-	public static Field getEmpty()
+
+	public static Field getEmptyField()
 	{
 		return Field.EMPTY;
 	}
-	
+
 	private static class EmptyField extends Field
 	{
 		private static final long serialVersionUID = 3752879867259651027L;
 
 		public EmptyField()
 		{
-			super(ElementContainer.getEmpty());
+			super(ElementContainer.getEmptyElement());
 		}
 
 		@Override
@@ -127,7 +127,7 @@ public abstract class Field extends MenuElement implements SelectableElement
 		{
 			return false;
 		}
-		
+
 		@Override
 		public boolean isEmpty()
 		{
@@ -157,6 +157,6 @@ public abstract class Field extends MenuElement implements SelectableElement
 		{
 
 		}
-		
+
 	}
 }

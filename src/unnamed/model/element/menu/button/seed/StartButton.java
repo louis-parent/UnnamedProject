@@ -12,10 +12,10 @@ import unnamed.model.element.menu.field.Field;
 public class StartButton extends FieldValidator
 {
 	private static final long serialVersionUID = -3868409855098130358L;
-	
+
 	private static Image released;
 	private static Image pressed;
-	
+
 	public StartButton(Field field, ElementContainer container)
 	{
 		super(field, container);
@@ -31,7 +31,7 @@ public class StartButton extends FieldValidator
 	protected void action(String value) throws SlickException
 	{
 		long seed;
-		
+
 		if(value.isEmpty())
 		{
 			seed = GameController.getInstance().getRandom().nextLong();
@@ -40,21 +40,21 @@ public class StartButton extends FieldValidator
 		{
 			seed = this.seedToLong(value);
 		}
-		
+
 		GameController.getInstance().createGame(seed);
 	}
 
 	private long seedToLong(String value)
 	{
 		long result = 0;
-		
+
 		for(int i = 0; i < value.length(); i++)
 		{
 			int currentByte = 8 - (i % 8);
 			long c = value.charAt(i) % 255;
-			c = c << (currentByte - 1) * 8;
-			
-			if((i / 8) % 2 == 0)
+			c = c << ((currentByte - 1) * 8);
+
+			if(((i / 8) % 2) == 0)
 			{
 				result |= c;
 			}
@@ -63,7 +63,7 @@ public class StartButton extends FieldValidator
 				result &= c;
 			}
 		}
-		
+
 		return result;
 	}
 

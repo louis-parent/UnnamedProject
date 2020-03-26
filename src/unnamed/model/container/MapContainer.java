@@ -1,10 +1,7 @@
 package unnamed.model.container;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -14,7 +11,6 @@ import unnamed.controller.GameController;
 import unnamed.model.element.entity.Entity;
 import unnamed.model.element.map.TileMap;
 import unnamed.model.element.map.tile.Tile;
-import unnamed.model.element.map.tile.TileBiome;
 import unnamed.model.generator.MapGenerator;
 
 public class MapContainer extends ElementContainer
@@ -28,7 +24,7 @@ public class MapContainer extends ElementContainer
 
 	private TileMap map;
 	private Tile fountain;
-	
+
 	private Entity entity;
 
 	public MapContainer() throws SlickException
@@ -38,9 +34,9 @@ public class MapContainer extends ElementContainer
 		this.isMouseWheelActivated = false;
 
 		this.map = new TileMap(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
-		
-		this.fountain = Tile.getEmpty();
-		
+
+		this.fountain = Tile.getEmptyTile();
+
 		this.entity = Entity.getEmptyEntity();
 	}
 
@@ -50,29 +46,14 @@ public class MapContainer extends ElementContainer
 		MapGenerator generator = new MapGenerator(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 		this.map.addAll(generator.generateMap(this));
 		this.fountain = generator.getFountain();
-		
+
 		for(Tile tile : this.map)
 		{
 			this.addElement(tile);
 		}
-		
+
 		this.entity = new Entity(this.fountain, this);
 		this.addElement(this.entity);
-	}
-
-	@Override
-	public void tickUpdate() throws SlickException
-	{
-		this.tickUpdateAllTiles();
-		this.entity.tickUpdate();
-	}
-
-	private void tickUpdateAllTiles() throws SlickException
-	{
-		for(Tile tile : this.map)
-		{
-			tile.tickUpdate();
-		}
 	}
 
 	@Override
@@ -167,7 +148,7 @@ public class MapContainer extends ElementContainer
 	{
 		this.isMouseWheelActivated = false;
 	}
-	
+
 	@Override
 	public void rightClickAt(float x, float y) throws SlickException
 	{
@@ -176,14 +157,14 @@ public class MapContainer extends ElementContainer
 			((Entity) this.getSelected()).moveTo(this.getTopTileAt(x, y));
 		}
 	}
-	
+
 	private Tile getTopTileAt(float x, float y) throws SlickException
 	{
 		List<Tile> tiles = new ArrayList<Tile>(this.map);
 		tiles.sort((left, right) -> Integer.compare(left.getZ(), right.getZ()));
 		Tile topTile = this.getTopElementAtIn(x, y, tiles);
-		
-		return topTile == null ? Tile.getEmpty() : topTile;
+
+		return topTile == null ? Tile.getEmptyTile() : topTile;
 	}
 
 	@Override

@@ -5,11 +5,11 @@ import org.newdawn.slick.Color;
 public class FormattedString
 {
 	private static FormattedString EMPTY = new FormattedString("");
-	
+
 	private String text;
 
 	private Color color;
-	
+
 	private int maxLength;
 
 	private int offsetX;
@@ -33,7 +33,7 @@ public class FormattedString
 	{
 		return this.text;
 	}
-	
+
 	public String getFormatedText()
 	{
 		int minLength = this.length() < this.maxLength ? this.length() : this.maxLength;
@@ -74,28 +74,28 @@ public class FormattedString
 	{
 		this.offsetY = offsetY;
 	}
-	
+
 	public boolean isEmpty()
 	{
 		return this.text.isEmpty();
 	}
-	
+
 	public int length()
 	{
 		return this.text.length();
 	}
-	
+
 	public void substring(int begin, int end)
 	{
 		this.text = this.text.substring(begin, end);
 	}
-	
+
 	public void append(char c)
 	{
 		this.text += c;
 	}
-	
-	public static FormattedString getEmpty()
+
+	public static FormattedString getEmptyFormattedString()
 	{
 		return FormattedString.EMPTY;
 	}

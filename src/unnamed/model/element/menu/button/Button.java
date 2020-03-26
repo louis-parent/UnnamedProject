@@ -113,6 +113,8 @@ public abstract class Button extends MenuElement
 	}
 
 	protected abstract Image getPressedSprite();
+
 	protected abstract Image getReleasedSprite();
+
 	protected abstract void action() throws SlickException;
 }

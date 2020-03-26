@@ -2,6 +2,8 @@ package unnamed.model.element.map.tile.behaviour;
 
 import java.util.List;
 
+import org.newdawn.slick.SlickException;
+
 import unnamed.controller.GameController;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
@@ -17,6 +19,8 @@ public class CorruptBehaviour implements TileBehaviour
 
 	private float targetY;
 
+	private boolean isActivated;
+
 	public CorruptBehaviour(Tile tile)
 	{
 		this.tile = tile;
@@ -26,10 +30,14 @@ public class CorruptBehaviour implements TileBehaviour
 			this.targetY = CorruptBehaviour.RAISE_OFFSET;
 			this.tile.setY(this.tile.getY() - CorruptBehaviour.RAISE_OFFSET);
 		}
+
+		this.tile.getContainer().addElementToTickUpdate(this.tile);
+
+		this.isActivated = true;
 	}
 
 	@Override
-	public void tickUpdate()
+	public void tickUpdate() throws SlickException
 	{
 		if((this.targetY > 0) && !this.tile.isSelected())
 		{
@@ -40,7 +48,7 @@ public class CorruptBehaviour implements TileBehaviour
 		this.spreadCorruption();
 	}
 
-	private void spreadCorruption()
+	private void spreadCorruption() throws SlickException
 	{
 		List<Tile> adjacents = this.tile.getAdjacents();
 		adjacents.removeIf(tile -> tile.getBiome() != TileBiome.GRASS);
@@ -94,5 +102,22 @@ public class CorruptBehaviour implements TileBehaviour
 	public void cleanUp()
 	{
 		this.resetFalling();
+	}
+
+	@Override
+	public void informNeighbourChange()
+	{
+		boolean isAdjacentToGrass = this.tile.getAdjacents().stream().anyMatch(tile -> tile.getBiome() == TileBiome.GRASS);
+
+		if(this.isActivated && !isAdjacentToGrass)
+		{
+			this.tile.getContainer().removeElementToTickUpdate(this.tile);
+			this.isActivated = false;
+		}
+		else if(!this.isActivated && isAdjacentToGrass)
+		{
+			this.tile.getContainer().addElementToTickUpdate(this.tile);
+			this.isActivated = true;
+		}
 	}
 }

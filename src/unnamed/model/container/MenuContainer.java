@@ -61,11 +61,11 @@ public abstract class MenuContainer extends ElementContainer
 			this.setSelected(this.fields.get(0));
 		}
 	}
-	
+
 	@Override
 	public void leave() throws SlickException
 	{
-		this.setSelected(SelectableElement.getEmpty());
+		this.setSelected(SelectableElement.getEmptySelectable());
 	}
 
 	@Override
@@ -105,10 +105,10 @@ public abstract class MenuContainer extends ElementContainer
 	public void wheelReleasedAt(float x, float y)
 	{
 	}
-	
+
 	@Override
 	public void rightClickAt(float x, float y)
-	{		
+	{
 	}
 
 	@Override

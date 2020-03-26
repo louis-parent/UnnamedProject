@@ -5,13 +5,11 @@ import unnamed.model.element.map.tile.Tile;
 public class DefaultBehaviour implements TileBehaviour
 {
 
-	private Tile tile;
-	
 	public DefaultBehaviour(Tile tile)
 	{
-		this.tile = tile;
+
 	}
-	
+
 	@Override
 	public void tickUpdate()
 	{
@@ -51,6 +49,12 @@ public class DefaultBehaviour implements TileBehaviour
 	@Override
 	public void cleanUp()
 	{
-		
+
+	}
+
+	@Override
+	public void informNeighbourChange()
+	{
+
 	}
 }

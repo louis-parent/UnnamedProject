@@ -25,11 +25,6 @@ public class SeedMenuContainer extends MenuContainer
 	}
 
 	@Override
-	public void tickUpdate()
-	{
-	}
-	
-	@Override
 	public void enter() throws SlickException
 	{
 		super.enter();

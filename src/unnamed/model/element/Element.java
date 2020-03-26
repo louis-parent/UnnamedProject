@@ -143,7 +143,7 @@ public abstract class Element implements Serializable
 
 	public FormattedString getFormattedText()
 	{
-		return FormattedString.getEmpty();
+		return FormattedString.getEmptyFormattedString();
 	}
 
 	public abstract Image getSprite() throws SlickException;
@@ -155,25 +155,25 @@ public abstract class Element implements Serializable
 	public abstract void pressed();
 
 	public abstract void mouseLeft();
-	
-	public static Element getEmpty()
+
+	public static Element getEmptyElement()
 	{
 		return Element.EMPTY;
 	}
-	
+
 	private static class EmptyElement extends Element
 	{
 		private static final long serialVersionUID = -8396774274171993181L;
 
 		public EmptyElement()
 		{
-			super(ElementContainer.getEmpty());
+			super(ElementContainer.getEmptyElement());
 		}
 
 		@Override
 		public Image getSprite() throws SlickException
 		{
-			return PixelisedImage.getEmpty();
+			return PixelisedImage.getEmptyPixelisedImage();
 
 		}
 
@@ -201,7 +201,7 @@ public abstract class Element implements Serializable
 		@Override
 		public void clickEvent()
 		{
-			
+
 		}
 	}
 }

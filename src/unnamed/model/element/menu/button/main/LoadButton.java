@@ -11,7 +11,7 @@ import unnamed.model.element.menu.button.Button;
 public class LoadButton extends Button
 {
 	private static final long serialVersionUID = -8409899989368706116L;
-	
+
 	private static Image released;
 	private static Image pressed;
 	private static Image disabled;
@@ -20,7 +20,7 @@ public class LoadButton extends Button
 	{
 		super(container);
 	}
-	
+
 	public LoadButton(int x, int y, int z, ElementContainer container)
 	{
 		super(x, y, z, container);
@@ -41,7 +41,7 @@ public class LoadButton extends Button
 			GameController.getInstance().loadGame();
 		}
 	}
-	
+
 	public boolean isDisabled()
 	{
 		return !GameController.saveExists();
@@ -59,7 +59,7 @@ public class LoadButton extends Button
 			return super.getSprite();
 		}
 	}
-	
+
 	@Override
 	protected Image getPressedSprite()
 	{

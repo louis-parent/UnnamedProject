@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import org.newdawn.slick.SlickException;
+
 import unnamed.controller.GameController;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
@@ -40,31 +42,31 @@ public class TileMap extends ArrayList<Tile>
 		}
 	}
 
-	public Map<TileDirection, Tile> getAdjacentTilesRaw(Tile tile)
+	public Map<TileDirection, Tile> getAdjacentTilesRaw(Tile tile) throws SlickException
 	{
 		Map<TileDirection, Tile> adjacents = new HashMap<TileDirection, Tile>();
 
-		adjacents.put(TileDirection.NE, getTileAt((tile.getColumn() + 1) - ((tile.getRow() - 1)  % 2), tile.getRow() - 1));
-		adjacents.put(TileDirection.E, getTileAt(tile.getColumn() + 1, tile.getRow()));
-		adjacents.put(TileDirection.SE, getTileAt((tile.getColumn() + 1) - ((tile.getRow() + 1) % 2), tile.getRow() + 1));
-		adjacents.put(TileDirection.SW, getTileAt(tile.getColumn() - ((tile.getRow() + 1) % 2), tile.getRow() + 1));
-		adjacents.put(TileDirection.W, getTileAt(tile.getColumn() - 1, tile.getRow()));
-		adjacents.put(TileDirection.NW, getTileAt(tile.getColumn() - ((tile.getRow() - 1) % 2), tile.getRow() - 1));
+		adjacents.put(TileDirection.NE, this.getTileAt((tile.getColumn() + 1) - ((tile.getRow() - 1) % 2), tile.getRow() - 1));
+		adjacents.put(TileDirection.E, this.getTileAt(tile.getColumn() + 1, tile.getRow()));
+		adjacents.put(TileDirection.SE, this.getTileAt((tile.getColumn() + 1) - ((tile.getRow() + 1) % 2), tile.getRow() + 1));
+		adjacents.put(TileDirection.SW, this.getTileAt(tile.getColumn() - ((tile.getRow() + 1) % 2), tile.getRow() + 1));
+		adjacents.put(TileDirection.W, this.getTileAt(tile.getColumn() - 1, tile.getRow()));
+		adjacents.put(TileDirection.NW, this.getTileAt(tile.getColumn() - ((tile.getRow() - 1) % 2), tile.getRow() - 1));
 
 		return adjacents;
 	}
 
-	private Tile getTileAt(int x, int y)
+	private Tile getTileAt(int x, int y) throws SlickException
 	{
 		int listPosition = this.getListPosition(x, y);
-		
+
 		if(listPosition != -1)
 		{
 			return this.get(listPosition);
 		}
 		else
 		{
-			return Tile.getEmpty();
+			return Tile.getEmptyTile();
 		}
 	}
 
@@ -73,7 +75,7 @@ public class TileMap extends ArrayList<Tile>
 		List<Tile> adjacents = source.getAdjacents();
 
 		adjacents.removeIf(tile -> tile.getType() != type);
-		
+
 		return adjacents.size();
 	}
 
@@ -122,24 +124,24 @@ public class TileMap extends ArrayList<Tile>
 		return this.get(rand.nextInt(this.size()));
 	}
 
-	public Tile getRandomTile(TileBiome biome)
+	public Tile getRandomTile(TileBiome biome) throws SlickException
 	{
 		return this.getRandomTile(tile -> tile.getBiome() == biome);
 	}
 
-	public Tile getRandomTile(TileType type)
+	public Tile getRandomTile(TileType type) throws SlickException
 	{
 		return this.getRandomTile(tile -> tile.getType() == type);
 	}
 
-	public Tile getRandomTile(TileBiome biome, TileType type)
+	public Tile getRandomTile(TileBiome biome, TileType type) throws SlickException
 	{
 		return this.getRandomTile(tile -> (tile.getBiome() == biome) && (tile.getType() == type));
 	}
 
-	private Tile getRandomTile(Predicate<Tile> predicate)
+	private Tile getRandomTile(Predicate<Tile> predicate) throws SlickException
 	{
-		Tile selected = Tile.getEmpty();
+		Tile selected = Tile.getEmptyTile();
 
 		boolean found = false;
 

@@ -10,7 +10,7 @@ public abstract class FieldValidator extends Button
 	private static final long serialVersionUID = 2079967442580121662L;
 
 	private Field field;
-	
+
 	public FieldValidator(Field field, ElementContainer container)
 	{
 		super(container);
@@ -22,11 +22,11 @@ public abstract class FieldValidator extends Button
 	{
 		this.action(this.field.getFormattedText().getText());
 	}
-	
+
 	public void setField(Field field)
 	{
 		this.field = field;
 	}
-	
+
 	protected abstract void action(String value) throws SlickException;
 }

@@ -3,8 +3,10 @@ package unnamed.model.container;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.newdawn.slick.SlickException;
 
@@ -22,6 +24,8 @@ public abstract class ElementContainer implements Serializable
 	private Map<Integer, List<Element>> elements;
 	private int maxDepth;
 
+	private Set<Element> elementsToTickUpdate;
+
 	private SelectableElement lastSelected;
 
 	public ElementContainer()
@@ -29,7 +33,9 @@ public abstract class ElementContainer implements Serializable
 		this.elements = new HashMap<Integer, List<Element>>();
 		this.maxDepth = 0;
 
-		this.lastSelected = SelectableElement.getEmpty();
+		this.elementsToTickUpdate = new HashSet<Element>();
+
+		this.lastSelected = SelectableElement.getEmptySelectable();
 	}
 
 	public void addAllElements(List<Element> elements) throws SlickException
@@ -57,15 +63,14 @@ public abstract class ElementContainer implements Serializable
 		this.elements.get(z).add(element);
 	}
 
-	public void removeElement(Element element)
+	public void addElementToTickUpdate(Element element)
 	{
-		this.elements.get(element.getZ()).remove(element);
+		this.elementsToTickUpdate.add(element);
 	}
 
-	public void replaceElement(Element oldElement, Element newElement) throws SlickException
+	public boolean removeElementToTickUpdate(Element element)
 	{
-		this.removeElement(oldElement);
-		this.addElement(newElement);
+		return this.elementsToTickUpdate.remove(element);
 	}
 
 	public List<Element> getElementsToDraw()
@@ -93,7 +98,7 @@ public abstract class ElementContainer implements Serializable
 	protected Element getTopElementAt(float x, float y) throws SlickException
 	{
 		Element topElement = this.getTopElementAtIn(x, y, this.getElementsToDraw());
-		return topElement == null ? Element.getEmpty() : topElement;
+		return topElement == null ? Element.getEmptyElement() : topElement;
 	}
 
 	@Nullable
@@ -193,9 +198,17 @@ public abstract class ElementContainer implements Serializable
 
 	}
 
-	public abstract void init() throws SlickException;
+	public void tickUpdate() throws SlickException
+	{
+		Set<Element> toTickUpdate = new HashSet<Element>(this.elementsToTickUpdate);
 
-	public abstract void tickUpdate() throws SlickException;
+		for(Element element : toTickUpdate)
+		{
+			element.tickUpdate();
+		}
+	}
+
+	public abstract void init() throws SlickException;
 
 	public abstract void mouseWheelMoved(int change);
 
@@ -215,11 +228,11 @@ public abstract class ElementContainer implements Serializable
 
 	public abstract int getWidth();
 
-	public static ElementContainer getEmpty()
+	public static ElementContainer getEmptyElement()
 	{
 		return ElementContainer.EMPTY;
 	}
-	
+
 	private static class EmptyContainer extends ElementContainer
 	{
 		private static final long serialVersionUID = 4766154415901796682L;
@@ -231,11 +244,6 @@ public abstract class ElementContainer implements Serializable
 
 		@Override
 		public void wheelPressedAt(float x, float y)
-		{
-		}
-
-		@Override
-		public void tickUpdate()
 		{
 		}
 

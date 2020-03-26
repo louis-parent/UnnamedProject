@@ -11,15 +11,15 @@ import unnamed.model.element.menu.button.Button;
 public class SaveButton extends Button
 {
 	private static final long serialVersionUID = -9138057225816165313L;
-	
+
 	private static Image released;
 	private static Image pressed;
-	
+
 	public SaveButton(ElementContainer container)
 	{
 		super(container);
 	}
-	
+
 	public SaveButton(int x, int y, int z, ElementContainer container)
 	{
 		super(x, y, z, container);
