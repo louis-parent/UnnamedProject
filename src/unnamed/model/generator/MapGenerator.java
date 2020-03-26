@@ -434,7 +434,7 @@ public class MapGenerator
 
 	private void seedCorruption() throws SlickException
 	{
-		Tile corruptTile = this.map.getRandomTile();
+		Tile corruptTile = this.map.getRandomTile(TileBiome.GRASS);
 
 		corruptTile.setBiome(TileBiome.CORRUPT);
 
