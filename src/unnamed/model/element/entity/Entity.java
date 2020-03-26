@@ -77,7 +77,7 @@ public class Entity extends Element implements SelectableElement
 	@Override
 	public void tickUpdate() throws SlickException
 	{
-		if(this.standingOn.getBiome() == TileBiome.CORRUPT)
+		if(this.standingOn.getBiome() == TileBiome.CORRUPT && this.isCharged)
 		{
 			this.isCharged = false;
 			this.standingOn.setBiome(TileBiome.GRASS);

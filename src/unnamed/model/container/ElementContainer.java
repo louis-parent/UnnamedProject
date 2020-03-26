@@ -206,6 +206,8 @@ public abstract class ElementContainer implements Serializable
 		{
 			element.tickUpdate();
 		}
+		
+		System.out.println(toTickUpdate);
 	}
 
 	public abstract void init() throws SlickException;
