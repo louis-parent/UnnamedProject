@@ -10,7 +10,7 @@ import unnamed.model.element.map.tile.TileBiome;
 
 public class CorruptBehaviour implements TileBehaviour
 {
-	private static final double CORRUPTION_SPREAD_PERCENTAGE = 1.0 / 50.0;
+	private static final double CORRUPTION_SPREAD_PERCENTAGE = 1.0 / 1000.0;
 
 	private static final int RAISE_OFFSET = 13;
 	private static final int FALLING_SPEED = 1;

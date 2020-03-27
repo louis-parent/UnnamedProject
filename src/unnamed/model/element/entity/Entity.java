@@ -1,5 +1,14 @@
 package unnamed.model.element.entity;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Stack;
+
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -9,6 +18,8 @@ import unnamed.model.element.Element;
 import unnamed.model.element.SelectableElement;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
+import unnamed.model.element.map.tile.TileDirection;
+import unnamed.model.element.map.tile.TileType;
 
 public class Entity extends Element implements SelectableElement
 {
@@ -28,6 +39,8 @@ public class Entity extends Element implements SelectableElement
 	private boolean isSelected;
 
 	private boolean isCharged;
+
+	private Stack<Tile> path;
 
 	public static void init() throws SlickException
 	{
@@ -52,6 +65,8 @@ public class Entity extends Element implements SelectableElement
 		this.isSelected = false;
 
 		this.isCharged = false;
+		
+		this.path = new Stack<Tile>();
 
 		this.getContainer().addElementToTickUpdate(this);
 	}
@@ -77,7 +92,7 @@ public class Entity extends Element implements SelectableElement
 	@Override
 	public void tickUpdate() throws SlickException
 	{
-		if(this.standingOn.getBiome() == TileBiome.CORRUPT && this.isCharged)
+		if((this.standingOn.getBiome() == TileBiome.CORRUPT) && this.isCharged)
 		{
 			this.isCharged = false;
 			this.standingOn.setBiome(TileBiome.GRASS);
@@ -87,6 +102,11 @@ public class Entity extends Element implements SelectableElement
 			this.isCharged = true;
 		}
 
+		if(!this.path.isEmpty())
+		{
+			this.standOn(this.path.pop());
+		}
+		
 		this.centerPosToTile();
 	}
 
@@ -107,7 +127,7 @@ public class Entity extends Element implements SelectableElement
 
 	public void moveTo(Tile newTile)
 	{
-		this.standOn(newTile);
+		this.AStar(newTile);
 	}
 
 	@Override
@@ -134,6 +154,70 @@ public class Entity extends Element implements SelectableElement
 		this.isSelected = toSelect;
 	}
 
+	private boolean AStar(Tile target)
+	{
+		Map<Tile, Integer> distances = new WeightedTileMap();
+		Map<Tile, Integer> heuristics = new WeightedTileMap();
+
+		Map<Tile, Tile> cameFrom = new HashMap<Tile, Tile>();
+		Queue<Tile> openQueue = new PriorityQueue<Tile>(11, new HeuristicComparator(heuristics));
+		
+		
+		openQueue.add(this.standingOn);
+		distances.put(this.standingOn, 0);
+		heuristics.put(this.standingOn, this.euclidianDistance(this.standingOn, target));
+
+		while(!openQueue.isEmpty())
+		{
+			Tile current = openQueue.poll();
+
+			if(current.equals(target))
+			{
+				this.buildPath(target, cameFrom);
+				return true;
+			}
+
+			List<Tile> adjacents = current.getAdjacents();
+			adjacents.removeIf(tile -> (tile.getBiome() == TileBiome.DEEP_WATER || tile.getType() == TileType.MOUNTAIN));
+			
+			for(Tile adjacent : adjacents)
+			{
+				int newDistance = distances.get(current) + 1;
+
+				if(newDistance < distances.get(adjacent))
+				{
+					cameFrom.put(adjacent, current);
+					distances.put(adjacent, newDistance);
+					heuristics.put(adjacent, newDistance + this.euclidianDistance(adjacent, target));
+
+					if(!openQueue.contains(adjacent))
+					{
+						openQueue.add(adjacent);
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private void buildPath(Tile target, Map<Tile, Tile> cameFrom)
+	{
+		this.path = new Stack<Tile>();
+		this.path.add(target);
+		
+		while(!target.equals(this.standingOn))
+		{
+			target = cameFrom.get(target);
+			this.path.add(target);
+		}
+	}
+
+	private int euclidianDistance(Tile first, Tile second)
+	{
+		return (int) Math.sqrt(Math.pow(second.getColumn() - first.getColumn(), 2) + Math.pow(second.getRow() - first.getRow(), 2));
+	}
+
 	public static Entity getEmptyEntity() throws SlickException
 	{
 		if(Entity.EMPTY == null)
@@ -158,5 +242,52 @@ public class Entity extends Element implements SelectableElement
 		{
 			return true;
 		}
+	}
+
+	private static class WeightedTileMap extends HashMap<Tile, Integer>
+	{
+		private static final long serialVersionUID = 7271971041006998574L;
+
+		@Override
+		public Integer get(Object key)
+		{
+			if((key instanceof Tile) && !this.containsKey(key))
+			{
+				this.put((Tile) key, Integer.MAX_VALUE);
+			}
+
+			return super.get(key);
+		}
+	}
+
+	private static class HeuristicComparator implements Comparator<Tile>
+	{
+		private Map<Tile, Integer> heuristics;
+
+		public HeuristicComparator(Map<Tile, Integer> heuristics)
+		{
+			this.heuristics = heuristics;
+		}
+
+		@Override
+		public int compare(Tile left, Tile right)
+		{
+			Integer leftHeuristic = this.heuristics.get(left);
+			Integer rightHeuristic = this.heuristics.get(right);
+
+			if(leftHeuristic < rightHeuristic)
+			{
+				return -1;
+			}
+			else if(leftHeuristic == rightHeuristic)
+			{
+				return 0;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+
 	}
 }
