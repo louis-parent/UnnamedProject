@@ -1,6 +1,5 @@
 package unnamed.model.element.entity;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -27,13 +26,7 @@ public class Entity extends Element implements SelectableElement
 
 	private static Entity EMPTY;
 
-	private static Image idle;
-//	private static Image down_left;
-//	private static Image down_right;
-//	private static Image up_left;
-//	private static Image up_right;
-//	private static Image left;
-//	private static Image right;
+	private static Map<TileDirection, Image> directedSprites;
 
 	private Tile standingOn;
 	private boolean isSelected;
@@ -41,16 +34,22 @@ public class Entity extends Element implements SelectableElement
 	private boolean isCharged;
 
 	private Stack<Tile> path;
+	private Tile destination;
+
+	private boolean hasFinishedMoving;
 
 	public static void init() throws SlickException
 	{
-		Entity.idle = new PixelisedImage("assets/entity/idle.png");
-//		Entity.down_left = new PixelisedImage("assets/entity/down_left.png");
-//		Entity.down_right = new PixelisedImage("assets/entity/down_right.png");
-//		Entity.up_left = new PixelisedImage("assets/entity/up_left.png");
-//		Entity.up_right = new PixelisedImage("assets/entity/up_right.png");
-//		Entity.left = new PixelisedImage("assets/entity/left.png");
-//		Entity.right = new PixelisedImage("assets/entity/right.png");
+
+		Entity.directedSprites = new HashMap<TileDirection, Image>();
+
+		Entity.directedSprites.put(TileDirection.NE, new PixelisedImage("assets/entity/up_right.png"));
+		Entity.directedSprites.put(TileDirection.E, new PixelisedImage("assets/entity/right.png"));
+		Entity.directedSprites.put(TileDirection.SE, new PixelisedImage("assets/entity/down_right.png"));
+		Entity.directedSprites.put(TileDirection.SW, new PixelisedImage("assets/entity/down_left.png"));
+		Entity.directedSprites.put(TileDirection.W, new PixelisedImage("assets/entity/left.png"));
+		Entity.directedSprites.put(TileDirection.NW, new PixelisedImage("assets/entity/up_left.png"));
+		Entity.directedSprites.put(TileDirection.NONE, new PixelisedImage("assets/entity/idle.png"));
 	}
 
 	public Entity(ElementContainer container) throws SlickException
@@ -65,8 +64,11 @@ public class Entity extends Element implements SelectableElement
 		this.isSelected = false;
 
 		this.isCharged = false;
-		
+
 		this.path = new Stack<Tile>();
+		this.destination = Tile.getEmptyTile();
+
+		this.hasFinishedMoving = false;
 
 		this.getContainer().addElementToTickUpdate(this);
 	}
@@ -76,17 +78,44 @@ public class Entity extends Element implements SelectableElement
 		this.standingOn = tile;
 	}
 
-	private void centerPosToTile() throws SlickException
+	private void adjustPosition() throws SlickException
 	{
-		this.setX((this.standingOn.getX() + (this.standingOn.getWidth() / 2f)) - (this.getWidth() / 2f));
-		this.setY((this.standingOn.getY() + (Tile.Y_ENTITY_OFFSET)) - (this.getHeight()));
-		this.setZ(this.standingOn.getZ() + 1);
+		float centerXStandingOn = (this.standingOn.getX() + (this.standingOn.getWidth() / 2f)) - (this.getWidth() / 2f);
+		float centerYStandingOn = (this.standingOn.getY() + (Tile.Y_ENTITY_OFFSET)) - (this.getHeight());
+
+		float centerXDestination = (this.destination.getX() + (this.destination.getWidth() / 2f)) - (this.getWidth() / 2f);
+		float centerYDestination = (this.destination.getY() + (Tile.Y_ENTITY_OFFSET)) - (this.getHeight());
+
+		if(this.destination.isEmpty())
+		{
+			this.setX(centerXStandingOn);
+			this.setY(centerYStandingOn);
+			this.setZ(this.standingOn.getZ() + 1);
+		}
+		else
+		{
+			this.setX((centerXStandingOn + centerXDestination) / 2);
+			this.setY((centerYStandingOn + centerYDestination) / 2);
+			this.setZ(Math.max(this.standingOn.getZ(), this.destination.getZ()) + 1);
+		}
+
 	}
 
 	@Override
 	public Image getSprite() throws SlickException
 	{
-		return Entity.idle;
+		TileDirection direction = TileDirection.NONE;
+		
+		if(!this.destination.isEmpty())
+		{
+			direction = this.standingOn.directionOf(this.destination);
+		}
+		else if(!this.path.isEmpty())
+		{
+			direction = this.standingOn.directionOf(this.path.peek());
+		}
+		
+		return Entity.directedSprites.get(direction);
 	}
 
 	@Override
@@ -102,12 +131,32 @@ public class Entity extends Element implements SelectableElement
 			this.isCharged = true;
 		}
 
-		if(!this.path.isEmpty())
+		this.doMovement();
+
+		this.adjustPosition();
+	}
+
+	private void doMovement() throws SlickException
+	{
+		if(!this.destination.isEmpty())
 		{
-			this.standOn(this.path.pop());
+			if(this.hasFinishedMoving)
+			{
+				this.standOn(this.destination);
+				this.hasFinishedMoving = false;
+
+				this.destination = Tile.getEmptyTile();
+			}
+			else
+			{
+				this.hasFinishedMoving = true;
+			}
+
 		}
-		
-		this.centerPosToTile();
+		else if(!this.path.isEmpty())
+		{
+			this.destination = this.path.pop();
+		}
 	}
 
 	@Override
@@ -127,6 +176,7 @@ public class Entity extends Element implements SelectableElement
 
 	public void moveTo(Tile newTile)
 	{
+		this.path = new Stack<Tile>();
 		this.AStar(newTile);
 	}
 
@@ -161,8 +211,7 @@ public class Entity extends Element implements SelectableElement
 
 		Map<Tile, Tile> cameFrom = new HashMap<Tile, Tile>();
 		Queue<Tile> openQueue = new PriorityQueue<Tile>(11, new HeuristicComparator(heuristics));
-		
-		
+
 		openQueue.add(this.standingOn);
 		distances.put(this.standingOn, 0);
 		heuristics.put(this.standingOn, this.euclidianDistance(this.standingOn, target));
@@ -179,7 +228,7 @@ public class Entity extends Element implements SelectableElement
 
 			List<Tile> adjacents = current.getAdjacents();
 			adjacents.removeIf(tile -> (tile.getBiome() == TileBiome.DEEP_WATER || tile.getType() == TileType.MOUNTAIN));
-			
+
 			for(Tile adjacent : adjacents)
 			{
 				int newDistance = distances.get(current) + 1;
@@ -203,14 +252,15 @@ public class Entity extends Element implements SelectableElement
 
 	private void buildPath(Tile target, Map<Tile, Tile> cameFrom)
 	{
-		this.path = new Stack<Tile>();
 		this.path.add(target);
-		
+
 		while(!target.equals(this.standingOn))
 		{
 			target = cameFrom.get(target);
 			this.path.add(target);
 		}
+
+		this.path.pop();
 	}
 
 	private int euclidianDistance(Tile first, Tile second)

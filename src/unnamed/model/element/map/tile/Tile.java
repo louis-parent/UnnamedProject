@@ -268,4 +268,17 @@ public class Tile extends Element implements SelectableElement
 
 		return Tile.EMPTY;
 	}
+
+	public TileDirection directionOf(Tile adjacentTile)
+	{
+		for(Map.Entry<TileDirection, Tile> entry : this.adjacents.entrySet())
+		{
+			if(entry.getValue().equals(adjacentTile))
+			{
+				return entry.getKey();
+			}
+		}
+		
+		return TileDirection.NONE;
+	}
 }
