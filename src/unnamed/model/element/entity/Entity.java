@@ -25,7 +25,7 @@ public class Entity extends Element implements SelectableElement
 
 	private static Entity EMPTY;
 
-	private static Map<TileDirection, Image> directedSprites;
+	private static Map<TileDirection, PixelisedImage> directedSprites;
 
 	private Tile standingOn;
 	private boolean isSelected;
@@ -40,7 +40,7 @@ public class Entity extends Element implements SelectableElement
 	public static void init() throws SlickException
 	{
 
-		Entity.directedSprites = new HashMap<TileDirection, Image>();
+		Entity.directedSprites = new HashMap<TileDirection, PixelisedImage>();
 
 		Entity.directedSprites.put(TileDirection.NE, new PixelisedImage("assets/entity/up_right.png"));
 		Entity.directedSprites.put(TileDirection.E, new PixelisedImage("assets/entity/right.png"));
@@ -121,7 +121,14 @@ public class Entity extends Element implements SelectableElement
 			direction = this.standingOn.directionOf(this.path.peek());
 		}
 
-		return Entity.directedSprites.get(direction);
+		if(this.isSelected)
+		{
+			return Entity.directedSprites.get(direction).highlighted();
+		}
+		else
+		{
+			return Entity.directedSprites.get(direction);
+		}
 	}
 
 	@Override
