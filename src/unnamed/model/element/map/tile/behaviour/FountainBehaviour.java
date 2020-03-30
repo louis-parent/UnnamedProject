@@ -9,18 +9,16 @@ import unnamed.model.element.entity.Entity;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
 
-public class FountainBehaviour implements TileBehaviour
+public class FountainBehaviour extends DefaultBehaviour
 {
 	private static final int TICK_PER_SPAWN = 40;
-
-	private Tile tile;
 
 	private int spawnCooldown;
 
 	public FountainBehaviour(Tile tile)
 	{
-		this.tile = tile;
-
+		super(tile);
+		
 		this.spawnCooldown = FountainBehaviour.TICK_PER_SPAWN;
 
 		this.tile.getContainer().addElementToTickUpdate(this.tile);
@@ -53,42 +51,6 @@ public class FountainBehaviour implements TileBehaviour
 		{
 			GameController.getInstance().loseGame();
 		}
-	}
-
-	@Override
-	public void pressed()
-	{
-
-	}
-
-	@Override
-	public void mouseLeft()
-	{
-
-	}
-
-	@Override
-	public void clickEvent()
-	{
-
-	}
-
-	@Override
-	public void selectEvent()
-	{
-
-	}
-
-	@Override
-	public void deselectEvent()
-	{
-
-	}
-
-	@Override
-	public void cleanUp()
-	{
-
 	}
 
 	@Override

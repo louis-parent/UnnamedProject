@@ -1,17 +1,20 @@
 package unnamed.model.element.map.tile.behaviour;
 
+import org.newdawn.slick.SlickException;
+
 import unnamed.model.element.map.tile.Tile;
 
 public class DefaultBehaviour implements TileBehaviour
 {
-
+	protected Tile tile;
+	
 	public DefaultBehaviour(Tile tile)
 	{
-
+		this.tile = tile;
 	}
 
 	@Override
-	public void tickUpdate()
+	public void tickUpdate() throws SlickException
 	{
 
 	}
@@ -53,7 +56,7 @@ public class DefaultBehaviour implements TileBehaviour
 	}
 
 	@Override
-	public void informNeighbourChange()
+	public void informNeighbourChange() throws SlickException
 	{
 
 	}

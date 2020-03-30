@@ -8,14 +8,12 @@ import unnamed.controller.GameController;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
 
-public class CorruptBehaviour implements TileBehaviour
+public class CorruptBehaviour extends DefaultBehaviour
 {
 	private static final double CORRUPTION_SPREAD_PERCENTAGE = 1.0 / 1000.0;
 
 	private static final int RAISE_OFFSET = 13;
 	private static final int FALLING_SPEED = 1;
-
-	private Tile tile;
 
 	private float targetY;
 
@@ -23,8 +21,8 @@ public class CorruptBehaviour implements TileBehaviour
 
 	public CorruptBehaviour(Tile tile)
 	{
-		this.tile = tile;
-
+		super(tile);
+		
 		if(!tile.isSelected())
 		{
 			this.targetY = CorruptBehaviour.RAISE_OFFSET;
@@ -63,24 +61,6 @@ public class CorruptBehaviour implements TileBehaviour
 	}
 
 	@Override
-	public void pressed()
-	{
-
-	}
-
-	@Override
-	public void mouseLeft()
-	{
-
-	}
-
-	@Override
-	public void clickEvent()
-	{
-
-	}
-
-	@Override
 	public void selectEvent()
 	{
 		this.resetFalling();
@@ -90,12 +70,6 @@ public class CorruptBehaviour implements TileBehaviour
 	{
 		this.tile.setY(this.tile.getY() + this.targetY);
 		this.targetY = 0;
-	}
-
-	@Override
-	public void deselectEvent()
-	{
-
 	}
 
 	@Override
