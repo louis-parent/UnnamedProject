@@ -44,7 +44,7 @@ public abstract class MenuElement extends Element
 
 		public EmptyMenuElement()
 		{
-			super(ElementContainer.getEmptyElement());
+			super(ElementContainer.getEmptyContainer());
 		}
 
 		@Override

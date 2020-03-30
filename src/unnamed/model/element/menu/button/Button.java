@@ -6,27 +6,46 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.menu.MenuElement;
+import unnamed.model.element.menu.button.behaviour.ButtonBehaviour;
+import unnamed.model.element.menu.button.behaviour.DefaultBehaviour;
 
-public abstract class Button extends MenuElement
+public class Button extends MenuElement
 {
 	private static final long serialVersionUID = 410744874078962405L;
 
-	private boolean pressed;
+	private static ButtonImageRegistry imageRegistry;
 
-	public Button(ElementContainer container)
+	private static Button EMPTY;
+
+	public static void init() throws SlickException
 	{
-		this(0, 0, 0, container);
+		Button.imageRegistry = new ButtonImageRegistry();
 	}
 
-	public Button(int x, int y, int z, ElementContainer container)
+	private ButtonType type;
+	private ButtonStatus status;
+
+	private ButtonBehaviour behaviour;
+
+	public Button(ButtonType type, ButtonBehaviour behaviour, ElementContainer container)
+	{
+		this(type, behaviour, 0, 0, 0, container);
+	}
+
+	public Button(ButtonType type, ButtonBehaviour behaviour, int x, int y, int z, ElementContainer container)
 	{
 		super(x, y, z, container);
-		this.pressed = false;
+
+		this.type = type;
+		this.status = ButtonStatus.RELEASED;
+
+		this.behaviour = behaviour;
 	}
 
 	@Override
 	public void tickUpdate()
 	{
+		this.behaviour.tickUpdate();
 	}
 
 	@Override
@@ -34,7 +53,7 @@ public abstract class Button extends MenuElement
 	{
 		if(this.isPressed())
 		{
-			this.pressed = false;
+			this.status = ButtonStatus.RELEASED;
 			this.action();
 		}
 	}
@@ -42,18 +61,24 @@ public abstract class Button extends MenuElement
 	@Override
 	public void pressed()
 	{
-		this.pressed = true;
+		if(this.status == ButtonStatus.RELEASED)
+		{
+			this.status = ButtonStatus.PRESSED;
+		}
 	}
 
 	@Override
 	public void mouseLeft()
 	{
-		this.pressed = false;
+		if(this.isPressed())
+		{
+			this.status = ButtonStatus.RELEASED;
+		}
 	}
 
 	public boolean isPressed()
 	{
-		return this.pressed;
+		return this.status == ButtonStatus.PRESSED;
 	}
 
 	@Override
@@ -64,10 +89,13 @@ public abstract class Button extends MenuElement
 
 	private Image getBiggerSpriteForHeight()
 	{
-		int pressedHeight = this.getPressedSprite().getHeight();
-		int releasedHeight = this.getReleasedSprite().getHeight();
+		Image pressedSprite = Button.imageRegistry.getImageFor(this.type, ButtonStatus.PRESSED);
+		Image releasedSprite = Button.imageRegistry.getImageFor(this.type, ButtonStatus.RELEASED);
 
-		return pressedHeight > releasedHeight ? this.getPressedSprite() : this.getReleasedSprite();
+		int pressedHeight = pressedSprite.getHeight();
+		int releasedHeight = releasedSprite.getHeight();
+
+		return pressedHeight > releasedHeight ? pressedSprite : releasedSprite;
 	}
 
 	@Override
@@ -78,23 +106,19 @@ public abstract class Button extends MenuElement
 
 	private Image getBiggerSpriteForWidth()
 	{
-		int pressedWidth = this.getPressedSprite().getWidth();
-		int releasedWidth = this.getReleasedSprite().getWidth();
+		Image pressedSprite = Button.imageRegistry.getImageFor(this.type, ButtonStatus.PRESSED);
+		Image releasedSprite = Button.imageRegistry.getImageFor(this.type, ButtonStatus.RELEASED);
 
-		return pressedWidth > releasedWidth ? this.getPressedSprite() : this.getReleasedSprite();
+		int pressedWidth = pressedSprite.getWidth();
+		int releasedWidth = releasedSprite.getWidth();
+
+		return pressedWidth > releasedWidth ? pressedSprite : releasedSprite;
 	}
 
 	@Override
 	public Image getSprite()
 	{
-		if(this.isPressed())
-		{
-			return this.getPressedSprite();
-		}
-		else
-		{
-			return this.getReleasedSprite();
-		}
+		return Button.imageRegistry.getImageFor(this.type, this.status);
 	}
 
 	@Override
@@ -103,18 +127,42 @@ public abstract class Button extends MenuElement
 		int spriteX = (int) (x - this.getX());
 		int spriteY = (int) (y - this.getY());
 
-		Image pressedSprite = this.getPressedSprite();
+		Image pressedSprite = Button.imageRegistry.getImageFor(this.type, ButtonStatus.PRESSED);
 		Color pressedPixelColor = pressedSprite.getColor(spriteX, spriteY);
 
-		Image releasedSprite = this.getReleasedSprite();
+		Image releasedSprite = Button.imageRegistry.getImageFor(this.type, ButtonStatus.RELEASED);
 		Color releasedPixelColor = releasedSprite.getColor(spriteX, spriteY);
 
 		return (pressedPixelColor.getAlpha() == 0) && (releasedPixelColor.getAlpha() == 0);
 	}
 
-	protected abstract Image getPressedSprite();
+	protected void action() throws SlickException
+	{
+		this.behaviour.action();
+	}
 
-	protected abstract Image getReleasedSprite();
+	public void setStatus(ButtonStatus status)
+	{
+		this.status = status;
+	}
 
-	protected abstract void action() throws SlickException;
+	public ButtonStatus getStatus()
+	{
+		return this.status;
+	}
+
+	public static Button getEmptyButton()
+	{
+		if(Button.EMPTY == null)
+		{
+			Button.EMPTY = new Button(ButtonType.MENU, DefaultBehaviour.getEmptyBehaviour(), ElementContainer.getEmptyContainer());
+		}
+
+		return Button.EMPTY;
+	}
+
+	public ButtonBehaviour getBehaviour()
+	{
+		return this.behaviour;
+	}
 }

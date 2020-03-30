@@ -29,7 +29,7 @@ public interface SelectableElement
 
 		public EmptySelectableElement()
 		{
-			super(ElementContainer.getEmptyElement());
+			super(ElementContainer.getEmptyContainer());
 		}
 
 		private boolean isSelected;

@@ -167,7 +167,7 @@ public abstract class Element implements Serializable
 
 		public EmptyElement()
 		{
-			super(ElementContainer.getEmptyElement());
+			super(ElementContainer.getEmptyContainer());
 		}
 
 		@Override

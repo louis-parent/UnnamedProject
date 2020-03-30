@@ -1,24 +1,22 @@
-package unnamed.model.element.menu.button;
+package unnamed.model.element.menu.button.behaviour;
 
 import org.newdawn.slick.SlickException;
 
-import unnamed.model.container.ElementContainer;
+import unnamed.model.element.menu.button.Button;
 import unnamed.model.element.menu.field.Field;
 
-public abstract class FieldValidator extends Button
+public abstract class FieldValidatorBehaviour extends DefaultBehaviour
 {
-	private static final long serialVersionUID = 2079967442580121662L;
-
 	private Field field;
-
-	public FieldValidator(Field field, ElementContainer container)
+	
+	public FieldValidatorBehaviour(Field field, Button button)
 	{
-		super(container);
+		super(button);
 		this.field = field;
 	}
 
 	@Override
-	protected final void action() throws SlickException
+	public final void action() throws SlickException
 	{
 		this.action(this.field.getFormattedText().getText());
 	}

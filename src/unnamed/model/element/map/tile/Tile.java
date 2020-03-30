@@ -54,7 +54,7 @@ public class Tile extends Element implements SelectableElement
 
 	private Tile() throws SlickException
 	{
-		this(ElementContainer.getEmptyElement());
+		this(ElementContainer.getEmptyContainer());
 	}
 
 	public Tile(ElementContainer container) throws SlickException

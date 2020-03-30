@@ -5,8 +5,9 @@ import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
 import unnamed.model.element.menu.MenuElement;
-import unnamed.model.element.menu.button.FieldValidator;
+import unnamed.model.element.menu.button.Button;
 import unnamed.model.element.menu.button.MenuFactory;
+import unnamed.model.element.menu.button.behaviour.FieldValidatorBehaviour;
 import unnamed.model.element.menu.field.Field;
 
 public class SeedMenuContainer extends MenuContainer
@@ -21,7 +22,7 @@ public class SeedMenuContainer extends MenuContainer
 		MenuElement[] elements = this.buildMenu(MenuFactory.SEED_FIELD, MenuFactory.START_BUTTON);
 
 		this.seedField = (Field) elements[0];
-		((FieldValidator) elements[1]).setField(this.seedField);
+		((FieldValidatorBehaviour) ((Button) elements[1]).getBehaviour()).setField(this.seedField);
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import org.newdawn.slick.SlickException;
 import unnamed.model.element.map.tile.Tile;
 
 public class DefaultBehaviour implements TileBehaviour
-{
+{	
 	protected Tile tile;
 	
 	public DefaultBehaviour(Tile tile)

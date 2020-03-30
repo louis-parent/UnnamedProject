@@ -228,7 +228,7 @@ public abstract class ElementContainer implements Serializable
 
 	public abstract int getWidth();
 
-	public static ElementContainer getEmptyElement()
+	public static ElementContainer getEmptyContainer()
 	{
 		return ElementContainer.EMPTY;
 	}

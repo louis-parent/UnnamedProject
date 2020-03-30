@@ -352,7 +352,7 @@ public class Entity extends Element implements SelectableElement
 
 		public EmptyEntity() throws SlickException
 		{
-			super(ElementContainer.getEmptyElement());
+			super(ElementContainer.getEmptyContainer());
 		}
 
 		@Override

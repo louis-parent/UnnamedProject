@@ -119,7 +119,7 @@ public abstract class Field extends MenuElement implements SelectableElement
 
 		public EmptyField()
 		{
-			super(ElementContainer.getEmptyElement());
+			super(ElementContainer.getEmptyContainer());
 		}
 
 		@Override
