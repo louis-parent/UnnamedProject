@@ -2,7 +2,6 @@ package unnamed.model.element.entity;
 
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -144,26 +143,60 @@ public class Entity extends Element implements SelectableElement
 	}
 
 	private void doMovement() throws SlickException
-	{
+	{		
 		if(!this.destination.isEmpty())
 		{
-			if(this.hasFinishedMoving)
+			if(this.isTileCrossable(this.destination))
 			{
-				this.standOn(this.destination);
-				this.hasFinishedMoving = false;
-
-				this.destination = Tile.getEmptyTile();
+				if(this.hasFinishedMoving)
+				{
+					this.standOn(this.destination);
+					this.hasFinishedMoving = false;
+	
+					this.destination = Tile.getEmptyTile();
+				}
+				else
+				{
+					this.hasFinishedMoving = true;
+				}
 			}
 			else
 			{
-				this.hasFinishedMoving = true;
+				this.clearPath();
 			}
 
 		}
 		else if(!this.path.isEmpty())
 		{
-			this.destination = this.path.pop();
+			if(this.isTileCrossable(this.path.peek()))
+			{
+				this.destination = this.path.pop();
+			}
+			else
+			{
+				this.clearPath();
+			}
 		}
+	}
+
+	private boolean isTileCrossable(Tile tile)
+	{
+		return tile.getType() != TileType.MOUNTAIN && tile.getBiome() != TileBiome.DEEP_WATER;
+	}
+
+	private void clearPath() throws SlickException
+	{
+		if(!this.path.isEmpty())
+		{
+			this.path.firstElement().unbook();
+			this.path = new Stack<Tile>();
+		}
+		else if(!this.destination.isEmpty())
+		{
+			this.destination.unbook();
+		}
+
+		this.destination = Tile.getEmptyTile();
 	}
 
 	@Override
@@ -181,13 +214,9 @@ public class Entity extends Element implements SelectableElement
 	{
 	}
 
-	public void moveTo(Tile newTile)
+	public void moveTo(Tile newTile) throws SlickException
 	{
-		if(!this.path.isEmpty())
-		{
-			this.path.firstElement().unbook();
-			this.path = new Stack<Tile>();
-		}
+		this.clearPath();
 
 		if(!newTile.isOccupied())
 		{
@@ -244,10 +273,7 @@ public class Entity extends Element implements SelectableElement
 				return true;
 			}
 
-			List<Tile> adjacents = current.getAdjacents();
-			adjacents.removeIf(tile -> ((tile.getBiome() == TileBiome.DEEP_WATER) || (tile.getType() == TileType.MOUNTAIN)));
-
-			for(Tile adjacent : adjacents)
+			for(Tile adjacent : current.getAdjacents())
 			{
 				int newDistance = distances.get(current) + 1;
 
@@ -255,7 +281,7 @@ public class Entity extends Element implements SelectableElement
 				{
 					cameFrom.put(adjacent, current);
 					distances.put(adjacent, newDistance);
-					heuristics.put(adjacent, newDistance + this.euclidianDistance(adjacent, target));
+					heuristics.put(adjacent, newDistance + this.getHeuristicFor(target, adjacent));
 
 					if(!openQueue.contains(adjacent))
 					{
@@ -266,6 +292,28 @@ public class Entity extends Element implements SelectableElement
 		}
 
 		return false;
+	}
+
+	private int getHeuristicFor(Tile target, Tile adjacent)
+	{
+		return this.euclidianDistance(adjacent, target) + this.getAStarWeightForTile(adjacent);
+	}
+	
+	private int euclidianDistance(Tile first, Tile second)
+	{
+		return (int) Math.sqrt(Math.pow(second.getColumn() - first.getColumn(), 2) + Math.pow(second.getRow() - first.getRow(), 2));
+	}
+
+	private int getAStarWeightForTile(Tile tile)
+	{
+		if(!this.isTileCrossable(tile))
+		{
+			return 999999;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	private void buildPath(Tile target, Map<Tile, Tile> cameFrom)
@@ -279,11 +327,6 @@ public class Entity extends Element implements SelectableElement
 		}
 
 		this.path.pop();
-	}
-
-	private int euclidianDistance(Tile first, Tile second)
-	{
-		return (int) Math.sqrt(Math.pow(second.getColumn() - first.getColumn(), 2) + Math.pow(second.getRow() - first.getRow(), 2));
 	}
 
 	public static Entity getEmptyEntity() throws SlickException
