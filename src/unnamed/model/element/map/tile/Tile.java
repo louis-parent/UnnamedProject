@@ -12,6 +12,7 @@ import org.newdawn.slick.SlickException;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
 import unnamed.model.element.SelectableElement;
+import unnamed.model.element.entity.Entity;
 import unnamed.model.element.map.tile.behaviour.TileBehaviour;
 
 public class Tile extends Element implements SelectableElement
@@ -44,6 +45,8 @@ public class Tile extends Element implements SelectableElement
 
 	private boolean isSelected;
 
+	private boolean isOccupied;
+
 	public static void init() throws SlickException
 	{
 		Tile.registry = new TileImageRegistry();
@@ -74,6 +77,8 @@ public class Tile extends Element implements SelectableElement
 		this.spriteVariant = this.type.getRandomVariant();
 
 		this.isSelected = false;
+
+		this.isOccupied = false;
 	}
 
 	public int getColumn()
@@ -212,6 +217,31 @@ public class Tile extends Element implements SelectableElement
 		this.spriteVariant = spriteVariant;
 	}
 
+	public void informPresence(Entity entity)
+	{
+		this.isOccupied = true;
+	}
+
+	public void informDeparture(Entity entity)
+	{
+		this.isOccupied = false;
+	}
+
+	public boolean isOccupied()
+	{
+		return this.isOccupied;
+	}
+
+	public void book()
+	{
+		this.isOccupied = true;
+	}
+
+	public void unbook()
+	{
+		this.isOccupied = false;
+	}
+
 	@Override
 	public void clickEvent()
 	{
@@ -278,7 +308,7 @@ public class Tile extends Element implements SelectableElement
 				return entry.getKey();
 			}
 		}
-		
+
 		return TileDirection.NONE;
 	}
 }

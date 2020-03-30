@@ -107,9 +107,9 @@ public class CorruptBehaviour implements TileBehaviour
 	@Override
 	public void informNeighbourChange()
 	{
-		boolean isAdjacentToGrass = this.tile.getAdjacents().stream().anyMatch(tile -> tile.getBiome() == TileBiome.GRASS && !tile.isEmpty());
+		boolean isAdjacentToGrass = this.tile.getAdjacents().stream().anyMatch(tile -> (tile.getBiome() == TileBiome.GRASS) && !tile.isEmpty());
 
-		if(this.isActivated && !isAdjacentToGrass && this.targetY == 0)
+		if(this.isActivated && !isAdjacentToGrass && (this.targetY == 0))
 		{
 			this.tile.getContainer().removeElementToTickUpdate(this.tile);
 			this.isActivated = false;

@@ -60,7 +60,10 @@ public class Entity extends Element implements SelectableElement
 	public Entity(Tile tile, ElementContainer container) throws SlickException
 	{
 		super(container);
+
+		this.standingOn = Tile.getEmptyTile();
 		this.standOn(tile);
+
 		this.isSelected = false;
 
 		this.isCharged = false;
@@ -75,7 +78,11 @@ public class Entity extends Element implements SelectableElement
 
 	public void standOn(Tile tile)
 	{
+		this.standingOn.informDeparture(this);
+
 		this.standingOn = tile;
+
+		this.standingOn.informPresence(this);
 	}
 
 	private void adjustPosition() throws SlickException
@@ -105,7 +112,7 @@ public class Entity extends Element implements SelectableElement
 	public Image getSprite() throws SlickException
 	{
 		TileDirection direction = TileDirection.NONE;
-		
+
 		if(!this.destination.isEmpty())
 		{
 			direction = this.standingOn.directionOf(this.destination);
@@ -114,7 +121,7 @@ public class Entity extends Element implements SelectableElement
 		{
 			direction = this.standingOn.directionOf(this.path.peek());
 		}
-		
+
 		return Entity.directedSprites.get(direction);
 	}
 
@@ -176,8 +183,19 @@ public class Entity extends Element implements SelectableElement
 
 	public void moveTo(Tile newTile)
 	{
-		this.path = new Stack<Tile>();
-		this.AStar(newTile);
+		if(!this.path.isEmpty())
+		{
+			this.path.firstElement().unbook();
+			this.path = new Stack<Tile>();
+		}
+
+		if(!newTile.isOccupied())
+		{
+			if(this.AStar(newTile))
+			{
+				newTile.book();
+			}
+		}
 	}
 
 	@Override
@@ -227,7 +245,7 @@ public class Entity extends Element implements SelectableElement
 			}
 
 			List<Tile> adjacents = current.getAdjacents();
-			adjacents.removeIf(tile -> (tile.getBiome() == TileBiome.DEEP_WATER || tile.getType() == TileType.MOUNTAIN));
+			adjacents.removeIf(tile -> ((tile.getBiome() == TileBiome.DEEP_WATER) || (tile.getType() == TileType.MOUNTAIN)));
 
 			for(Tile adjacent : adjacents)
 			{
