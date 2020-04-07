@@ -12,6 +12,7 @@ import unnamed.model.element.map.TileMap;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.map.tile.TileBiome;
 import unnamed.model.element.map.tile.TileType;
+import unnamed.model.element.map.tile.behaviour.CorruptBehaviour;
 
 public class MapGenerator
 {
@@ -437,6 +438,7 @@ public class MapGenerator
 		Tile corruptTile = this.map.getRandomTile(TileBiome.GRASS);
 
 		corruptTile.setBiome(TileBiome.CORRUPT);
+		((CorruptBehaviour) corruptTile.getBehaviour()).resetFalling();
 
 		this.corruptTiles.add(corruptTile);
 	}

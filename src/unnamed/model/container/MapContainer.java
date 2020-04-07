@@ -27,6 +27,8 @@ public class MapContainer extends ElementContainer
 
 	private Entity entity;
 
+	private List<Tile> transitionTiles;
+
 	public MapContainer() throws SlickException
 	{
 		super();
@@ -38,13 +40,18 @@ public class MapContainer extends ElementContainer
 		this.fountain = Tile.getEmptyTile();
 
 		this.entity = Entity.getEmptyEntity();
+
+		this.transitionTiles = new ArrayList<Tile>();
 	}
 
 	@Override
 	public void init() throws SlickException
 	{
 		MapGenerator generator = new MapGenerator(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
+
 		this.map.addAll(generator.generateMap(this));
+		this.transitionTiles.addAll(this.map);
+
 		this.fountain = generator.getFountain();
 
 		for(Tile tile : this.map)
@@ -54,6 +61,36 @@ public class MapContainer extends ElementContainer
 
 		this.entity = new Entity(this.fountain, this);
 		this.addElement(this.entity);
+	}
+
+	@Override
+	public void tickUpdate() throws SlickException
+	{
+		if(!this.transitionTiles.isEmpty())
+		{
+			this.transitionAllTiles();
+		}
+
+		super.tickUpdate();
+	}
+
+	private void transitionAllTiles() throws SlickException
+	{
+		for(int i = 0; i < this.transitionTiles.size(); i++)
+		{
+			Tile tile = this.transitionTiles.get(i);
+
+			if(!tile.isSeen() && GameController.getInstance().getCameraController().isVisible(tile))
+			{
+				tile.seen();
+			}
+
+			if(tile.doTransitionStep())
+			{
+				this.transitionTiles.remove(i);
+				i--;
+			}
+		}
 	}
 
 	@Override

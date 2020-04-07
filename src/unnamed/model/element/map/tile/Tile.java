@@ -9,6 +9,8 @@ import java.util.Map;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import unnamed.controller.GameController;
+import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.Element;
 import unnamed.model.element.SelectableElement;
@@ -20,6 +22,10 @@ public class Tile extends Element implements SelectableElement
 	private static final long serialVersionUID = -867365679274168458L;
 
 	private static Tile EMPTY;
+
+	public static final int TRANSITION_STEP_SPEED = 6;
+	private static final int TRANSITION_OFFFSET = 100;
+	private static final int AVERAGE_TRANSITION_ORIGIN = 800;
 
 	public static final int Y_ENTITY_OFFSET = 29;
 
@@ -46,6 +52,8 @@ public class Tile extends Element implements SelectableElement
 	private boolean isSelected;
 
 	private boolean isOccupied;
+
+	private boolean seen;
 
 	public static void init() throws SlickException
 	{
@@ -79,6 +87,8 @@ public class Tile extends Element implements SelectableElement
 		this.isSelected = false;
 
 		this.isOccupied = false;
+
+		this.seen = false;
 	}
 
 	public int getColumn()
@@ -126,6 +136,11 @@ public class Tile extends Element implements SelectableElement
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public TileBehaviour getBehaviour()
+	{
+		return this.behaviour;
 	}
 
 	private void informAllNeighboursOfChange() throws SlickException
@@ -178,7 +193,7 @@ public class Tile extends Element implements SelectableElement
 		this.behaviour.mouseLeft();
 	}
 
-	private static float getXValueFrom(int column, int row)
+	public static float getXValueFrom(int column, int row)
 	{
 		if((row % 2) == 0)
 		{
@@ -190,7 +205,12 @@ public class Tile extends Element implements SelectableElement
 		}
 	}
 
-	private static float getYValueFrom(int row)
+	private static float getYRandomValueFrom(int row)
+	{
+		return Tile.getYValueFrom(row) + Tile.getRandomYOrigin();
+	}
+
+	public static float getYValueFrom(int row)
 	{
 		if(row != 0)
 		{
@@ -200,6 +220,16 @@ public class Tile extends Element implements SelectableElement
 		{
 			return Tile.FLOATING_OFFSET;
 		}
+	}
+
+	private static float getRandomYOrigin()
+	{
+		return ((GameController.getInstance().getRandom().nextBoolean() ? -1 : 1) * AVERAGE_TRANSITION_ORIGIN) + Tile.getRandomYOffset();
+	}
+
+	private static int getRandomYOffset()
+	{
+		return GameController.getInstance().getRandom().nextInt(TRANSITION_OFFFSET) - (TRANSITION_OFFFSET / 2);
 	}
 
 	private static int getZValueFrom(int row)
@@ -277,7 +307,16 @@ public class Tile extends Element implements SelectableElement
 	@Override
 	public Image getSprite() throws SlickException
 	{
-		return Tile.registry.get(Tile.registry.getImageNameFor(this.biome, this.type, this.spriteVariant));
+		PixelisedImage sprite = Tile.registry.get(Tile.registry.getImageNameFor(this.biome, this.type, this.spriteVariant));
+
+		if(this.seen)
+		{
+			return sprite;
+		}
+		else
+		{
+			return sprite.madeTransparent();
+		}
 	}
 
 	public static Tile getEmptyTile() throws SlickException
@@ -310,5 +349,40 @@ public class Tile extends Element implements SelectableElement
 		}
 
 		return TileDirection.NONE;
+	}
+
+	public boolean doTransitionStep()
+	{
+		if(this.seen)
+		{
+			float currentY = this.getY();
+			float destinationY = Tile.getYValueFrom(this.getRow()) - (this.isSelected ? Tile.FLOATING_OFFSET : 0);
+
+			if(currentY < destinationY)
+			{
+				this.setY(Math.min(currentY + TRANSITION_STEP_SPEED, destinationY));
+			}
+			else if(currentY > destinationY)
+			{
+				this.setY(Math.max(currentY - TRANSITION_STEP_SPEED, destinationY));
+			}
+
+			return this.getY() == destinationY;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public boolean isSeen()
+	{
+		return this.seen;
+	}
+
+	public void seen()
+	{
+		this.seen = true;
+		this.setY(Tile.getYRandomValueFrom(this.getRow()));
 	}
 }

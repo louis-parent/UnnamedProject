@@ -66,7 +66,7 @@ public class CorruptBehaviour extends DefaultBehaviour
 		this.resetFalling();
 	}
 
-	private void resetFalling()
+	public void resetFalling()
 	{
 		this.tile.setY(this.tile.getY() + this.targetY);
 		this.targetY = 0;

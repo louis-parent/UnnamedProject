@@ -1,5 +1,8 @@
 package unnamed.controller;
 
+import org.newdawn.slick.SlickException;
+
+import unnamed.model.element.Element;
 import unnamed.view.Camera;
 
 public class CameraController
@@ -77,5 +80,10 @@ public class CameraController
 		{
 			this.zoom();
 		}
+	}
+	
+	public boolean isVisible(Element elem) throws SlickException
+	{
+		return this.camera.isVisible(elem);
 	}
 }

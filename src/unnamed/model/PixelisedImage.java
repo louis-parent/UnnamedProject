@@ -12,6 +12,7 @@ public class PixelisedImage extends Image
 	private static PixelisedImage EMPTY;
 
 	private PixelisedImage highlighted;
+	private PixelisedImage transparent;
 
 	public PixelisedImage(Image image)
 	{
@@ -80,6 +81,17 @@ public class PixelisedImage extends Image
 		return !allTransparent;
 	}
 
+	public Image madeTransparent() throws SlickException {
+		
+		if(this.transparent == null)
+		{
+			this.transparent = new PixelisedImage(this);
+			this.transparent.setAlpha(0);
+		}
+
+		return this.transparent;
+	}
+	
 	public static Image getEmptyPixelisedImage() throws SlickException
 	{
 		if(PixelisedImage.EMPTY == null)

@@ -1,8 +1,10 @@
 package unnamed.view;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
 import unnamed.controller.GameController;
+import unnamed.model.element.Element;
 
 public class Camera
 {
@@ -203,5 +205,20 @@ public class Camera
 	{
 		this.offsetX -= oldx - newx;
 		this.offsetY -= oldy - newy;
+	}
+
+	public boolean isVisible(Element elem) throws SlickException
+	{
+		float startX = -this.offsetX;
+		float endX = -this.offsetX + (GameController.GAME_WIDTH / this.zoomMultiplicator);
+
+		boolean isInX = startX <= elem.getX() + elem.getWidth() && endX >= elem.getX();
+
+		float startY = -this.offsetY;
+		float endY = -this.offsetY + (GameController.GAME_HEIGHT / this.zoomMultiplicator);
+
+		boolean isInY = startY <= elem.getY() + elem.getHeight() && endY >= elem.getY();
+
+		return isInX && isInY;
 	}
 }
