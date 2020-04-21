@@ -25,8 +25,6 @@ public interface SelectableElement
 
 	public static final class EmptySelectableElement extends Element implements SelectableElement
 	{
-		private static final long serialVersionUID = -6913225886061735609L;
-
 		public EmptySelectableElement()
 		{
 			super(ElementContainer.getEmptyContainer());

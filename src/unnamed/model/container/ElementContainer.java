@@ -1,6 +1,5 @@
 package unnamed.model.container;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,10 +14,8 @@ import unnamed.model.element.Element;
 import unnamed.model.element.SelectableElement;
 import unnamed.util.Nullable;
 
-public abstract class ElementContainer implements Serializable
+public abstract class ElementContainer
 {
-	private static final long serialVersionUID = 3624575560912630840L;
-
 	private static final ElementContainer EMPTY = new EmptyContainer();
 
 	private Map<Integer, List<Element>> elements;
@@ -235,8 +232,6 @@ public abstract class ElementContainer implements Serializable
 
 	private static class EmptyContainer extends ElementContainer
 	{
-		private static final long serialVersionUID = 4766154415901796682L;
-
 		@Override
 		public void wheelReleasedAt(float x, float y)
 		{

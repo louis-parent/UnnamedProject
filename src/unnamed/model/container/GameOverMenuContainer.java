@@ -8,8 +8,6 @@ import unnamed.model.element.menu.button.MenuFactory;
 
 public class GameOverMenuContainer extends MenuContainer
 {
-	private static final long serialVersionUID = 3759703099376065619L;
-
 	@Override
 	public void init() throws SlickException
 	{

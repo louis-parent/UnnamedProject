@@ -11,8 +11,6 @@ import unnamed.model.element.menu.button.behaviour.DefaultBehaviour;
 
 public class Button extends MenuElement
 {
-	private static final long serialVersionUID = 410744874078962405L;
-
 	private static ButtonImageRegistry imageRegistry;
 
 	private static Button EMPTY;

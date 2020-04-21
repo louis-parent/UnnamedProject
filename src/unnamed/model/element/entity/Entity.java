@@ -1,5 +1,6 @@
 package unnamed.model.element.entity;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +20,7 @@ import unnamed.model.element.map.tile.TileBiome;
 import unnamed.model.element.map.tile.TileDirection;
 import unnamed.model.element.map.tile.TileType;
 
-public class Entity extends Element implements SelectableElement
+public class Entity extends Element implements SelectableElement, Serializable
 {
 	private static final long serialVersionUID = 8553384493664910671L;
 

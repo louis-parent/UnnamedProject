@@ -8,8 +8,6 @@ import unnamed.model.element.menu.button.MenuFactory;
 
 public class PauseMenuContainer extends MenuContainer
 {
-	private static final long serialVersionUID = 1412919249921734035L;
-
 	@Override
 	public void init() throws SlickException
 	{

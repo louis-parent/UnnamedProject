@@ -1,5 +1,6 @@
 package unnamed.model.container;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import unnamed.model.element.map.TileMap;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.generator.MapGenerator;
 
-public class MapContainer extends ElementContainer
+public class MapContainer extends ElementContainer implements Serializable
 {
 	private static final long serialVersionUID = -3760401809828849717L;
 

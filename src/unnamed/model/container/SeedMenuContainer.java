@@ -12,8 +12,6 @@ import unnamed.model.element.menu.field.Field;
 
 public class SeedMenuContainer extends MenuContainer
 {
-	private static final long serialVersionUID = 4282892685264066141L;
-
 	private Field seedField;
 
 	@Override

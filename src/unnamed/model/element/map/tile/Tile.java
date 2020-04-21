@@ -1,5 +1,6 @@
 package unnamed.model.element.map.tile;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import unnamed.model.element.SelectableElement;
 import unnamed.model.element.entity.Entity;
 import unnamed.model.element.map.tile.behaviour.TileBehaviour;
 
-public class Tile extends Element implements SelectableElement
+public class Tile extends Element implements SelectableElement, Serializable
 {
 	private static final long serialVersionUID = -867365679274168458L;
 

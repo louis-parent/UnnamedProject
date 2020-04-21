@@ -13,8 +13,6 @@ import unnamed.model.element.menu.MenuElement;
 
 public abstract class Field extends MenuElement implements SelectableElement
 {
-	private static final long serialVersionUID = -174723088589298269L;
-
 	private static final Field EMPTY = new EmptyField();
 
 	private static Image background;
@@ -115,8 +113,6 @@ public abstract class Field extends MenuElement implements SelectableElement
 
 	private static class EmptyField extends Field
 	{
-		private static final long serialVersionUID = 3752879867259651027L;
-
 		public EmptyField()
 		{
 			super(ElementContainer.getEmptyContainer());

@@ -15,7 +15,6 @@ import unnamed.model.element.menu.field.Field;
 
 public abstract class MenuContainer extends ElementContainer
 {
-	private static final long serialVersionUID = 8508648978109147145L;
 	private static final int PADDING = 50;
 
 	private List<Field> fields;

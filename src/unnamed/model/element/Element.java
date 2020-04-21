@@ -1,7 +1,5 @@
 package unnamed.model.element;
 
-import java.io.Serializable;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -10,10 +8,8 @@ import unnamed.model.PixelisedImage;
 import unnamed.model.container.ElementContainer;
 import unnamed.model.element.menu.FormattedString;
 
-public abstract class Element implements Serializable
+public abstract class Element
 {
-	private static final long serialVersionUID = -8180400148689092894L;
-
 	private static final Element EMPTY = new EmptyElement();
 
 	private ElementContainer container;
@@ -163,8 +159,6 @@ public abstract class Element implements Serializable
 
 	private static class EmptyElement extends Element
 	{
-		private static final long serialVersionUID = -8396774274171993181L;
-
 		public EmptyElement()
 		{
 			super(ElementContainer.getEmptyContainer());
