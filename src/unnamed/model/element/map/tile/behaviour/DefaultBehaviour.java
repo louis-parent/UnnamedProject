@@ -5,7 +5,9 @@ import org.newdawn.slick.SlickException;
 import unnamed.model.element.map.tile.Tile;
 
 public class DefaultBehaviour implements TileBehaviour
-{	
+{
+	private static final long serialVersionUID = -5837389956545460578L;
+	
 	protected Tile tile;
 	
 	public DefaultBehaviour(Tile tile)

@@ -10,6 +10,8 @@ import unnamed.model.element.map.tile.TileBiome;
 
 public class CorruptBehaviour extends DefaultBehaviour
 {
+	private static final long serialVersionUID = 6172879787241605839L;
+
 	private static final double CORRUPTION_SPREAD_PERCENTAGE = 1.0 / 1000.0;
 
 	private static final int RAISE_OFFSET = 13;

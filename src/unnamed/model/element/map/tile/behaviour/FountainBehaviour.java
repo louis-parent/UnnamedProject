@@ -11,6 +11,8 @@ import unnamed.model.element.map.tile.TileBiome;
 
 public class FountainBehaviour extends DefaultBehaviour
 {
+	private static final long serialVersionUID = 8235280915630442965L;
+
 	private static final int TICK_PER_SPAWN = 40;
 
 	private int spawnCooldown;
