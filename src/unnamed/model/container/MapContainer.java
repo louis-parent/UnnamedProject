@@ -25,8 +25,6 @@ public class MapContainer extends ElementContainer
 	private TileMap map;
 	private Tile fountain;
 
-	private Entity entity;
-
 	private List<Tile> transitionTiles;
 
 	public MapContainer() throws SlickException
@@ -38,8 +36,6 @@ public class MapContainer extends ElementContainer
 		this.map = new TileMap(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 
 		this.fountain = Tile.getEmptyTile();
-
-		this.entity = Entity.getEmptyEntity();
 
 		this.transitionTiles = new ArrayList<Tile>();
 	}
@@ -59,8 +55,7 @@ public class MapContainer extends ElementContainer
 			this.addElement(tile);
 		}
 
-		this.entity = new Entity(this.fountain, this);
-		this.addElement(this.entity);
+		this.addElement(new Entity(this.fountain, this));
 	}
 
 	@Override
