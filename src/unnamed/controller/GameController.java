@@ -22,6 +22,7 @@ import unnamed.model.container.SeedMenuContainer;
 import unnamed.model.element.entity.Entity;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.element.menu.button.MenuFactory;
+import unnamed.model.save.SaveableMap;
 import unnamed.view.Camera;
 import unnamed.view.GameWindow;
 
@@ -262,7 +263,7 @@ public class GameController
 			}
 
 			ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(save));
-			stream.writeObject(this.mapContainer);
+			stream.writeObject(this.mapContainer.toSaveable());
 			stream.close();
 		}
 		catch(IOException e)
@@ -275,7 +276,7 @@ public class GameController
 		try
 		{
 			ObjectInputStream stream = new ObjectInputStream(new FileInputStream(GameController.SAVE_FILE));
-			this.mapContainer = (MapContainer) stream.readObject();
+			this.mapContainer = ((SaveableMap) stream.readObject()).getContainer();
 			stream.close();
 		}
 		catch(IOException | ClassNotFoundException e)

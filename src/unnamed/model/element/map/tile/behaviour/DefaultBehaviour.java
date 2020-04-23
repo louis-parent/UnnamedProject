@@ -6,15 +6,19 @@ import unnamed.model.element.map.tile.Tile;
 
 public class DefaultBehaviour implements TileBehaviour
 {
-	private static final long serialVersionUID = -5837389956545460578L;
-	
-	protected Tile tile;
+	private Tile tile;
 	
 	public DefaultBehaviour(Tile tile)
 	{
 		this.tile = tile;
 	}
 
+	@Override
+	public Tile getTile()
+	{
+		return this.tile;
+	}
+	
 	@Override
 	public void tickUpdate() throws SlickException
 	{

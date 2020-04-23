@@ -11,8 +11,6 @@ import unnamed.model.element.map.tile.TileBiome;
 
 public class FountainBehaviour extends DefaultBehaviour
 {
-	private static final long serialVersionUID = 8235280915630442965L;
-
 	private static final int TICK_PER_SPAWN = 40;
 
 	private int spawnCooldown;
@@ -23,17 +21,21 @@ public class FountainBehaviour extends DefaultBehaviour
 		
 		this.spawnCooldown = FountainBehaviour.TICK_PER_SPAWN;
 
-		this.tile.getContainer().addElementToTickUpdate(this.tile);
+		Tile ownTile = this.getTile();
+		
+		ownTile.getContainer().addElementToTickUpdate(ownTile);
 	}
 
 	@Override
 	public void tickUpdate() throws SlickException
 	{
-		if(!this.tile.isOccupied())
+		Tile ownTile = this.getTile();
+		
+		if(!ownTile.isOccupied())
 		{
 			if(this.spawnCooldown == 0)
 			{
-				this.tile.getContainer().addElement(new Entity(this.tile, this.tile.getContainer()));
+				ownTile.getContainer().addElement(new Entity(ownTile, ownTile.getContainer()));
 				this.spawnCooldown = FountainBehaviour.TICK_PER_SPAWN;
 			}
 			else
@@ -45,7 +47,7 @@ public class FountainBehaviour extends DefaultBehaviour
 
 	private void checkDefeat() throws SlickException
 	{
-		List<Tile> adjacents = this.tile.getAdjacents();
+		List<Tile> adjacents = this.getTile().getAdjacents();
 		adjacents.removeIf(tile -> tile.getBiome() != TileBiome.CORRUPT);
 		boolean isDefeat = !adjacents.isEmpty();
 
@@ -59,5 +61,15 @@ public class FountainBehaviour extends DefaultBehaviour
 	public void informNeighbourChange() throws SlickException
 	{
 		this.checkDefeat();
+	}
+
+	public int getCooldown()
+	{
+		return this.spawnCooldown;
+	}
+
+	public void setCooldwn(int cooldown)
+	{
+		this.spawnCooldown = cooldown;
 	}
 }

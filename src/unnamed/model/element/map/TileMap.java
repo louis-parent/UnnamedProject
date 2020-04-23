@@ -30,6 +30,16 @@ public class TileMap extends ArrayList<Tile>
 		this.rows = rows;
 	}
 
+	public int getColumns()
+	{
+		return columns;
+	}
+
+	public int getRows()
+	{
+		return rows;
+	}
+
 	public int getListPosition(float x, float y)
 	{
 		if(((x >= 0) && (y >= 0)) && ((x < this.columns) && (y < this.rows)))

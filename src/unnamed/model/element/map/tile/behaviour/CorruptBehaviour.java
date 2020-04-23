@@ -10,8 +10,6 @@ import unnamed.model.element.map.tile.TileBiome;
 
 public class CorruptBehaviour extends DefaultBehaviour
 {
-	private static final long serialVersionUID = 6172879787241605839L;
-
 	private static final double CORRUPTION_SPREAD_PERCENTAGE = 1.0 / 1000.0;
 
 	private static final int RAISE_OFFSET = 13;
@@ -25,13 +23,15 @@ public class CorruptBehaviour extends DefaultBehaviour
 	{
 		super(tile);
 		
+		Tile ownTile = this.getTile();
+		
 		if(!tile.isSelected())
 		{
 			this.targetY = CorruptBehaviour.RAISE_OFFSET;
-			this.tile.setY(this.tile.getY() - CorruptBehaviour.RAISE_OFFSET);
+			ownTile.setY(ownTile.getY() - CorruptBehaviour.RAISE_OFFSET);
 		}
 
-		this.tile.getContainer().addElementToTickUpdate(this.tile);
+		ownTile.getContainer().addElementToTickUpdate(ownTile);
 
 		this.isActivated = true;
 	}
@@ -39,9 +39,11 @@ public class CorruptBehaviour extends DefaultBehaviour
 	@Override
 	public void tickUpdate() throws SlickException
 	{
-		if((this.targetY > 0) && !this.tile.isSelected())
+		Tile ownTile = this.getTile();
+		
+		if((this.targetY > 0) && !ownTile.isSelected())
 		{
-			this.tile.setY(this.tile.getY() + CorruptBehaviour.FALLING_SPEED);
+			ownTile.setY(ownTile.getY() + CorruptBehaviour.FALLING_SPEED);
 			this.targetY -= CorruptBehaviour.FALLING_SPEED;
 		}
 
@@ -50,7 +52,7 @@ public class CorruptBehaviour extends DefaultBehaviour
 
 	private void spreadCorruption() throws SlickException
 	{
-		List<Tile> adjacents = this.tile.getAdjacents();
+		List<Tile> adjacents = this.getTile().getAdjacents();
 		adjacents.removeIf(tile -> tile.getBiome() != TileBiome.GRASS);
 
 		for(Tile toSpread : adjacents)
@@ -70,7 +72,8 @@ public class CorruptBehaviour extends DefaultBehaviour
 
 	public void resetFalling()
 	{
-		this.tile.setY(this.tile.getY() + this.targetY);
+		Tile ownTile = this.getTile();
+		ownTile.setY(ownTile.getY() + this.targetY);
 		this.targetY = 0;
 	}
 
@@ -83,16 +86,18 @@ public class CorruptBehaviour extends DefaultBehaviour
 	@Override
 	public void informNeighbourChange()
 	{
-		boolean isAdjacentToGrass = this.tile.getAdjacents().stream().anyMatch(tile -> (tile.getBiome() == TileBiome.GRASS) && !tile.isEmpty());
+		Tile ownTile = this.getTile();
+		
+		boolean isAdjacentToGrass = ownTile.getAdjacents().stream().anyMatch(tile -> (tile.getBiome() == TileBiome.GRASS) && !tile.isEmpty());
 
 		if(this.isActivated && !isAdjacentToGrass && (this.targetY == 0))
 		{
-			this.tile.getContainer().removeElementToTickUpdate(this.tile);
+			ownTile.getContainer().removeElementToTickUpdate(ownTile);
 			this.isActivated = false;
 		}
 		else if(!this.isActivated && isAdjacentToGrass)
 		{
-			this.tile.getContainer().addElementToTickUpdate(this.tile);
+			ownTile.getContainer().addElementToTickUpdate(ownTile);
 			this.isActivated = true;
 		}
 	}

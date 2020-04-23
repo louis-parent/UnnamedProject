@@ -1,6 +1,5 @@
 package unnamed.model.element.map.tile;
 
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,10 +17,8 @@ import unnamed.model.element.SelectableElement;
 import unnamed.model.element.entity.Entity;
 import unnamed.model.element.map.tile.behaviour.TileBehaviour;
 
-public class Tile extends Element implements SelectableElement, Serializable
+public class Tile extends Element implements SelectableElement
 {
-	private static final long serialVersionUID = -867365679274168458L;
-
 	private static Tile EMPTY;
 
 	public static final int TRANSITION_STEP_SPEED = 6;
@@ -129,7 +126,7 @@ public class Tile extends Element implements SelectableElement, Serializable
 				this.behaviour.cleanUp();
 			}
 
-			this.behaviour = this.biome.getBehaviour().getConstructor(Tile.class).newInstance(this);
+			this.setBehaviour(this.biome.getBehaviour().getConstructor(Tile.class).newInstance(this));
 
 			this.informAllNeighboursOfChange();
 		}
@@ -142,6 +139,11 @@ public class Tile extends Element implements SelectableElement, Serializable
 	public TileBehaviour getBehaviour()
 	{
 		return this.behaviour;
+	}
+
+	public void setBehaviour(TileBehaviour behaviour)
+	{
+		this.behaviour = behaviour;
 	}
 
 	private void informAllNeighboursOfChange() throws SlickException
@@ -238,12 +240,12 @@ public class Tile extends Element implements SelectableElement, Serializable
 		return row * Tile.Z_SPACE_BETWEEN_TILES;
 	}
 
-	protected int getSpriteVariant()
+	public int getSpriteVariant()
 	{
 		return this.spriteVariant;
 	}
 
-	protected void setSpriteVariant(int spriteVariant)
+	public void setSpriteVariant(int spriteVariant)
 	{
 		this.spriteVariant = spriteVariant;
 	}
@@ -325,8 +327,6 @@ public class Tile extends Element implements SelectableElement, Serializable
 		if(Tile.EMPTY == null)
 		{
 			Tile.EMPTY = new Tile() {
-
-				private static final long serialVersionUID = -7401166447770248461L;
 
 				@Override
 				public boolean isEmpty()

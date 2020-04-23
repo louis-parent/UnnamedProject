@@ -1,6 +1,5 @@
 package unnamed.model.container;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +12,10 @@ import unnamed.model.element.entity.Entity;
 import unnamed.model.element.map.TileMap;
 import unnamed.model.element.map.tile.Tile;
 import unnamed.model.generator.MapGenerator;
+import unnamed.model.save.SaveableMap;
 
-public class MapContainer extends ElementContainer implements Serializable
+public class MapContainer extends ElementContainer
 {
-	private static final long serialVersionUID = -3760401809828849717L;
-
 	private static final int NUMBER_OF_COLUMNS = 75;
 	private static final int NUMBER_OF_ROWS = 75;
 
@@ -34,9 +32,7 @@ public class MapContainer extends ElementContainer implements Serializable
 
 		this.isMouseWheelActivated = false;
 
-		this.map = new TileMap(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
-
-		this.fountain = Tile.getEmptyTile();
+		this.setFountain(Tile.getEmptyTile());
 
 		this.transitionTiles = new ArrayList<Tile>();
 	}
@@ -46,17 +42,25 @@ public class MapContainer extends ElementContainer implements Serializable
 	{
 		MapGenerator generator = new MapGenerator(MapContainer.NUMBER_OF_COLUMNS, MapContainer.NUMBER_OF_ROWS);
 
-		this.map.addAll(generator.generateMap(this));
-		this.transitionTiles.addAll(this.map);
+		TileMap generateMap = generator.generateMap(this);
 
-		this.fountain = generator.getFountain();
+		addTileMap(generateMap);
+
+		this.setFountain(generator.getFountain());
+
+		this.addElement(new Entity(this.fountain, this));
+	}
+
+	public void addTileMap(TileMap generateMap) throws SlickException
+	{
+		this.map = generateMap;
+
+		this.transitionTiles.addAll(this.map);
 
 		for(Tile tile : this.map)
 		{
 			this.addElement(tile);
 		}
-
-		this.addElement(new Entity(this.fountain, this));
 	}
 
 	@Override
@@ -99,6 +103,11 @@ public class MapContainer extends ElementContainer implements Serializable
 	public int getWidth()
 	{
 		return (MapContainer.NUMBER_OF_COLUMNS * Tile.TILE_WIDTH) + (Tile.TILE_WIDTH / 2);
+	}
+
+	public void setFountain(Tile tile)
+	{
+		this.fountain = tile;
 	}
 
 	@Override
@@ -204,5 +213,10 @@ public class MapContainer extends ElementContainer implements Serializable
 	public void enter()
 	{
 		GameController.getInstance().getCameraController().zoom(10);
+	}
+
+	public SaveableMap toSaveable()
+	{
+		return new SaveableMap(this.map, this.fountain);
 	}
 }

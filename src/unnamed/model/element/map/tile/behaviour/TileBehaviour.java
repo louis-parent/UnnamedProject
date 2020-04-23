@@ -1,12 +1,13 @@
 package unnamed.model.element.map.tile.behaviour;
 
-import java.io.Serializable;
-
 import org.newdawn.slick.SlickException;
 
-public interface TileBehaviour extends Serializable
-{
+import unnamed.model.element.map.tile.Tile;
 
+public interface TileBehaviour
+{
+	public abstract Tile getTile();
+	
 	public abstract void tickUpdate() throws SlickException;
 
 	public abstract void pressed();
